@@ -43,12 +43,23 @@ public class FrequencyAnalysisSimulator {
 		return ciphertext;
 	}
 	
+	
+	/** 
+	 * 
+	 * @param ciphertext the cipher that is deciphered
+	 * @return the completely deciphered or almost completely deciphered monoalphabetic substitution cipher in plaintext
+	 */
 	public static String decipherMonoalphabetic(String ciphertext) {
 		// TODO Implement decipherMonoalphabetic(String ciphertext) method
 		String plaintext = ciphertext;
 		return plaintext; 
 	}
 	
+	/** 
+	 * 
+	 * @param ciphertext
+	 * @return the completely deciphered or almost completely deciphered Vigenere cipher in plaintext
+	 */
 	public static String decipherVigenere(String ciphertext) {
 		// TODO Implement decipherVigenere(String ciphertext) method
 		String plaintext = decipherMonoalphabetic(ciphertext);
