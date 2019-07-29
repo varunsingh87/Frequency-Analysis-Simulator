@@ -8,6 +8,8 @@
  */
 
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FrequencyAnalysisSimulator {
 	
@@ -30,7 +32,14 @@ public class FrequencyAnalysisSimulator {
 	 * @return the type of substitution cipher
 	 */
 	public static String determineCipherType() {
-		return "monoalphabetic";
+		// DONE Implement determineCipherType()
+		System.out.println("If you know the type of cipher this ciphertext is, enter it now. Otherwise, enter a new line.");
+		String cipherType = userInput.nextLine();
+		if (cipherType.equals("monoalphabetic")) {
+			return "monoalphabetic";
+		} else {
+			return "Vigenere";	
+		}
 	}
 	
 	/** 
@@ -62,6 +71,10 @@ public class FrequencyAnalysisSimulator {
 	 */
 	public static String decipherVigenere(String ciphertext) {
 		// TODO Implement decipherVigenere(String ciphertext) method
+		Pattern p = Pattern.compile(".*(.+).*\1.*");
+		Matcher m = p.matcher(ciphertext);
+		Boolean b = m.matches();
+		System.out.println(b);
 		String plaintext = decipherMonoalphabetic(ciphertext);
 		return plaintext; 
 	}
