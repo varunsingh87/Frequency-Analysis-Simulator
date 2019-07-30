@@ -7,9 +7,15 @@
  * @inspiration The Code Book by Simon Singh
  */
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class FrequencyAnalysisSimulator {
 	
@@ -21,9 +27,13 @@ public class FrequencyAnalysisSimulator {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String ciphertext = determineCiphertext();
-		if (determineCipherType().equals("monoalphabetic")) {
+		String ciphertype = determineCipherType();
+		if (ciphertype.equalsIgnoreCase("Caesar shift")) {
+			decipherCaesarShift(ciphertext);
+		}
+		else if (ciphertype.equals("monoalphabetic")) {
 			System.out.println(decipherMonoalphabetic(ciphertext));
-		} else if (determineCipherType().equals("Vigenere")) {
+		} else if (ciphertype.equals("Vigenere")) {
 			System.out.println(decipherVigenere(ciphertext));
 		}
 	}
@@ -35,11 +45,7 @@ public class FrequencyAnalysisSimulator {
 		// DONE Implement determineCipherType()
 		System.out.println("If you know the type of cipher this ciphertext is, enter it now. Otherwise, enter a new line.");
 		String cipherType = userInput.nextLine();
-		if (cipherType.equals("monoalphabetic")) {
-			return "monoalphabetic";
-		} else {
-			return "Vigenere";	
-		}
+		return cipherType;
 	}
 	
 	/** 
@@ -52,6 +58,24 @@ public class FrequencyAnalysisSimulator {
 		return ciphertext;
 	}
 	
+	public static void decipherCaesarShift(String ciphertext) {
+		String[] alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+		String[] cipherletters = ciphertext.split("");
+		
+		List<Character> numbers = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+	       List<Integer> squares = numbers.stream()
+	                                      .map( c -> numbers.indexOf(c))
+	                                      .collect(Collectors.toList());
+	       System.out.println(squares);
+//		for (int key = 1; key <= 26; key++) {
+//			System.out.println("Key: " + key);
+//			Arrays.asList(cipherletters).stream().map(n -> {
+//				int newPosition = Arrays.asList(alphabet).indexOf(n) + key;
+//				System.out.println("The new position of the letter " + n + " is " + newPosition);
+//				return newPosition;
+//			}).collect(Collectors.toSet());
+//		}
+	}
 	
 	/** 
 	 * 
