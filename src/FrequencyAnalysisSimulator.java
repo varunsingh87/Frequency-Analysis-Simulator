@@ -65,9 +65,13 @@ public class FrequencyAnalysisSimulator {
 		List<Character> alphabet = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 	    List<Character> decipheredText = cipherchars.stream()
 	                                      .map( c -> {
-	                                    	  int newPosition = alphabet.indexOf(c) + key;
-	                                    	  if (newPosition == 26) {
-	                                    		  newPosition = 0;
+	                                    	  if (c.equals(' ')) {
+	                                    		  return c;
+	                                    	  }
+	                                    	  int index = alphabet.indexOf(c);
+	                                    	  int newPosition = index + key;
+	                                    	  if (newPosition > 25) {
+	                                    		  newPosition -= 26; 
 	                                    	  }
 	                                    	  return alphabet.get(newPosition);
 	                                      })
