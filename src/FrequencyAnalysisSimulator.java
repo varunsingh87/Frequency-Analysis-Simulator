@@ -18,7 +18,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-//import net.sf.extjwnl.dictionary;
+import net.sf.extjwnl.dictionary;
 
 public class FrequencyAnalysisSimulator {
 	
