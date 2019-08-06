@@ -1,10 +1,14 @@
 /**
  * Frequency Analysis Simulator
+ * By Varun Singh
  */
 
 /**
  * @author Varun Singh
  * @inspiration The Code Book by Simon Singh
+ * @citations
+ 	* Princeton University "About WordNet." WordNet. Princeton University. 2010. 
+ 	* Stack Overflow, Inc.
  */
 
 import java.util.ArrayList;
@@ -14,6 +18,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+//import net.sf.extjwnl.dictionary;
 
 public class FrequencyAnalysisSimulator {
 	
@@ -51,12 +56,18 @@ public class FrequencyAnalysisSimulator {
 	 * @return the cipher text that the user inputs as a string
 	 */
 	public static String determineCiphertext() {
-		// DONE Implement determineCiphertext() method
+		// DONE Implement determineCiphertext() method 
 		System.out.println("Enter a ciphertext: ");
 		String ciphertext = userInput.nextLine();
 		return ciphertext;
 	}
-	
+
+	/**
+	 * 
+	 * @param ciphertext
+	 * @param key
+	 * @return the 
+	 */
 	public static String decipherCaesarShift(String ciphertext, int key) {
 		List<Character> cipherchars = new ArrayList<Character>();
 		for (char ch: ciphertext.toCharArray()) {
@@ -64,22 +75,26 @@ public class FrequencyAnalysisSimulator {
 		}
 		List<Character> alphabet = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 	    List<Character> decipheredText = cipherchars.stream()
-	                                      .map( c -> {
-	                                    	  if (c.equals(' ')) {
-	                                    		  return c;
-	                                    	  }
-	                                    	  int index = alphabet.indexOf(c);
-	                                    	  int newPosition = index + key;
-	                                    	  if (newPosition > 25) {
-	                                    		  newPosition -= 26; 
-	                                    	  }
-	                                    	  return alphabet.get(newPosition);
-	                                      })
-	                                      .collect(Collectors.toList());
+	      .map( c -> {
+        	  if (c.equals(' ')) {
+        		  return c;
+        	  }
+        	  int index = alphabet.indexOf(c);
+        	  int newPosition = index + key;
+        	  if (newPosition > 25) {
+        		  newPosition -= 26; 
+        	  }
+        	  return alphabet.get(newPosition);
+          })
+          .collect(Collectors.toList());
 	    String plaintext = getStringRepresentation(decipheredText);
 	    return plaintext;
 	}
 	
+	/**
+	 * @param list 
+	 * @return
+	 */
 	private static String getStringRepresentation(List<Character> list)
 	{    
 	    StringBuilder builder = new StringBuilder(list.size());
@@ -91,7 +106,6 @@ public class FrequencyAnalysisSimulator {
 	}
 	
 	/** 
-	 * 
 	 * @param ciphertext the cipher that is deciphered
 	 * @return the completely deciphered or almost completely deciphered monoalphabetic substitution cipher in plaintext
 	 */
@@ -102,7 +116,6 @@ public class FrequencyAnalysisSimulator {
 	}
 	
 	/** 
-	 * 
 	 * @param ciphertext
 	 * @return the completely deciphered or almost completely deciphered Vigenere cipher in plaintext
 	 */

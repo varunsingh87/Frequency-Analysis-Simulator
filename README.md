@@ -1,7 +1,7 @@
 # Frequency Analysis Simulator
 **Start Date**: July 22, 2019
 
-Frequency Analysis Simulator is a Java program that simulates frequency analysis in which the user inputs cipher text into the console and the System outputs as close to the corresponding plain text as possible. If the type of cipher has been identified, the process may be sped up after the user inputs the type of cipher (monoalphabetic or Vigenere) on prompt. 
+Frequency Analysis Simulator is a Java program that simulates frequency analysis in which the user inputs cipher text into the console and the System outputs as close to the corresponding plain text as possible. If the type of cipher has been identified, the process may be sped up after the user inputs the type of cipher (monoalphabetic or Vigenere) on prompt. Furthermore, Frequency Analysis Simulator can decipher the caesar shift cipher, a cipher that does not involve the use of frequency analysis for decipherment. 
 
 ## Getting Started
 
@@ -73,7 +73,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Billie Thompson** - *README template* - [PurpleBooth](https://github.com/PurpleBooth)
 * **Varun Singh** - *Owner and Programmer* - [KnowledgeableKangaroo](https://github.com/KnowledgeableKangaroo)
 
 See also the list of [contributors](https://github.com/KnowledgeableKangaroo/Frequency-Analysis-Simulator/contributors) who participated in this project.
