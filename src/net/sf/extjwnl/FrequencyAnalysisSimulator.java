@@ -1,5 +1,3 @@
-package net.sf.extjwnl;
-
 /**
  * Frequency Analysis Simulator
  * By Varun Singh
@@ -13,6 +11,8 @@ package net.sf.extjwnl;
  	* Stack Overflow, Inc.
  */
 
+package net.sf.extjwnl;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import net.sf.extjwnl.data.POS;
+import net.sf.extjwnl.data.*;
 import net.sf.extjwnl.dictionary.*;
 
 public class FrequencyAnalysisSimulator {
@@ -33,7 +33,10 @@ public class FrequencyAnalysisSimulator {
 	public static void main(String[] args) throws JWNLException {
 		
 		Dictionary d = Dictionary.getDefaultResourceInstance();
-		System.out.println(d.lookupIndexWord(POS.NOUN, "dog").toString());
+		POS pos = POS.ADJECTIVE;
+		String word = "person";
+		IndexWord method = d.lookupIndexWord(pos,  word);
+		System.out.println(d.lookupIndexWord(pos, "person") != null && !d.lookupIndexWord(POS.ADJECTIVE, "person").equals(null)); // Check if this is a word
 		
 		// TODO Auto-generated method stub
 		String ciphertext = determineCiphertext();
