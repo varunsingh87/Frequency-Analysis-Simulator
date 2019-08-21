@@ -14,4 +14,14 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<dependency>
+		<groupId>net.sf.extjwnl</groupId>
+		<artifactId>extjwnl</artifactId>
+		<version>2.0.2</version>
+	</dependency>
+	<dependency>
+	  	<groupId>net.sf.extjwnl</groupId>
+	  	<artifactId>extjwnl-data-wn31</artifactId>
+	  	<version>1.2</version>
+	</dependency>
 </projectDescription>
