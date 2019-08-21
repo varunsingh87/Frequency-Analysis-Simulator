@@ -27,7 +27,6 @@ public class FrequencyAnalysisSimulator {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Dictionary d = Dictionary.getDefaultResourceInstance();
 		// TODO Auto-generated method stub
 		String ciphertext = determineCiphertext();
 		String ciphertype = determineCipherType();
