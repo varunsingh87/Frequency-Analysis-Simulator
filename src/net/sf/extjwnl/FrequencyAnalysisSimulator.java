@@ -35,9 +35,7 @@ public class FrequencyAnalysisSimulator {
 		String ciphertext = determineCiphertext();
 		String ciphertype = determineCipherType();
 		if (ciphertype.equalsIgnoreCase("Caesar shift")) {
-			for (int key = 1; key <= 26; key++) {
-				System.out.println(decipherCaesarShift(ciphertext, key));
-			}
+			System.out.println(decipherCaesarShift(ciphertext));
 		} else if (ciphertype.equals("monoalphabetic")) {
 			System.out.println(decipherMonoalphabetic(ciphertext));
 		} else if (ciphertype.equals("Vigenere")) {
@@ -71,11 +69,11 @@ public class FrequencyAnalysisSimulator {
 	 * @return
 	 * @throws JWNLException
 	 */
-	private static boolean isWordAndPOS(POS pos, String word) throws JWNLException {
+	private static boolean isWord(String word) throws JWNLException {
 		Dictionary d = Dictionary.getDefaultResourceInstance();
-		IndexWord method = d.lookupIndexWord(pos,  word);
+		IndexWord method = d.lookupIndexWord(POS.NOUN,  word);
 		// Check if this is a word and has the correct part of speech
-		return method != null && method.equals(null);
+		return method != null;
 	}
 	
 	/**
@@ -84,27 +82,36 @@ public class FrequencyAnalysisSimulator {
 	 * @param key
 	 * @return the plaintext
 	 */
-	public static String decipherCaesarShift(String ciphertext, int key) {
+	public static String decipherCaesarShift(String ciphertext) throws JWNLException {
 		List<Character> cipherchars = new ArrayList<Character>();
 		for (char ch: ciphertext.toCharArray()) {
 			cipherchars.add(Character.toLowerCase(ch));
 		}
 		List<Character> alphabet = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
-	    List<Character> decipheredText = cipherchars.stream()
-	      .map( c -> {
-        	  if (c.equals(' ')) {
-        		  return c;
-        	  }
-        	  int index = alphabet.indexOf(c);
-        	  int newPosition = index + key;
-        	  if (newPosition > 25) {
-        		  newPosition -= 26; 
-        	  }
-        	  return alphabet.get(newPosition);
-          })
-          .collect(Collectors.toList());
-	    String plaintext = getStringRepresentation(decipheredText);
-	    return plaintext;
+		for (int i = 1; i <= 26; i++) {
+			final int key = i;
+		    List<Character> decipheredText = cipherchars.stream()
+		      .map( c -> {
+		    	  // Skip spaces
+	        	  if (c.equals(' ')) {
+	        		  return c;
+	        	  }
+	        	  // Shift the letter by an integer, key
+	        	  int index = alphabet.indexOf(c);
+	        	  int newPosition = index + key;
+	        	  if (newPosition > 25) {
+	        		  newPosition -= 26; 
+	        	  }
+	        	  
+	        	  return alphabet.get(newPosition); // Return the new position
+	          })
+	          .collect(Collectors.toList());
+		    String plaintext = getStringRepresentation(decipheredText);
+		    if (isWord(plaintext.split(" ")[1])) {
+		    	return plaintext;
+		    }
+		}
+		return "This ciphertext has non-English plaintext";
 	}
 	
 	/**
