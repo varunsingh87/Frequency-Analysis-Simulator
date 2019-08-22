@@ -30,14 +30,7 @@ public class FrequencyAnalysisSimulator {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) throws JWNLException {
-		
-		Dictionary d = Dictionary.getDefaultResourceInstance();
-		POS pos = POS.ADJECTIVE;
-		String word = "person";
-		IndexWord method = d.lookupIndexWord(pos,  word);
-		System.out.println(d.lookupIndexWord(pos, "person") != null && !d.lookupIndexWord(POS.ADJECTIVE, "person").equals(null)); // Check if this is a word
-		
+	public static void main(String[] args) throws JWNLException {		
 		// TODO Auto-generated method stub
 		String ciphertext = determineCiphertext();
 		String ciphertype = determineCipherType();
@@ -71,12 +64,25 @@ public class FrequencyAnalysisSimulator {
 		String ciphertext = userInput.nextLine();
 		return ciphertext;
 	}
-
+	
+	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
+	 * @param pos
+	 * @param word
+	 * @return
+	 * @throws JWNLException
+	 */
+	private static boolean isWordAndPOS(POS pos, String word) throws JWNLException {
+		Dictionary d = Dictionary.getDefaultResourceInstance();
+		IndexWord method = d.lookupIndexWord(pos,  word);
+		// Check if this is a word and has the correct part of speech
+		return method != null && method.equals(null);
+	}
+	
 	/**
 	 * 
 	 * @param ciphertext
 	 * @param key
-	 * @return the 
+	 * @return the plaintext
 	 */
 	public static String decipherCaesarShift(String ciphertext, int key) {
 		List<Character> cipherchars = new ArrayList<Character>();
