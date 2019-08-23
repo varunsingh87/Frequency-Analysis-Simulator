@@ -66,13 +66,14 @@ public class FrequencyAnalysisSimulator {
 	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
 	 * @param pos
 	 * @param word
-	 * @return
+	 * @return whether the given string is an English word
 	 * @throws JWNLException
 	 */
 	private static boolean isWord(String word) throws JWNLException {
+		// DONE Implement isWord(String word) method
 		Dictionary d = Dictionary.getDefaultResourceInstance();
 		IndexWord method = d.lookupIndexWord(POS.NOUN,  word);
-		// Check if this is a word and has the correct part of speech
+		// Check if this is a word
 		return method != null;
 	}
 	

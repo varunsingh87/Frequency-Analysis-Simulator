@@ -61,7 +61,8 @@ Add additional notes about how to deploy this on a live system
 
 * [Eclipse](https://www.eclipse.org/) - The IDE used
 * [Java](https://www.java.com/en/) - The programming language used
-* [WordNet](https://wordnet.princeton.edu/) - Java API for predefined list of words used
+* [WordNet](https://wordnet.princeton.edu/) - API for predefined list of words used
+* [extJWNL](http://extjwnl.sourceforge.net/) - Java library imported; extension of JWNL
 
 ## Contributing
 
