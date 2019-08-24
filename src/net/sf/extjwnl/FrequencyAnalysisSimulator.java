@@ -103,10 +103,9 @@ public class FrequencyAnalysisSimulator {
 	 * @return the plaintext
 	 */
 	public static String decipherCaesarShift(String ciphertext) throws JWNLException {
-		List<Character> cipherchars = new ArrayList<Character>();
-		for (char ch: ciphertext.toCharArray()) {
-			cipherchars.add(Character.toLowerCase(ch));
-		}
+		// DONE Implement decipherCaesarShift (String ciphertext)
+		
+		List<Character> cipherchars = convertStringToList(ciphertext);
 		List<Character> alphabet = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 		for (int i = 1; i <= 26; i++) {
 			final int key = i;
@@ -122,7 +121,7 @@ public class FrequencyAnalysisSimulator {
 	        	  return alphabet.get(newPosition); // Return the new position
 	          })
 	          .collect(Collectors.toList());
-		    String plaintext = getStringRepresentation(decipheredText);
+		    String plaintext = convertListToString(decipheredText);
 		    if (isWord(plaintext.split(" ")[1])) {
 		    	return plaintext;
 		    }
@@ -134,7 +133,7 @@ public class FrequencyAnalysisSimulator {
 	 * @param list 
 	 * @return
 	 */
-	private static String getStringRepresentation(List<Character> list)
+	private static String convertListToString(List<Character> list)
 	{    
 	    StringBuilder builder = new StringBuilder(list.size());
 	    for(Character ch: list)
@@ -142,6 +141,19 @@ public class FrequencyAnalysisSimulator {
 	        builder.append(ch);
 	    }
 	    return builder.toString();
+	}
+	
+	/** Converts a string to a list of characters
+	 * @param value of the string that needs to be converted
+	 * @return the converted list
+	 */
+	private static List<Character> convertStringToList(String value) {
+		List<Character> cipherchars = new ArrayList<Character>();
+		for (char ch: value.toCharArray()) {
+			cipherchars.add(Character.toLowerCase(ch));
+		}
+		
+		return cipherchars;
 	}
 	
 	/** 
