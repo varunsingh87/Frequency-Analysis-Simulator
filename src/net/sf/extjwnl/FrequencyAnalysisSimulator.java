@@ -34,6 +34,7 @@ public class FrequencyAnalysisSimulator {
 		DECRYPT
 	}
 	static List<Character> alphabet = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+	static char[] charsToSkip = { ' ', '!', '.', '?', ',', ';', '\''};
 	static Exception InvalidInputException = new Exception("You did not enter valid input. Please rerun the program and try again");
 	
 	/**
@@ -119,6 +120,8 @@ public class FrequencyAnalysisSimulator {
 		String ciphertype = determineCipherType(ACTION.ENCRYPT);
 		if (ciphertype.equalsIgnoreCase("Caesar shift")) {
 			System.out.println(encryptCaesarShift(plaintext));
+		} else if (ciphertype.equalsIgnoreCase("monoalphabetic")) {
+			System.out.println(encryptMonoalphabetic(plaintext));
 		}
 	}
 	
@@ -153,6 +156,16 @@ public class FrequencyAnalysisSimulator {
 		return true;
 	}
 	
+	private static boolean isSpaceOrPunctuation(Character c) {
+		for (char item : charsToSkip) {
+			if (c.equals(item)) {
+				return true; // No need to look further.
+			} 
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * @param key the number of letters to shift to the right from the original letter
 	 * @param unshiftedText the ciphertext or the plaintext
@@ -161,20 +174,15 @@ public class FrequencyAnalysisSimulator {
 	private static String shiftLetters(final int key, String unshiftedText) {
 		// DONE Implement shiftLetters(final int key, String unshiftedText)
 		
-		List<Object> unshiftedChars = convertStringToList(unshiftedText);
+		List<Character> unshiftedChars = convertStringToList(unshiftedText);
 		
-	    List<Object> shiftedText = unshiftedChars.stream()
+	    List<Character> shiftedText = unshiftedChars.stream()
 	      .map( c -> {
 	    	  
-	    	  // Skip spaces and punctuation
-	    	  char[] items = { ' ', '!', '.', '?', ',', ';' };
-	    	  for (char item : items) {
-	    	      if (c.equals(item)) {
-	    	          return c; // No need to look further.
-	    	      } 
+	    	  if (isSpaceOrPunctuation(c)) {
+	    		  return c;
 	    	  }
-	    	  
-        	  
+
         	  // Shift the letter by an integer, key
         	  int index = alphabet.indexOf(c);
         	  int newPosition = index + key;
@@ -185,7 +193,7 @@ public class FrequencyAnalysisSimulator {
         	  return alphabet.get(newPosition); // Return the new position
 	      }).collect(Collectors.toList());
 	    
-	      return convertListToString((List<Object>)shiftedText);
+	      return convertListToString(shiftedText);
 	}
 	
 	/**
@@ -215,8 +223,6 @@ public class FrequencyAnalysisSimulator {
 		return ciphertext;
 	}
 	
-
-	
 	/** 
 	 * @param ciphertext the cipher that is deciphered
 	 * @return the completely deciphered or almost completely deciphered monoalphabetic substitution cipher in plaintext
@@ -225,6 +231,29 @@ public class FrequencyAnalysisSimulator {
 		// TODO Implement decipherMonoalphabetic(String ciphertext) method
 		String plaintext = ciphertext;
 		return plaintext; 
+	}
+	
+	/** 
+	 * Encrypts a message into a monoalphabetic cipher
+	 * @param plaintext
+	 * @return
+	 */
+	public static String encryptMonoalphabetic(String plaintext) {
+		List<Character> plaintextchars = convertStringToList(plaintext);
+		List<Character> cipherAlphabet = generateCipherAlphabet();
+		List<Character> plainAlphabet = alphabet;
+		
+		List<Character> cipherchars = plaintextchars.stream().map(p -> {
+			if (isSpaceOrPunctuation(p)) {
+				return p;
+			}
+			
+			int nthLetter = plainAlphabet.indexOf(p);
+			
+			return cipherAlphabet.get(nthLetter);
+		}).collect(Collectors.toList());	
+		
+		return convertListToString(cipherchars);
 	}
 	
 	/** 
@@ -245,7 +274,7 @@ public class FrequencyAnalysisSimulator {
 	 * @param list the list of characters
 	 * @return the converted string
 	 */
-	private static String convertListToString(List<Object> list)
+	private static String convertListToString(List<Character> list)
 	{    
 	    StringBuilder builder = new StringBuilder(list.size());
 	    for(Object ch: list)
@@ -259,8 +288,8 @@ public class FrequencyAnalysisSimulator {
 	 * @param value of the string that needs to be converted
 	 * @return the converted list
 	 */
-	private static List<Object> convertStringToList(String value) {
-		List<Object> cipherchars = new ArrayList<Object>();
+	private static List<Character> convertStringToList(String value) {
+		List<Character> cipherchars = new ArrayList<Character>();
 		for (char ch: value.toCharArray()) {
 			cipherchars.add(Character.toLowerCase(ch));
 		}
@@ -273,7 +302,7 @@ public class FrequencyAnalysisSimulator {
 	 */
 	private static List<Character> generateCipherAlphabet() {
 		List<Character> cipheralphabet = new ArrayList<Character>();
-		for (int i = 1; i <= 25; i++) {
+		for (int i = 0; i < 26; i++) {
 		    cipheralphabet.add(alphabet.get(i));
 		}
 		
