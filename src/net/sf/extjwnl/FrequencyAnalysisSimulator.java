@@ -30,6 +30,7 @@ public class FrequencyAnalysisSimulator {
 		ENCRYPT,
 		DECRYPT
 	}
+	static List<Character> alphabet = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 	
 	/**
 	 * @param args
@@ -53,7 +54,8 @@ public class FrequencyAnalysisSimulator {
 		return ACTION.valueOf(myString.toUpperCase());
 	}
 	
-	/**
+	/** Obtain the cipher type from the user
+	 * @param action the action that the user chose to take
 	 * @return the type of substitution cipher
 	 */
 	public static String determineCipherType(ACTION action) {
@@ -78,6 +80,9 @@ public class FrequencyAnalysisSimulator {
 		return ciphertext;
 	}
 	
+	/** Obtain the plain text message from the user 
+	 * @return
+	 */
 	public static String determinePlaintext() {
 		// TODO Implement determinePlaintext() method
 		System.out.println("Enter a plaintext: ");
@@ -106,6 +111,9 @@ public class FrequencyAnalysisSimulator {
 	protected static void handleEncrypt() {
 		String plaintext = determinePlaintext();
 		String ciphertype = determineCipherType(ACTION.ENCRYPT);
+		if (ciphertype.equalsIgnoreCase("Caesar shift")) {
+			System.out.println(encryptCaesarShift(plaintext));
+		}
 	}
 	
 	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
@@ -123,6 +131,37 @@ public class FrequencyAnalysisSimulator {
 	}
 	
 	/**
+	 * @param key the number of letters to shift to the right from the original letter
+	 * @param chars the text
+	 * @return the shifted output message
+	 */
+	private static String shiftLetters(final int key, List<Character> chars) {
+	    List<Character> shiftedText = chars.stream()
+	      .map( c -> {
+	    	  
+	    	  // Skip spaces and punctuation
+	    	  char[] items = { ' ', '!', '.', '?', ',', ';' };
+	    	  for (char item : items) {
+	    	      if (c.equals(item)) {
+	    	          return c; // No need to look further.
+	    	      } 
+	    	  }
+	    	  
+        	  
+        	  // Shift the letter by an integer, key
+        	  int index = alphabet.indexOf(c);
+        	  int newPosition = index + key;
+        	  if (newPosition > 25) {
+        		  newPosition -= 26; 
+        	  }
+        	  
+        	  return alphabet.get(newPosition); // Return the new position
+	      }).collect(Collectors.toList());
+	    
+	      return convertListToString(shiftedText);
+	}
+	
+	/**
 	 * 
 	 * @param ciphertext
 	 * @param key
@@ -132,37 +171,23 @@ public class FrequencyAnalysisSimulator {
 		// DONE Implement decipherCaesarShift (String ciphertext)
 		
 		List<Character> cipherchars = convertStringToList(ciphertext);
-		List<Character> alphabet = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+		
 		for (int i = 1; i <= 26; i++) {
 			final int key = i;
-		    List<Character> decipheredText = cipherchars.stream()
-		      .map( c -> {
-		    	  
-		    	  // Skip spaces and punctuation
-		    	  char[] items = { ' ', '!', '.', '?', ',', ';' };
-		    	  for (char item : items) {
-		    	      if (c.equals(item)) {
-		    	          return c; // No need to look further.
-		    	      } 
-		    	  }
-		    	  
-	        	  
-	        	  // Shift the letter by an integer, key
-	        	  int index = alphabet.indexOf(c);
-	        	  int newPosition = index + key;
-	        	  if (newPosition > 25) {
-	        		  newPosition -= 26; 
-	        	  }
-	        	  
-	        	  return alphabet.get(newPosition); // Return the new position
-	          })
-	          .collect(Collectors.toList());
-		    String plaintext = convertListToString(decipheredText);
-		    if (isWord(plaintext.split(" ")[1])) {
-		    	return plaintext;
+			String shiftedText = shiftLetters(key, cipherchars);
+		    if (isWord(shiftedText.split(" ")[1])) {
+		    	return shiftedText;
 		    }
 		}
 		return "This ciphertext has non-English plaintext";
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static String encryptCaesarShift(String plaintext) {
+		return plaintext;
 	}
 	
 	/**
