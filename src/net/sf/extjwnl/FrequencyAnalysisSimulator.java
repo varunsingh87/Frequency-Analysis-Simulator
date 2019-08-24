@@ -35,7 +35,6 @@ public class FrequencyAnalysisSimulator {
 	 * @param args
 	 */
 	public static void main(String[] args) throws JWNLException {		
-		// TODO Auto-generated method stub
 		String ciphertext = determineCiphertext();
 		String ciphertype = determineCipherType();
 		if (ciphertype.equalsIgnoreCase("Caesar shift")) {
@@ -111,6 +110,16 @@ public class FrequencyAnalysisSimulator {
 			final int key = i;
 		    List<Character> decipheredText = cipherchars.stream()
 		      .map( c -> {
+		    	  
+		    	  // Skip spaces and punctuation
+		    	  char[] items = { ' ', '!', '.', '?', ',', ';' };
+		    	  for (char item : items) {
+		    	      if (c.equals(item)) {
+		    	          return c; // No need to look further.
+		    	      } 
+		    	  }
+		    	  
+	        	  
 	        	  // Shift the letter by an integer, key
 	        	  int index = alphabet.indexOf(c);
 	        	  int newPosition = index + key;
