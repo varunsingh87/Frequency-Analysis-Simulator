@@ -26,6 +26,10 @@ import net.sf.extjwnl.dictionary.*;
 public class FrequencyAnalysisSimulator {
 	
 	static Scanner userInput = new Scanner (System.in);
+	static enum ACTION {
+		ENCRYPT,
+		DECRYPT
+	}
 	
 	/**
 	 * @param args
@@ -41,6 +45,13 @@ public class FrequencyAnalysisSimulator {
 		} else if (ciphertype.equals("Vigenere")) {
 			System.out.println(decipherVigenere(ciphertext));
 		}
+	}
+	
+	/**
+	 * @return whether to encrypt or decrypt
+	 */
+	public static ACTION determineAction() {
+		return ACTION.ENCRYPT;
 	}
 	
 	/**
@@ -61,6 +72,14 @@ public class FrequencyAnalysisSimulator {
 		System.out.println("Enter a ciphertext: ");
 		String ciphertext = userInput.nextLine();
 		return ciphertext;
+	}
+	
+	protected static void handleDecrypt() {
+		
+	}
+	
+	protected static void handleEncrypt() {
+		
 	}
 	
 	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
@@ -93,10 +112,6 @@ public class FrequencyAnalysisSimulator {
 			final int key = i;
 		    List<Character> decipheredText = cipherchars.stream()
 		      .map( c -> {
-		    	  // Skip spaces
-	        	  if (c.equals(' ')) {
-	        		  return c;
-	        	  }
 	        	  // Shift the letter by an integer, key
 	        	  int index = alphabet.indexOf(c);
 	        	  int newPosition = index + key;
