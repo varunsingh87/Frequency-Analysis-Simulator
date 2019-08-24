@@ -130,13 +130,28 @@ public class FrequencyAnalysisSimulator {
 		return method != null;
 	}
 	
+	private static boolean isSentence(String[] words) throws JWNLException {
+		for (String word : words) {
+			if (isWord(word))
+				break;
+			else
+				return false;
+		}
+		
+		return true;
+	}
+	
 	/**
 	 * @param key the number of letters to shift to the right from the original letter
-	 * @param chars the text
+	 * @param unshiftedText the ciphertext or the plaintext
 	 * @return the shifted output message
 	 */
-	private static String shiftLetters(final int key, List<Character> chars) {
-	    List<Character> shiftedText = chars.stream()
+	private static String shiftLetters(final int key, String unshiftedText) {
+		// DONE Implement shiftLetters(final int key, String unshiftedText)
+		
+		List<Character> unshiftedChars = convertStringToList(unshiftedText);
+		
+	    List<Character> shiftedText = unshiftedChars.stream()
 	      .map( c -> {
 	    	  
 	    	  // Skip spaces and punctuation
@@ -170,24 +185,22 @@ public class FrequencyAnalysisSimulator {
 	public static String decipherCaesarShift(String ciphertext) throws JWNLException {
 		// DONE Implement decipherCaesarShift (String ciphertext)
 		
-		List<Character> cipherchars = convertStringToList(ciphertext);
-		
 		for (int i = 1; i <= 26; i++) {
 			final int key = i;
-			String shiftedText = shiftLetters(key, cipherchars);
-		    if (isWord(shiftedText.split(" ")[1])) {
+			String shiftedText = shiftLetters(key, ciphertext);
+		    if (isSentence(shiftedText.split(" "))) {
 		    	return shiftedText;
 		    }
 		}
 		return "This ciphertext has non-English plaintext";
 	}
 	
-	/**
-	 * 
-	 * @return
+	/** Generates a random integer key between 1 and 26 (inclusive) and shifts all letters in the given plain text by this key
+	 * @return the Caesar-shift-cipher-encrypted cipher text
 	 */
 	public static String encryptCaesarShift(String plaintext) {
-		return plaintext;
+		String ciphertext = shiftLetters((int)Math.round(Math.random() * 26), plaintext);
+		return ciphertext;
 	}
 	
 	/**
