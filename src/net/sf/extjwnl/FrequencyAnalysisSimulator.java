@@ -39,18 +39,23 @@ public class FrequencyAnalysisSimulator {
 	}
 	
 	/**
-	 * @return whether to encrypt or decrypt
+	 * @return whether to encrypt or decipher
 	 */
 	public static ACTION determineAction() {
-		return ACTION.ENCRYPT;
+		return ACTION.DECRYPT;
 	}
 	
 	/**
 	 * @return the type of substitution cipher
 	 */
-	public static String determineCipherType() {
+	public static String determineCipherType(ACTION action) {
 		// DONE Implement determineCipherType()
-		System.out.println("If you know the type of cipher this ciphertext is, enter it now. Otherwise, enter a new line.");
+		if (action.equals(ACTION.DECRYPT)) {
+			System.out.println("If you know the type of cipher this ciphertext is, enter it now. Otherwise, enter a new line.");
+		} else if (action.equals(ACTION.ENCRYPT)) {
+			System.out.println("What type of cipher would you like to use to encrypt the message? (Caesar shift, monoalphabetic, Vigenere");
+		}
+		
 		String cipherType = userInput.nextLine();
 		return cipherType;
 	}
@@ -65,9 +70,12 @@ public class FrequencyAnalysisSimulator {
 		return ciphertext;
 	}
 	
+	/** Handles all the methods, tasks, and processes if the user chooses to decipher a message
+	 * @throws JWNLException
+	 */
 	protected static void handleDecrypt() throws JWNLException {
 		String ciphertext = determineCiphertext();
-		String ciphertype = determineCipherType();
+		String ciphertype = determineCipherType(ACTION.DECRYPT);
 		if (ciphertype.equalsIgnoreCase("Caesar shift")) {
 			System.out.println(decipherCaesarShift(ciphertext));
 		} else if (ciphertype.equals("monoalphabetic")) {
@@ -77,8 +85,11 @@ public class FrequencyAnalysisSimulator {
 		}
 	}
 	
+	/** Handles all the methods, tasks, and processes if the user chooses to encrypt a message
+	 * 
+	 */
 	protected static void handleEncrypt() {
-		
+		String ciphertype = determineCipherType(ACTION.ENCRYPT);
 	}
 	
 	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
