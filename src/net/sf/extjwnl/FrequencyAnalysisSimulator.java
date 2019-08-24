@@ -34,15 +34,23 @@ public class FrequencyAnalysisSimulator {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) throws JWNLException {		
-		handleDecrypt();
+	public static void main(String[] args) throws JWNLException {
+		ACTION action = determineAction();
+		if (action.equals(ACTION.DECRYPT))
+			handleDecrypt();
+		else if (action.equals(ACTION.ENCRYPT))
+			handleEncrypt();
 	}
 	
 	/**
 	 * @return whether to encrypt or decipher
 	 */
 	public static ACTION determineAction() {
-		return ACTION.DECRYPT;
+		
+		System.out.println("Would you like to \na) encrypt \nb) decrypt?");
+		String myString = userInput.nextLine();
+		
+		return ACTION.valueOf(myString.toUpperCase());
 	}
 	
 	/**
@@ -70,6 +78,13 @@ public class FrequencyAnalysisSimulator {
 		return ciphertext;
 	}
 	
+	public static String determinePlaintext() {
+		// TODO Implement determinePlaintext() method
+		System.out.println("Enter a plaintext: ");
+		String plaintext = userInput.nextLine();
+		return plaintext;
+	}
+	
 	/** Handles all the methods, tasks, and processes if the user chooses to decipher a message
 	 * @throws JWNLException
 	 */
@@ -89,6 +104,7 @@ public class FrequencyAnalysisSimulator {
 	 * 
 	 */
 	protected static void handleEncrypt() {
+		String plaintext = determinePlaintext();
 		String ciphertype = determineCipherType(ACTION.ENCRYPT);
 	}
 	
