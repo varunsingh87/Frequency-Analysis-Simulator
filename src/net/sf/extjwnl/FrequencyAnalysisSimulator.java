@@ -15,13 +15,16 @@ package net.sf.extjwnl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import net.sf.extjwnl.data.*;
-import net.sf.extjwnl.dictionary.*;
+
+import net.sf.extjwnl.data.IndexWord;
+import net.sf.extjwnl.data.POS;
+import net.sf.extjwnl.dictionary.Dictionary;
 
 public class FrequencyAnalysisSimulator {
 	
@@ -31,11 +34,13 @@ public class FrequencyAnalysisSimulator {
 		DECRYPT
 	}
 	static List<Character> alphabet = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+	static Exception InvalidInputException = new Exception("You did not enter valid input. Please rerun the program and try again");
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) throws JWNLException {
+
 		ACTION action = determineAction();
 		if (action.equals(ACTION.DECRYPT))
 			handleDecrypt();
@@ -78,6 +83,7 @@ public class FrequencyAnalysisSimulator {
 		System.out.println("Enter a ciphertext: ");
 		String ciphertext = userInput.nextLine();
 		return ciphertext;
+		
 	}
 	
 	/** Obtain the plain text message from the user 
@@ -130,6 +136,12 @@ public class FrequencyAnalysisSimulator {
 		return method != null;
 	}
 	
+	/**
+	 * 
+	 * @param words
+	 * @return
+	 * @throws JWNLException
+	 */
 	private static boolean isSentence(String[] words) throws JWNLException {
 		for (String word : words) {
 			if (isWord(word))
@@ -149,9 +161,9 @@ public class FrequencyAnalysisSimulator {
 	private static String shiftLetters(final int key, String unshiftedText) {
 		// DONE Implement shiftLetters(final int key, String unshiftedText)
 		
-		List<Character> unshiftedChars = convertStringToList(unshiftedText);
+		List<Object> unshiftedChars = convertStringToList(unshiftedText);
 		
-	    List<Character> shiftedText = unshiftedChars.stream()
+	    List<Object> shiftedText = unshiftedChars.stream()
 	      .map( c -> {
 	    	  
 	    	  // Skip spaces and punctuation
@@ -173,7 +185,7 @@ public class FrequencyAnalysisSimulator {
         	  return alphabet.get(newPosition); // Return the new position
 	      }).collect(Collectors.toList());
 	    
-	      return convertListToString(shiftedText);
+	      return convertListToString((List<Object>)shiftedText);
 	}
 	
 	/**
@@ -203,32 +215,7 @@ public class FrequencyAnalysisSimulator {
 		return ciphertext;
 	}
 	
-	/**
-	 * @param list 
-	 * @return
-	 */
-	private static String convertListToString(List<Character> list)
-	{    
-	    StringBuilder builder = new StringBuilder(list.size());
-	    for(Character ch: list)
-	    {
-	        builder.append(ch);
-	    }
-	    return builder.toString();
-	}
-	
-	/** Converts a string to a list of characters
-	 * @param value of the string that needs to be converted
-	 * @return the converted list
-	 */
-	private static List<Character> convertStringToList(String value) {
-		List<Character> cipherchars = new ArrayList<Character>();
-		for (char ch: value.toCharArray()) {
-			cipherchars.add(Character.toLowerCase(ch));
-		}
-		
-		return cipherchars;
-	}
+
 	
 	/** 
 	 * @param ciphertext the cipher that is deciphered
@@ -254,4 +241,44 @@ public class FrequencyAnalysisSimulator {
 		return plaintext; 
 	}
 
+	/**
+	 * @param list the list of characters
+	 * @return the converted string
+	 */
+	private static String convertListToString(List<Object> list)
+	{    
+	    StringBuilder builder = new StringBuilder(list.size());
+	    for(Object ch: list)
+	    {
+	        builder.append(ch);
+	    }
+	    return builder.toString();
+	}
+	
+	/** Converts a string to a list of characters
+	 * @param value of the string that needs to be converted
+	 * @return the converted list
+	 */
+	private static List<Object> convertStringToList(String value) {
+		List<Object> cipherchars = new ArrayList<Object>();
+		for (char ch: value.toCharArray()) {
+			cipherchars.add(Character.toLowerCase(ch));
+		}
+		
+		return cipherchars;
+	}
+	
+	/**
+	 * @return
+	 */
+	private static List<Character> generateCipherAlphabet() {
+		List<Character> cipheralphabet = new ArrayList<Character>();
+		for (int i = 1; i <= 25; i++) {
+		    cipheralphabet.add(alphabet.get(i));
+		}
+		
+		Collections.shuffle(cipheralphabet);
+		
+		return cipheralphabet;
+	}
 }
