@@ -35,15 +35,7 @@ public class FrequencyAnalysisSimulator {
 	 * @param args
 	 */
 	public static void main(String[] args) throws JWNLException {		
-		String ciphertext = determineCiphertext();
-		String ciphertype = determineCipherType();
-		if (ciphertype.equalsIgnoreCase("Caesar shift")) {
-			System.out.println(decipherCaesarShift(ciphertext));
-		} else if (ciphertype.equals("monoalphabetic")) {
-			System.out.println(decipherMonoalphabetic(ciphertext));
-		} else if (ciphertype.equals("Vigenere")) {
-			System.out.println(decipherVigenere(ciphertext));
-		}
+		handleDecrypt();
 	}
 	
 	/**
@@ -73,8 +65,16 @@ public class FrequencyAnalysisSimulator {
 		return ciphertext;
 	}
 	
-	protected static void handleDecrypt() {
-		
+	protected static void handleDecrypt() throws JWNLException {
+		String ciphertext = determineCiphertext();
+		String ciphertype = determineCipherType();
+		if (ciphertype.equalsIgnoreCase("Caesar shift")) {
+			System.out.println(decipherCaesarShift(ciphertext));
+		} else if (ciphertype.equals("monoalphabetic")) {
+			System.out.println(decipherMonoalphabetic(ciphertext));
+		} else if (ciphertype.equals("Vigenere")) {
+			System.out.println(decipherVigenere(ciphertext));
+		}
 	}
 	
 	protected static void handleEncrypt() {
