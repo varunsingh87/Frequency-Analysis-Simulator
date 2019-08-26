@@ -16,13 +16,13 @@ package net.sf.extjwnl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import net.sf.extjwnl.data.IndexWord;
 import net.sf.extjwnl.data.POS;
 import net.sf.extjwnl.dictionary.Dictionary;
 
@@ -41,7 +41,6 @@ public class FrequencyAnalysisSimulator {
 	 * @param args
 	 */
 	public static void main(String[] args) throws JWNLException {
-
 		ACTION action = determineAction();
 		if (action.equals(ACTION.DECRYPT))
 			handleDecrypt();
@@ -53,11 +52,16 @@ public class FrequencyAnalysisSimulator {
 	 * @return whether to encrypt or decipher
 	 */
 	public static ACTION determineAction() {
-		
-		System.out.println("Would you like to \na) encrypt \nb) decrypt?");
+		System.out.println("Would you like to encrypt or decrypt?");
 		String myString = userInput.nextLine();
-		
-		return ACTION.valueOf(myString.toUpperCase());
+		ACTION determinedAction;
+		try {
+			determinedAction = ACTION.valueOf(myString.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			System.out.println("That is not a valid response. The default encrypt is being used.");
+			determinedAction = ACTION.ENCRYPT;
+		}
+		return determinedAction;
 	}
 	
 	/** Obtain the cipher type from the user
@@ -92,7 +96,7 @@ public class FrequencyAnalysisSimulator {
 	 */
 	public static String determinePlaintext() {
 		// TODO Implement determinePlaintext() method
-		System.out.println("Enter a plaintext: ");
+		System.out.print("Enter a plaintext: ");
 		String plaintext = userInput.nextLine();
 		return plaintext;
 	}
@@ -147,9 +151,7 @@ public class FrequencyAnalysisSimulator {
 	 */
 	private static boolean isSentence(String[] words) throws JWNLException {
 		for (String word : words) {
-			if (isWord(word))
-				break;
-			else
+			if (!isWord(word))
 				return false;
 		}
 		
@@ -219,7 +221,7 @@ public class FrequencyAnalysisSimulator {
 	 * @return the Caesar-shift-cipher-encrypted cipher text
 	 */
 	public static String encryptCaesarShift(String plaintext) {
-		String ciphertext = shiftLetters((int)Math.round(Math.random() * 26), plaintext);
+		String ciphertext = shiftLetters((int)(Math.random() * 26), plaintext);
 		return ciphertext;
 	}
 	
