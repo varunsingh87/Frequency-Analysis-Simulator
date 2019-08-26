@@ -22,6 +22,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.sf.extjwnl.data.POS;
 import net.sf.extjwnl.dictionary.Dictionary;
@@ -41,6 +42,7 @@ public class FrequencyAnalysisSimulator {
 	 * @param args
 	 */
 	public static void main(String[] args) throws JWNLException {
+		System.out.println(isWord("yet"));
 		ACTION action = determineAction();
 		if (action.equals(ACTION.DECRYPT))
 			handleDecrypt();
@@ -138,9 +140,25 @@ public class FrequencyAnalysisSimulator {
 	private static boolean isWord(String word) throws JWNLException {
 		// DONE Implement isWord(String word) method
 		Dictionary d = Dictionary.getDefaultResourceInstance();
-		IndexWord method = d.lookupIndexWord(POS.NOUN,  word);
-		// Check if this is a word
-		return method != null;
+		List<POS> POSList =
+                new ArrayList<POS>(EnumSet.allOf(POS.class));
+		
+		List<String> reflexivepronouns = convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
+		List<String> outliers = convertStringToListOfStrings("the this that of these those and you for");
+		List<String> combinedOutliers = Stream.of(reflexivepronouns, outliers)
+                .flatMap(x -> x.stream())
+                .collect(Collectors.toList());
+		boolean isWord = POSList.stream().anyMatch(c -> {
+			try {
+				return d.lookupIndexWord(c, word) != null;
+			} catch (JWNLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		});
+		
+		return isWord || combinedOutliers.contains(word);
 	}
 	
 	/**
@@ -176,7 +194,7 @@ public class FrequencyAnalysisSimulator {
 	private static String shiftLetters(final int key, String unshiftedText) {
 		// DONE Implement shiftLetters(final int key, String unshiftedText)
 		
-		List<Character> unshiftedChars = convertStringToList(unshiftedText);
+		List<Character> unshiftedChars = convertStringToListOfCharacters(unshiftedText);
 		
 	    List<Character> shiftedText = unshiftedChars.stream()
 	      .map( c -> {
@@ -221,7 +239,7 @@ public class FrequencyAnalysisSimulator {
 	 * @return the Caesar-shift-cipher-encrypted cipher text
 	 */
 	public static String encryptCaesarShift(String plaintext) {
-		String ciphertext = shiftLetters((int)(Math.random() * 26), plaintext);
+		String ciphertext = shiftLetters((int)(Math.random() * 25), plaintext);
 		return ciphertext;
 	}
 	
@@ -241,7 +259,7 @@ public class FrequencyAnalysisSimulator {
 	 * @return
 	 */
 	public static String encryptMonoalphabetic(String plaintext) {
-		List<Character> plaintextchars = convertStringToList(plaintext);
+		List<Character> plaintextchars = convertStringToListOfCharacters(plaintext);
 		List<Character> cipherAlphabet = generateCipherAlphabet();
 		List<Character> plainAlphabet = alphabet;
 		
@@ -286,11 +304,21 @@ public class FrequencyAnalysisSimulator {
 	    return builder.toString();
 	}
 	
+	
+	/**
+	 * Used for ease when copying lists from the web
+	 * @param value the set of strings divided by spaces as one string
+	 * @return the set of strings as an array list of strings
+	 */
+	private static List<String> convertStringToListOfStrings(String value) {
+		return new ArrayList<String>(Arrays.asList(value.split(" ")));
+	}
+	
 	/** Converts a string to a list of characters
 	 * @param value of the string that needs to be converted
 	 * @return the converted list
 	 */
-	private static List<Character> convertStringToList(String value) {
+	private static List<Character> convertStringToListOfCharacters(String value) {
 		List<Character> cipherchars = new ArrayList<Character>();
 		for (char ch: value.toCharArray()) {
 			cipherchars.add(Character.toLowerCase(ch));
