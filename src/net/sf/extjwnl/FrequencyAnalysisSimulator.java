@@ -42,7 +42,6 @@ public class FrequencyAnalysisSimulator {
 	 * @param args
 	 */
 	public static void main(String[] args) throws JWNLException {
-		System.out.println(isWord("yet"));
 		ACTION action = determineAction();
 		if (action.equals(ACTION.DECRYPT))
 			handleDecrypt();
@@ -176,6 +175,12 @@ public class FrequencyAnalysisSimulator {
 		return true;
 	}
 	
+	/**
+	 * Returns whether or not a given character is a space or a punctuation mark
+	 * @param c the character being checked
+	 * @return true if a character is either a space or a punctuation
+	 * false if the character is anything else
+	 */
 	private static boolean isSpaceOrPunctuation(Character c) {
 		for (char item : charsToSkip) {
 			if (c.equals(item)) {
@@ -303,7 +308,6 @@ public class FrequencyAnalysisSimulator {
 	    }
 	    return builder.toString();
 	}
-	
 	
 	/**
 	 * Used for ease when copying lists from the web
