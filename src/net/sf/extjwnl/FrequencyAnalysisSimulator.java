@@ -11,6 +11,8 @@
  	* Stack Overflow, Inc.
  */
 
+// n hqvk tcmt bvrp dvkgpe vo pgtgqtnvq mpg me kgt me m kmptcvz'e fmlhenag frt tcnlh me bvr mpg, dmb mttgqtnvq wb kvpae mpg m wmttgp vo dpnag nt'e ligmp opvw bvrp jmlmqt gxdpgeenvqe tcg inzcte mpg qvt mii vq rdetmnpe frt kg'pg tmihnqz hnqze mqa erllgeenvqe gjgq bvr lmq't fg lmrzct rqmkmpge ev dpgdmpg ovp m lcmqlg vo m inogtnwg fg dpgdmpga ovp egqemtnvqmi qgke m ecnqnqz qgk gpm ne tndtvgnqz qgmpgp mqa kcgpg av kg ogmtrpg?
+
 package net.sf.extjwnl;
 
 import java.util.ArrayList;
@@ -254,8 +256,11 @@ public class FrequencyAnalysisSimulator {
 	 */
 	public static String decipherMonoalphabetic(String ciphertext) {
 		// TODO Implement decipherMonoalphabetic(String ciphertext) method
-		String plaintext = ciphertext;
-		return plaintext; 
+		long frequencyOfEs = convertStringToListOfCharacters(ciphertext).stream().filter(e -> {
+			return e.equals('e');
+		}).count();
+		System.out.println(frequencyOfEs);
+		return ciphertext; 
 	}
 	
 	/** 
