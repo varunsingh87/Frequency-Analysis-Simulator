@@ -11,7 +11,7 @@
  	* Stack Overflow, Inc.
  */
 
-// n hqvk tcmt bvrp dvkgpe vo pgtgqtnvq mpg me kgt me m kmptcvz'e fmlhenag frt tcnlh me bvr mpg, dmb mttgqtnvq wb kvpae mpg m wmttgp vo dpnag nt'e ligmp opvw bvrp jmlmqt gxdpgeenvqe tcg inzcte mpg qvt mii vq rdetmnpe frt kg'pg tmihnqz hnqze mqa erllgeenvqe gjgq bvr lmq't fg lmrzct rqmkmpge ev dpgdmpg ovp m lcmqlg vo m inogtnwg fg dpgdmpga ovp egqemtnvqmi qgke m ecnqnqz qgk gpm ne tndtvgnqz qgmpgp mqa kcgpg av kg ogmtrpg?
+// ZT HKTHAKTR YGK MIT EGWH GY MIT ETFMWKB, ZT HKTHAKTR YGK MIT DWKQOTLM LEAD. DTMOEWSGWL HSAFFOFU, MTFAEOMB LHAFFOFU, RTEARTL GY RTFOAS OL LODHSB CIB O'SS ZT QOFU WFROLHWMTR KTLHTEMTR LASWMTR AFR LTTF YGK MIT CGFRTK O AD. BTL, DB MTTMI AFR ADZOMOGFL AKT ZAKTR, ZT HKTHAKTR!
 
 package net.sf.extjwnl;
 
@@ -44,6 +44,9 @@ public class FrequencyAnalysisSimulator {
 	 * @param args
 	 */
 	public static void main(String[] args) throws JWNLException {
+		System.out.println(getOccurences("OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL.\r\n" + 
+				"ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.",
+				'z'));
 		ACTION action = determineAction();
 		if (action.equals(ACTION.DECRYPT))
 			handleDecrypt();
@@ -132,51 +135,6 @@ public class FrequencyAnalysisSimulator {
 		}
 	}
 	
-	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
-	 * @param pos
-	 * @param word
-	 * @return whether the given string is an English word
-	 * @throws JWNLException
-	 */
-	private static boolean isWord(String word) throws JWNLException {
-		// DONE Implement isWord(String word) method
-		Dictionary d = Dictionary.getDefaultResourceInstance();
-		List<POS> POSList =
-                new ArrayList<POS>(EnumSet.allOf(POS.class));
-		
-		List<String> reflexivepronouns = convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
-		List<String> outliers = convertStringToListOfStrings("the this that of these those and you for");
-		List<String> combinedOutliers = Stream.of(reflexivepronouns, outliers)
-                .flatMap(x -> x.stream())
-                .collect(Collectors.toList());
-		boolean isWord = POSList.stream().anyMatch(c -> {
-			try {
-				return d.lookupIndexWord(c, word) != null;
-			} catch (JWNLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
-			}
-		});
-		
-		return isWord || combinedOutliers.contains(word);
-	}
-	
-	/**
-	 * 
-	 * @param words
-	 * @return
-	 * @throws JWNLException
-	 */
-	private static boolean isSentence(String[] words) throws JWNLException {
-		for (String word : words) {
-			if (!isWord(word))
-				return false;
-		}
-		
-		return true;
-	}
-	
 	/**
 	 * Returns whether or not a given character is a space or a punctuation mark
 	 * @param c the character being checked
@@ -209,20 +167,65 @@ public class FrequencyAnalysisSimulator {
 	    	  if (isSpaceOrPunctuation(c)) {
 	    		  return c;
 	    	  }
-
-        	  // Shift the letter by an integer, key
-        	  int index = alphabet.indexOf(c);
-        	  int newPosition = index + key;
-        	  if (newPosition > 25) {
-        		  newPosition -= 26; 
-        	  }
-        	  
-        	  return alphabet.get(newPosition); // Return the new position
+	
+	    	  // Shift the letter by an integer, key
+	    	  int index = alphabet.indexOf(c);
+	    	  int newPosition = index + key;
+	    	  if (newPosition > 25) {
+	    		  newPosition -= 26; 
+	    	  }
+	    	  
+	    	  return alphabet.get(newPosition); // Return the new position
 	      }).collect(Collectors.toList());
 	    
 	      return convertListToString(shiftedText);
 	}
-	
+
+	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
+	 * @param pos
+	 * @param word
+	 * @return whether the given string is an English word
+	 * @throws JWNLException
+	 */
+	private static boolean isWord(String word) throws JWNLException {
+		// DONE Implement isWord(String word) method
+		Dictionary d = Dictionary.getDefaultResourceInstance();
+		List<POS> POSList =
+	            new ArrayList<POS>(EnumSet.allOf(POS.class));
+		
+		List<String> reflexivepronouns = convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
+		List<String> outliers = convertStringToListOfStrings("the this that of these those and you for");
+		List<String> combinedOutliers = Stream.of(reflexivepronouns, outliers)
+	            .flatMap(x -> x.stream())
+	            .collect(Collectors.toList());
+		boolean isWord = POSList.stream().anyMatch(c -> {
+			try {
+				return d.lookupIndexWord(c, word) != null;
+			} catch (JWNLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		});
+		
+		return isWord || combinedOutliers.contains(word);
+	}
+
+	/**
+	 * 
+	 * @param words
+	 * @return
+	 * @throws JWNLException
+	 */
+	private static boolean isSentence(String[] words) throws JWNLException {
+		for (String word : words) {
+			if (!isWord(word))
+				return false;
+		}
+		
+		return true;
+	}
+
 	/**
 	 * 
 	 * @param ciphertext
@@ -251,18 +254,50 @@ public class FrequencyAnalysisSimulator {
 	}
 	
 	/** 
+	 * Get the number of occurences of a given letter in a given text
+	 * @param text the excerpt from which the number of occurences of the letter is counted
+	 * @param letter the character that is being counted
+	 * @return the number of occurences of the letter as a long
+	 */
+	private static long getOccurences(String text, char letter) {
+		long frequencyOfLetter = convertStringToListOfCharacters(text).stream().filter(e -> {
+			return e.equals(letter);
+		}).count();
+		return frequencyOfLetter;
+	}
+	
+	/** 
+	 * 
+	 */
+	private static void doNothing() {
+		
+	}
+
+	/** 
 	 * @param ciphertext the cipher that is deciphered
 	 * @return the completely deciphered or almost completely deciphered monoalphabetic substitution cipher in plaintext
 	 */
 	public static String decipherMonoalphabetic(String ciphertext) {
 		// TODO Implement decipherMonoalphabetic(String ciphertext) method
-		long frequencyOfEs = convertStringToListOfCharacters(ciphertext).stream().filter(e -> {
-			return e.equals('e');
-		}).count();
+		long frequencyOfEs = getOccurences(ciphertext, 'e');
 		System.out.println(frequencyOfEs);
 		return ciphertext; 
 	}
 	
+	/**
+	 * @return
+	 */
+	private static List<Character> generateCipherAlphabet() {
+		List<Character> cipheralphabet = new ArrayList<Character>();
+		for (int i = 0; i < 26; i++) {
+		    cipheralphabet.add(alphabet.get(i));
+		}
+		
+		Collections.shuffle(cipheralphabet);
+		
+		return cipheralphabet;
+	}
+
 	/** 
 	 * Encrypts a message into a monoalphabetic cipher
 	 * @param plaintext
@@ -334,19 +369,5 @@ public class FrequencyAnalysisSimulator {
 		}
 		
 		return cipherchars;
-	}
-	
-	/**
-	 * @return
-	 */
-	private static List<Character> generateCipherAlphabet() {
-		List<Character> cipheralphabet = new ArrayList<Character>();
-		for (int i = 0; i < 26; i++) {
-		    cipheralphabet.add(alphabet.get(i));
-		}
-		
-		Collections.shuffle(cipheralphabet);
-		
-		return cipheralphabet;
 	}
 }
