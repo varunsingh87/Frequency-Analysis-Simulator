@@ -266,10 +266,18 @@ public class FrequencyAnalysisSimulator {
 		return frequencyOfLetter;
 	}
 	
-	/** 
-	 * 
+	/**
+	 * @param text
+	 * @return
 	 */
-	private static void doNothing() {
+	private static List<Long> getListOfOccurences(String text) {
+		Stream<Long> alphabetCollection = alphabet.stream().map(l -> {
+			return getOccurences(text, l);
+		});
+		
+		List<Long> listOfOccurences = alphabetCollection.collect(Collectors.toList());
+		
+		return listOfOccurences;
 		
 	}
 
