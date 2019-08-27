@@ -277,10 +277,32 @@ public class FrequencyAnalysisSimulator {
 		
 		List<Long> listOfOccurences = alphabetCollection.collect(Collectors.toList());
 		
+		System.out.println(listOfOccurences.toString());
+		
 		return listOfOccurences;
 		
 	}
+	
+	/**	
+	 * @param text
+	 * @return
+	 */
+	private static List<Integer> getDifferencesOfOccurences(String text) {
+		List<Long> listOfOccurences = getListOfOccurences(text);
+		listOfOccurences = listOfOccurences.stream().sorted().collect(Collectors.toList());
+		System.out.println(listOfOccurences.toString());
+		
+		ArrayList<Integer> listOfDifferences = new ArrayList<Integer>();
+		
+		for (int i = 1; i < listOfOccurences.size(); i++) {
+			listOfDifferences.add(Math.toIntExact(Math.abs(listOfOccurences.get(i) - listOfOccurences.get(i - 1))));
+		}
+		
 
+		
+		return listOfDifferences;
+	}
+	
 	/** 
 	 * @param ciphertext the cipher that is deciphered
 	 * @return the completely deciphered or almost completely deciphered monoalphabetic substitution cipher in plaintext
