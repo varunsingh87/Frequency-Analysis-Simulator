@@ -289,13 +289,16 @@ public class FrequencyAnalysisSimulator {
 	 */
 	private static List<Integer> getDifferencesOfOccurences(String text) {
 		List<Long> listOfOccurences = getListOfOccurences(text);
+		// Sort the list into smallest to largest using the Stream<Object>.sorted() method
 		listOfOccurences = listOfOccurences.stream().sorted().collect(Collectors.toList());
 		System.out.println(listOfOccurences.toString());
 		
-		ArrayList<Integer> listOfDifferences = new ArrayList<Integer>();
+		// Initialize an empty array list
+		ArrayList<Integer> listOfDifferences = new ArrayList<Integer>(); 
 		
 		for (int i = 1; i < listOfOccurences.size(); i++) {
-			listOfDifferences.add(Math.toIntExact(Math.abs(listOfOccurences.get(i) - listOfOccurences.get(i - 1))));
+			// Add the absolute difference as an int to the listOfDifferences list
+			listOfDifferences.add(Math.toIntExact(Math.abs(listOfOccurences.get(i) - listOfOccurences.get(i - 1)))); 
 		}
 		
 
