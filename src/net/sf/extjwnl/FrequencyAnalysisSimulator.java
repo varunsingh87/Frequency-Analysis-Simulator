@@ -12,9 +12,8 @@
  */
 
 /*
- OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.
- 
- */
+OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.
+*/
 
 package net.sf.extjwnl;
 
@@ -22,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Scanner;
@@ -298,31 +298,46 @@ public class FrequencyAnalysisSimulator {
 	 * @param text
 	 * @return
 	 */
-	private static List<Long> getSortedListOfOccurences(String text) {
+	private static List<ArrayList<Object>> getSortedListOfOccurences(String text) {
 		
 		List<ArrayList<Object>> listOfOccurences = getListOfOccurences(text);
 		
-		// Sort the list into smallest to largest using the Stream<Object>.sorted() method
-		List<Long> sortedListOfOccurences = listOfOccurences.stream().sorted().collect(Collectors.toList());
-		System.out.println("sorted list of occurences: " + sortedListOfOccurences.toString());
+		// Sort the 2 dimensional list into smallest to largest by number of occurences
+		Arrays.sort(listOfOccurences.toArray(new Object[26][2]), new Comparator<Object[]>() {
+			public int compare(Object[] o1, Object[] o2) {
+				// Get two occurences as integers
+		        Long quantityOne = (Long) o1[1];
+			    Long quantityTwo = (Long) o2[1];
+			    // Compare each number of occurences to each other
+			    return quantityOne.compareTo(quantityTwo);
+			}
+		} );
+		System.out.println("sorted list of occurences: " + listOfOccurences.toString());
 		
-		return sortedListOfOccurences;
+		return listOfOccurences;
 	}
 	
 	/**	
-	 * Sort the list into smallest to largest using the Stream<Object>.sorted() method
+	 * 
 	 * @param text
 	 * @return the differences between each occurence
 	 */
 	private static List<Integer> getDifferencesOfOccurences(String text) {
-		List<Long> sortedListOfOccurences = getSortedListOfOccurences(text);
+		List<ArrayList<Object>> sortedListOfOccurences = getSortedListOfOccurences(text);
 		
 		// Initialize an empty array list
 		ArrayList<Integer> listOfDifferences = new ArrayList<Integer>(); 
 		
 		for (int i = 1; i < sortedListOfOccurences.size(); i++) {
+			System.out.println(sortedListOfOccurences.get(i));
 			// Add the absolute difference as an int to the listOfDifferences list
-			listOfDifferences.add(Math.toIntExact(Math.abs(sortedListOfOccurences.get(i) - sortedListOfOccurences.get(i - 1)))); 
+			listOfDifferences.add(
+				Math.toIntExact(
+					Math.abs(
+					-7//	sortedListOfOccurences.get(i).get(1) - sortedListOfOccurences.get(i - 1).get(1)
+					)
+				)
+			); 
 		}
 		
 		System.out.println("List of differences: " + listOfDifferences);
