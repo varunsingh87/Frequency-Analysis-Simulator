@@ -271,7 +271,7 @@ public class FrequencyAnalysisSimulator {
 	 * @param text
 	 * @return
 	 */
-	private static Object[] getListOfOccurences(String text) {
+	private static Object[][] getListOfOccurences(String text) {
 		Stream<Long> alphabetCollection = ALPHABET.stream().map(l -> {
 			return getOccurences(text, l);
 		});
@@ -288,10 +288,29 @@ public class FrequencyAnalysisSimulator {
 			letterOccurencesPairs.add(letterOccurencesPair);
 		}
 		
-		System.out.println(letterOccurencesPairs.toString());
+		Object[][] letterOccurencesPairs1 = toMultiDimensionalArray(letterOccurencesPairs);
 		
-		return letterOccurencesPairs.toArray();
+		System.out.println("list of occurences: " + Arrays.deepToString(letterOccurencesPairs1));
 		
+		return letterOccurencesPairs1;
+		
+	}
+	
+	private static Object[][] toMultiDimensionalArray(ArrayList<ArrayList<Object>> ec) {
+		Object[][] ei = new Object[26][2];
+		for (int i = 0; i < ec.size(); i++) {
+		    List<Object> row = ec.get(i);
+
+		    // Perform equivalent `toArray` operation
+		    Object[] copy = new Object[row.size()];
+		    for (int j = 0; j < row.size(); j++) {
+		        // Manually loop and set individually
+		        copy[j] = row.get(j);
+		    }
+
+		    ei[i] = copy;
+		}
+		return ei;
 	}
 	
 	/**
@@ -314,7 +333,7 @@ public class FrequencyAnalysisSimulator {
 			    return quantityOne.compareTo(quantityTwo);
 			}
 		} );
-		System.out.println("sorted list of occurences: " + listOfOccurences.toString());
+		System.out.println("sorted list of occurences: " + Arrays.deepToString(listOfOccurences));
 		
 		return listOfOccurences;
 	}
