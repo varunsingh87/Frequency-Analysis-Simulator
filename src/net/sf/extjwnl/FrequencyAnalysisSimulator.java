@@ -271,7 +271,7 @@ public class FrequencyAnalysisSimulator {
 	 * @param text
 	 * @return
 	 */
-	private static ArrayList<ArrayList<Object>> getListOfOccurences(String text) {
+	private static Object[] getListOfOccurences(String text) {
 		Stream<Long> alphabetCollection = ALPHABET.stream().map(l -> {
 			return getOccurences(text, l);
 		});
@@ -280,16 +280,17 @@ public class FrequencyAnalysisSimulator {
 		ArrayList<ArrayList<Object>> letterOccurencesPairs = new ArrayList<ArrayList<Object>>();
 		for (int i = 0; i < ALPHABET.size(); i++) {
 			ArrayList<Object> letterOccurencesPair = new ArrayList<Object>();
-			letterOccurencesPair.add(ALPHABET.get(i));
-			letterOccurencesPair.add(listOfOccurences.get(i));
+			// First element is letter as Character
+			letterOccurencesPair.add(ALPHABET.get(i)); 
+			// Second element is number of occurences as Long
+			letterOccurencesPair.add(listOfOccurences.get(i)); 
+			// Add the array list to the outer array list
 			letterOccurencesPairs.add(letterOccurencesPair);
 		}
 		
 		System.out.println(letterOccurencesPairs.toString());
 		
-		System.out.println("list of occurences: " + listOfOccurences.toString());
-		
-		return letterOccurencesPairs;
+		return letterOccurencesPairs.toArray();
 		
 	}
 	
@@ -298,12 +299,13 @@ public class FrequencyAnalysisSimulator {
 	 * @param text
 	 * @return
 	 */
-	private static List<ArrayList<Object>> getSortedListOfOccurences(String text) {
+	private static Object[][] getSortedListOfOccurences(String text) {
 		
-		List<ArrayList<Object>> listOfOccurences = getListOfOccurences(text);
+		Object[][] listOfOccurences = getListOfOccurences(text);
 		
 		// Sort the 2 dimensional list into smallest to largest by number of occurences
-		Arrays.sort(listOfOccurences.toArray(new Object[26][2]), new Comparator<Object[]>() {
+		Arrays.sort(listOfOccurences, new Comparator<Object[]>() {
+			@Override
 			public int compare(Object[] o1, Object[] o2) {
 				// Get two occurences as integers
 		        Long quantityOne = (Long) o1[1];
@@ -323,18 +325,18 @@ public class FrequencyAnalysisSimulator {
 	 * @return the differences between each occurence
 	 */
 	private static List<Integer> getDifferencesOfOccurences(String text) {
-		List<ArrayList<Object>> sortedListOfOccurences = getSortedListOfOccurences(text);
+		Object[][] sortedListOfOccurences = getSortedListOfOccurences(text);
 		
 		// Initialize an empty array list
 		ArrayList<Integer> listOfDifferences = new ArrayList<Integer>(); 
 		
-		for (int i = 1; i < sortedListOfOccurences.size(); i++) {
-			System.out.println(sortedListOfOccurences.get(i));
+		for (int i = 1; i < sortedListOfOccurences.length; i++) {
+			System.out.println(sortedListOfOccurences[i]);
 			// Add the absolute difference as an int to the listOfDifferences list
 			listOfDifferences.add(
 				Math.toIntExact(
 					Math.abs(
-					-7//	sortedListOfOccurences.get(i).get(1) - sortedListOfOccurences.get(i - 1).get(1)
+					    (Long)sortedListOfOccurences[i][1] - (Long)sortedListOfOccurences[i - 1][1]
 					)
 				)
 			); 
