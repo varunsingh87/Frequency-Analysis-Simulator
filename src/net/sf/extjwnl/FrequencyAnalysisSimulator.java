@@ -20,6 +20,7 @@ package net.sf.extjwnl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -39,8 +40,8 @@ public class FrequencyAnalysisSimulator {
 		ENCRYPT,
 		DECRYPT
 	}
-	static List<Character> alphabet = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
-	static char[] charsToSkip = { ' ', '!', '.', '?', ',', ';', '\''};
+	static List<Character> ALPHABET = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+	static char[] charsToSkip = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}'};
 	static Exception InvalidInputException = new Exception("You did not enter valid input. Please rerun the program and try again");
 	
 	/**
@@ -169,13 +170,13 @@ public class FrequencyAnalysisSimulator {
 	    	  }
 	
 	    	  // Shift the letter by an integer, key
-	    	  int index = alphabet.indexOf(c);
+	    	  int index = ALPHABET.indexOf(c);
 	    	  int newPosition = index + key;
 	    	  if (newPosition > 25) {
 	    		  newPosition -= 26; 
 	    	  }
 	    	  
-	    	  return alphabet.get(newPosition); // Return the new position
+	    	  return ALPHABET.get(newPosition); // Return the new position
 	      }).collect(Collectors.toList());
 	    
 	      return convertListToString(shiftedText);
@@ -190,8 +191,8 @@ public class FrequencyAnalysisSimulator {
 	private static boolean isWord(String word) throws JWNLException {
 		// DONE Implement isWord(String word) method
 		Dictionary d = Dictionary.getDefaultResourceInstance();
-		List<POS> POSList =
-	            new ArrayList<POS>(EnumSet.allOf(POS.class));
+		
+		Collection<POS> POSList = EnumSet.allOf(POS.class);
 		
 		List<String> reflexivepronouns = convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
 		List<String> outliers = convertStringToListOfStrings("the this that of these those and you for");
@@ -270,38 +271,61 @@ public class FrequencyAnalysisSimulator {
 	 * @param text
 	 * @return
 	 */
-	private static List<Long> getListOfOccurences(String text) {
-		Stream<Long> alphabetCollection = alphabet.stream().map(l -> {
+	private static ArrayList<ArrayList<Object>> getListOfOccurences(String text) {
+		Stream<Long> alphabetCollection = ALPHABET.stream().map(l -> {
 			return getOccurences(text, l);
 		});
 		
 		List<Long> listOfOccurences = alphabetCollection.collect(Collectors.toList());
+		ArrayList<ArrayList<Object>> letterOccurencesPairs = new ArrayList<ArrayList<Object>>();
+		for (int i = 0; i < ALPHABET.size(); i++) {
+			ArrayList<Object> letterOccurencesPair = new ArrayList<Object>();
+			letterOccurencesPair.add(ALPHABET.get(i));
+			letterOccurencesPair.add(listOfOccurences.get(i));
+			letterOccurencesPairs.add(letterOccurencesPair);
+		}
 		
-		System.out.println(listOfOccurences.toString());
+		System.out.println(letterOccurencesPairs.toString());
 		
-		return listOfOccurences;
+		System.out.println("list of occurences: " + listOfOccurences.toString());
+		
+		return letterOccurencesPairs;
 		
 	}
 	
-	/**	
+	/**
+	 * 
 	 * @param text
 	 * @return
 	 */
-	private static List<Integer> getDifferencesOfOccurences(String text) {
-		List<Long> listOfOccurences = getListOfOccurences(text);
+	private static List<Long> getSortedListOfOccurences(String text) {
+		
+		List<ArrayList<Object>> listOfOccurences = getListOfOccurences(text);
+		
 		// Sort the list into smallest to largest using the Stream<Object>.sorted() method
-		listOfOccurences = listOfOccurences.stream().sorted().collect(Collectors.toList());
-		System.out.println(listOfOccurences.toString());
+		List<Long> sortedListOfOccurences = listOfOccurences.stream().sorted().collect(Collectors.toList());
+		System.out.println("sorted list of occurences: " + sortedListOfOccurences.toString());
+		
+		return sortedListOfOccurences;
+	}
+	
+	/**	
+	 * Sort the list into smallest to largest using the Stream<Object>.sorted() method
+	 * @param text
+	 * @return the differences between each occurence
+	 */
+	private static List<Integer> getDifferencesOfOccurences(String text) {
+		List<Long> sortedListOfOccurences = getSortedListOfOccurences(text);
 		
 		// Initialize an empty array list
 		ArrayList<Integer> listOfDifferences = new ArrayList<Integer>(); 
 		
-		for (int i = 1; i < listOfOccurences.size(); i++) {
+		for (int i = 1; i < sortedListOfOccurences.size(); i++) {
 			// Add the absolute difference as an int to the listOfDifferences list
-			listOfDifferences.add(Math.toIntExact(Math.abs(listOfOccurences.get(i) - listOfOccurences.get(i - 1)))); 
+			listOfDifferences.add(Math.toIntExact(Math.abs(sortedListOfOccurences.get(i) - sortedListOfOccurences.get(i - 1)))); 
 		}
 		
-
+		System.out.println("List of differences: " + listOfDifferences);
 		
 		return listOfDifferences;
 	}
@@ -314,19 +338,18 @@ public class FrequencyAnalysisSimulator {
 		// TODO Implement decipherMonoalphabetic(String ciphertext) method
 		
 		List<Integer> listOfDifferences = getDifferencesOfOccurences(ciphertext);
-		System.out.println(listOfDifferences.toString());
 		int highestDifference = Collections.max(listOfDifferences);
 		
 		return "" + highestDifference + ""; 
 	}
 	
-	/**
-	 * @return
+	/** Creates a cipher alphabet
+	 * @return the cipher alphabet - the shuffled plaintext alphabet
 	 */
 	private static List<Character> generateCipherAlphabet() {
 		List<Character> cipheralphabet = new ArrayList<Character>();
 		for (int i = 0; i < 26; i++) {
-		    cipheralphabet.add(alphabet.get(i));
+		    cipheralphabet.add(ALPHABET.get(i));
 		}
 		
 		Collections.shuffle(cipheralphabet);
@@ -342,7 +365,7 @@ public class FrequencyAnalysisSimulator {
 	public static String encryptMonoalphabetic(String plaintext) {
 		List<Character> plaintextchars = convertStringToListOfCharacters(plaintext);
 		List<Character> cipherAlphabet = generateCipherAlphabet();
-		List<Character> plainAlphabet = alphabet;
+		List<Character> plainAlphabet = ALPHABET;
 		
 		List<Character> cipherchars = plaintextchars.stream().map(p -> {
 			if (isSpaceOrPunctuation(p)) {
