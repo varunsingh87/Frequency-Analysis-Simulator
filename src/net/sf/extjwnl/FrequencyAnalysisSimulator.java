@@ -28,6 +28,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import net.sf.extjwnl.data.POS;
@@ -284,25 +285,27 @@ public class FrequencyAnalysisSimulator {
 			letterOccurencesPair.add(ALPHABET.get(i)); 
 			// Second element is number of occurences as Long
 			letterOccurencesPair.add(listOfOccurences.get(i)); 
+			// Third element is to be set as difference between the index 1 and index 1 of the previous array
+
 			// Add the array list to the outer array list
 			letterOccurencesPairs.add(letterOccurencesPair);
 		}
 		
 		Object[][] letterOccurencesPairs1 = toMultiDimensionalArray(letterOccurencesPairs);
 		
-		System.out.println("list of occurences: " + Arrays.deepToString(letterOccurencesPairs1));
+		System.out.println("list of occurences:\n" + Arrays.deepToString(letterOccurencesPairs1));
 		
 		return letterOccurencesPairs1;
 		
 	}
 	
 	private static Object[][] toMultiDimensionalArray(ArrayList<ArrayList<Object>> ec) {
-		Object[][] ei = new Object[26][2];
+		Object[][] ei = new Object[26][3];
 		for (int i = 0; i < ec.size(); i++) {
-		    List<Object> row = ec.get(i);
+		    List<Object> row = ec.get(i); // Get each row
 
 		    // Perform equivalent `toArray` operation
-		    Object[] copy = new Object[row.size()];
+		    Object[] copy = new Object[3];
 		    for (int j = 0; j < row.size(); j++) {
 		        // Manually loop and set individually
 		        copy[j] = row.get(j);
@@ -311,6 +314,11 @@ public class FrequencyAnalysisSimulator {
 		    ei[i] = copy;
 		}
 		return ei;
+	}
+	
+	private static int[] getColumn(int[][] matrix, int column) {
+	    return IntStream.range(0, matrix.length)
+	        .map(i -> matrix[i][column]).toArray();
 	}
 	
 	/**
@@ -333,7 +341,8 @@ public class FrequencyAnalysisSimulator {
 			    return quantityOne.compareTo(quantityTwo);
 			}
 		} );
-		System.out.println("sorted list of occurences: " + Arrays.deepToString(listOfOccurences));
+
+		System.out.println("sorted list of occurences:\n" + Arrays.deepToString(listOfOccurences));
 		
 		return listOfOccurences;
 	}
@@ -343,40 +352,35 @@ public class FrequencyAnalysisSimulator {
 	 * @param text
 	 * @return the differences between each occurence
 	 */
-	private static List<Integer> getDifferencesOfOccurences(String text) {
-		Object[][] sortedListOfOccurences = getSortedListOfOccurences(text);
+	private static Object[][] getDifferencesOfOccurences(String text) {
+		Object[][] sortedListOfData = getSortedListOfOccurences(text);
 		
-		// Initialize an empty array list
-		ArrayList<Integer> listOfDifferences = new ArrayList<Integer>(); 
-		
-		for (int i = 1; i < sortedListOfOccurences.length; i++) {
-			System.out.println(sortedListOfOccurences[i]);
-			// Add the absolute difference as an int to the listOfDifferences list
-			listOfDifferences.add(
-				Math.toIntExact(
-					Math.abs(
-					    (Long)sortedListOfOccurences[i][1] - (Long)sortedListOfOccurences[i - 1][1]
-					)
+		for (int i = 1; i < sortedListOfData.length; i++) {
+			// Add the absolute difference as an int to the sortedListOfData array
+			sortedListOfData[i][2] = Math.toIntExact(
+				Math.abs(
+					(Long)sortedListOfData[i][1] - (Long)sortedListOfData[i - 1][1]
 				)
 			); 
 		}
 		
-		System.out.println("List of differences: " + listOfDifferences);
+		System.out.println("List of differences:\n" + Arrays.deepToString(sortedListOfData));
 		
-		return listOfDifferences;
+		return sortedListOfData;
 	}
 	
 	/** 
+
 	 * @param ciphertext the cipher that is deciphered
 	 * @return the completely deciphered or almost completely deciphered monoalphabetic substitution cipher in plaintext
 	 */
 	public static String decipherMonoalphabetic(String ciphertext) {
 		// TODO Implement decipherMonoalphabetic(String ciphertext) method
 		
-		List<Integer> listOfDifferences = getDifferencesOfOccurences(ciphertext);
-		int highestDifference = Collections.max(listOfDifferences);
+		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);
+		//int highestDifference = Collections.max(listOfDifferences);
 		
-		return "" + highestDifference + ""; 
+		return ""; 
 	}
 	
 	/** Creates a cipher alphabet
