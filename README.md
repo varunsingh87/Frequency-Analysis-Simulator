@@ -90,3 +90,9 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * etc
 
 Copyright 2019 Varun Singh
+
+<script src = "../script.js"></script>
+
+<script>
+   createLinkElement('image/x-icon', 'shortcut icon', 'icon.ico');
+</script>  
