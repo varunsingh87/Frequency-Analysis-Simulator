@@ -28,7 +28,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import net.sf.extjwnl.data.POS;
@@ -39,7 +38,8 @@ public class FrequencyAnalysisSimulator {
 	static Scanner userInput = new Scanner (System.in);
 	static enum ACTION {
 		ENCRYPT,
-		DECRYPT
+		DECRYPT,
+		MAGIC
 	}
 	static List<Character> ALPHABET = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 	static char[] charsToSkip = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}'};
@@ -54,6 +54,8 @@ public class FrequencyAnalysisSimulator {
 			handleDecrypt();
 		else if (action.equals(ACTION.ENCRYPT))
 			handleEncrypt();
+		else if (action.equals(ACTION.MAGIC))
+			System.out.println(decipherMonoalphabetic("OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL."));
 	}
 	
 	/**
@@ -316,11 +318,6 @@ public class FrequencyAnalysisSimulator {
 		return ei;
 	}
 	
-	private static int[] getColumn(int[][] matrix, int column) {
-	    return IntStream.range(0, matrix.length)
-	        .map(i -> matrix[i][column]).toArray();
-	}
-	
 	/**
 	 * 
 	 * @param text
@@ -369,6 +366,63 @@ public class FrequencyAnalysisSimulator {
 		return sortedListOfData;
 	}
 	
+	/**
+	 * 
+	 * @param matrix
+	 * @param colIndex
+	 * @return
+	 */
+	private static int maxCol(Object [][] matrix, int colIndex) {
+	    int max = (int) matrix[1][colIndex];
+	    for(int i = 2 ; i < matrix.length ; ++i) {
+	        max = Math.max(max, (int) matrix[i][colIndex]);
+	    }
+	    return max;
+	}
+	
+	/**
+	 * 
+	 * @param ciphertext
+	 * @return
+	 */
+	private static int getHighestDifference(String ciphertext) {
+		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);
+		int highestDifference = maxCol(listOfDifferences, 2);
+		System.out.println(highestDifference);
+		return highestDifference;
+	}
+	
+	/**
+	 * Gets the number of occurences of the least frequent of the most frequent letters
+	 * @param ciphertext
+	 * @return
+	 */
+	protected static int getLeastFrequentMostFrequentLetterFrequency(String ciphertext) {
+		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);
+		int highestDifference = getHighestDifference(ciphertext);
+		for (int i = 1; i < ALPHABET.size(); i++) {
+			if ((int)listOfDifferences[i][2] == highestDifference) {
+				return Math.toIntExact((long)listOfDifferences[i][1]);
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * 
+	 * @param ciphertext
+	 * @return
+	 */
+	protected static Object[][] getMostFrequentLetters(String ciphertext) {
+		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);
+		int leastFrequentMostFrequentLetterFrequency = getLeastFrequentMostFrequentLetterFrequency(ciphertext);
+		Object[][] mostFrequentLetters = Arrays.asList(listOfDifferences).stream().filter(a -> {
+			
+			return (long)a[1] >= leastFrequentMostFrequentLetterFrequency;
+		}).toArray(Object[][]::new);
+		return mostFrequentLetters;
+	}
+	
 	/** 
 
 	 * @param ciphertext the cipher that is deciphered
@@ -377,10 +431,9 @@ public class FrequencyAnalysisSimulator {
 	public static String decipherMonoalphabetic(String ciphertext) {
 		// TODO Implement decipherMonoalphabetic(String ciphertext) method
 		
-		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);
-		//int highestDifference = Collections.max(listOfDifferences);
+		Object[][] mostFrequentLetters = getMostFrequentLetters(ciphertext);
 		
-		return ""; 
+		return "" + Arrays.deepToString(mostFrequentLetters); 
 	}
 	
 	/** Creates a cipher alphabet
