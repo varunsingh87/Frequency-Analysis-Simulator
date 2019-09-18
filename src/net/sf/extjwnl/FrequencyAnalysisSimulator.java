@@ -30,6 +30,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import alphastats.*;
+
 import net.sf.extjwnl.data.POS;
 import net.sf.extjwnl.dictionary.Dictionary;
 
@@ -421,10 +423,9 @@ public class FrequencyAnalysisSimulator {
 			return (long)a[1] >= leastFrequentMostFrequentLetterFrequency;
 		}).toArray(Object[][]::new);
 		return mostFrequentLetters;
-	}
+	} 
 	
 	/** 
-
 	 * @param ciphertext the cipher that is deciphered
 	 * @return the completely deciphered or almost completely deciphered monoalphabetic substitution cipher in plaintext
 	 */
@@ -432,6 +433,7 @@ public class FrequencyAnalysisSimulator {
 		// TODO Implement decipherMonoalphabetic(String ciphertext) method
 		
 		Object[][] mostFrequentLetters = getMostFrequentLetters(ciphertext);
+		System.out.println("hello has the double letter l: " + AlphabeticalStatistics.hasDoubleLetters("hello", 'l'));
 		
 		return "" + Arrays.deepToString(mostFrequentLetters); 
 	}
