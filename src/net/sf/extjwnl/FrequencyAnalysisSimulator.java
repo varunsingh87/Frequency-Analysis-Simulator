@@ -1,21 +1,8 @@
-/**
- * Frequency Analysis Simulator
- * By Varun Singh
- */
-
-/**
- * @author Varun Singh
- * @inspiration The Code Book by Simon Singh
- * @citations
- 	* Princeton University "About WordNet." WordNet. Princeton University. 2010. 
- 	* Stack Overflow, Inc.
- */
-
 /*
 OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.
 */
 
-package net.sf.extjwnl;
+package net.sf.extjwnl; // Uses the extjwnl package to determine if strings are sentences
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,11 +17,28 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import alphastats.*;
+import alphastats.*; // Uses my custom package for statistics and generalizations
 
 import net.sf.extjwnl.data.POS;
 import net.sf.extjwnl.dictionary.Dictionary;
 
+/**
+ * Frequency Analysis Simulator
+ * By Varun Singh
+ */
+
+/**
+ * <h1>Frequency Analysis Simulator</h1>
+ * <p>A Java program that simulates frequency analysis in which the user inputs cipher text into the console and the System outputs as close to the corresponding plain text as possible.</p> 
+ * @author Varun Singh
+ * @inspiration The Code Book by Simon Singh
+ * @citations
+ 	* Princeton University "About WordNet." WordNet. Princeton University. 2010.
+ 	* <br>
+ 	* Stack Overflow, Inc.
+ 	* <br>
+ 	* Gale......
+ */
 public class FrequencyAnalysisSimulator {
 	
 	static Scanner userInput = new Scanner (System.in);
@@ -434,7 +438,7 @@ public class FrequencyAnalysisSimulator {
 		
 		Object[][] mostFrequentLetters = getMostFrequentLetters(ciphertext);
 		System.out.println("hello has the double letter l: " + AlphabeticalStatistics.hasDoubleLetters("hello", 'l'));
-		
+				
 		return "" + Arrays.deepToString(mostFrequentLetters); 
 	}
 	
