@@ -372,13 +372,22 @@ public class FrequencyAnalysisSimulator {
 		return sortedListOfData;
 	}
 	
-	private static List<Object> getCol(Object[][] matrix, int colIndex) {
-		ArrayList<Object> objCol = new ArrayList<Object>();
+	private static ArrayList<Integer> getColAsInts(Object[][] matrix, int colIndex) {
+		ArrayList<Integer> intCol = new ArrayList<Integer>();
 		for (Object[] row : matrix) {
-			objCol.add(row[colIndex]);
+			intCol.add((Integer)row[colIndex]);
 		}
 		
-		return objCol;
+		return intCol;
+	}
+	
+	private static ArrayList<Character> getColAsChars(Object[][] matrix, int colIndex) {
+		ArrayList<Character> charCol = new ArrayList<Character>();
+		for (Object[] row : matrix) {
+			charCol.add((Character)row[colIndex]);
+		}
+		
+		return charCol;
 	}
 	
 	/**
@@ -388,7 +397,7 @@ public class FrequencyAnalysisSimulator {
 	 * @return
 	 */
 	private static int maxCol(Object [][] matrix, int colIndex) {
-	    int max = Collections.max(getCol(matrix, colIndex));
+	    Integer max = Collections.max(getColAsInts(matrix, colIndex));
 	    return max;
 	}
 	
@@ -436,9 +445,12 @@ public class FrequencyAnalysisSimulator {
 	} 
 	
 	private static void findBasedOnBigrams(String ciphertext) {
-		Object[][] mostFrequentLetters = getMostFrequentLetters(ciphertext).
+		Character[] mostFrequentLetters = getColAsChars(getMostFrequentLetters(ciphertext), 0).toArray(new Character[getMostFrequentLetters(ciphertext).length]);
 		for (char bigramLetter : AlphabeticalStatistics.DOUBLE_LETTERS) {
-			boolean hasDoubleLetters = AlphabeticalStatistics.hasDoubleLetters(ciphertext, bigramLetter);
+			boolean hasDoubleLetters = AlphabeticalStatistics.hasDoubleLetters(ciphertext, mostFrequentLetters[0]);
+			if (hasDoubleLetters) {
+				
+			}
 		}
 	}
 	
