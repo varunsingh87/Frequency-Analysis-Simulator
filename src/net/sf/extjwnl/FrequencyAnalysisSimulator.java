@@ -29,7 +29,7 @@ import net.sf.extjwnl.dictionary.Dictionary;
 
 /**
  * <h1>Frequency Analysis Simulator</h1>
- * <p>A Java program that simulates frequency analysis in which the user inputs cipher text into the console and the System outputs as close to the corresponding plain text as possible.</p> 
+ * <p>Frequency Analysis Simulator is a Java program that simulates frequency analysis in which the user inputs cipher text into the console and the System outputs as close to the corresponding plain text as possible. If the type of cipher has been identified, the process may be sped up after the user inputs the type of cipher (monoalphabetic or Vigenere) on prompt. Furthermore, Frequency Analysis Simulator can decipher the caesar shift cipher, a cipher that does not involve the use of frequency analysis for decipherment. As another added bonus, the application is able to encrypt messages.</p>
  * @author Varun Singh
  * @inspiration The Code Book by Simon Singh
  * @citations
@@ -48,7 +48,7 @@ public class FrequencyAnalysisSimulator {
 		MAGIC
 	}
 	static List<Character> ALPHABET = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
-	static char[] charsToSkip = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}'};
+	static char[] CHARS_TO_SKIP = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}'};
 	static Exception InvalidInputException = new Exception("You did not enter valid input. Please rerun the program and try again");
 	
 	/**
@@ -152,7 +152,7 @@ public class FrequencyAnalysisSimulator {
 	 * false if the character is anything else
 	 */
 	private static boolean isSpaceOrPunctuation(Character c) {
-		for (char item : charsToSkip) {
+		for (char item : CHARS_TO_SKIP) {
 			if (c.equals(item)) {
 				return true; // No need to look further.
 			} 
@@ -372,6 +372,15 @@ public class FrequencyAnalysisSimulator {
 		return sortedListOfData;
 	}
 	
+	private static List<Object> getCol(Object[][] matrix, int colIndex) {
+		ArrayList<Object> objCol = new ArrayList<Object>();
+		for (Object[] row : matrix) {
+			objCol.add(row[colIndex]);
+		}
+		
+		return objCol;
+	}
+	
 	/**
 	 * 
 	 * @param matrix
@@ -379,10 +388,7 @@ public class FrequencyAnalysisSimulator {
 	 * @return
 	 */
 	private static int maxCol(Object [][] matrix, int colIndex) {
-	    int max = (int) matrix[1][colIndex];
-	    for(int i = 2 ; i < matrix.length ; ++i) {
-	        max = Math.max(max, (int) matrix[i][colIndex]);
-	    }
+	    int max = Collections.max(getCol(matrix, colIndex));
 	    return max;
 	}
 	
@@ -429,6 +435,13 @@ public class FrequencyAnalysisSimulator {
 		return mostFrequentLetters;
 	} 
 	
+	private static void findBasedOnBigrams(String ciphertext) {
+		Object[][] mostFrequentLetters = getMostFrequentLetters(ciphertext).
+		for (char bigramLetter : AlphabeticalStatistics.DOUBLE_LETTERS) {
+			boolean hasDoubleLetters = AlphabeticalStatistics.hasDoubleLetters(ciphertext, bigramLetter);
+		}
+	}
+	
 	/** 
 	 * @param ciphertext the cipher that is deciphered
 	 * @return the completely deciphered or almost completely deciphered monoalphabetic substitution cipher in plaintext
@@ -438,6 +451,8 @@ public class FrequencyAnalysisSimulator {
 		
 		Object[][] mostFrequentLetters = getMostFrequentLetters(ciphertext);
 		System.out.println("hello has the double letter l: " + AlphabeticalStatistics.hasDoubleLetters("hello", 'l'));
+		
+		findBasedOnBigrams(ciphertext);
 				
 		return "" + Arrays.deepToString(mostFrequentLetters); 
 	}
@@ -447,8 +462,8 @@ public class FrequencyAnalysisSimulator {
 	 */
 	private static List<Character> generateCipherAlphabet() {
 		List<Character> cipheralphabet = new ArrayList<Character>();
-		for (int i = 0; i < 26; i++) {
-		    cipheralphabet.add(ALPHABET.get(i));
+		for (char letter : ALPHABET) {
+		    cipheralphabet.add(letter);
 		}
 		
 		Collections.shuffle(cipheralphabet);
