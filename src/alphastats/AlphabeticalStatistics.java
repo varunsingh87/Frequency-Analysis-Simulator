@@ -1,7 +1,16 @@
 package alphastats;
 
+/**
+ * class for alphabetical stats
+ * @author Varun Singh
+ *
+ */
+
+// Make final class so class cannot be extended
 public final class AlphabeticalStatistics {
 	public static char[] DOUBLE_LETTERS = {'l', 's', 'e', 'o', 't'};
+	
+	// Make private constructor so no instances can be made
 	private AlphabeticalStatistics() {
 		
 	}
@@ -15,14 +24,15 @@ public final class AlphabeticalStatistics {
 	 * @exception UndoubleableLetterException when caught, it returns false
 	 */
 	public static boolean hasDoubleLetters(String text, char letter) {
-		try
-		{
+		/*
+		 * try {
+		 
 			 // Check if the letter can be a bigram
 		     if(new String(DOUBLE_LETTERS).contains(String.valueOf(letter)))
-		     {
+		     {*/
 		    	 // If so, check if the text has the given letter as a bigram
 		    	 return text.indexOf("" + letter + letter) != -1;
-		     }
+/*		     }
 		     
 		     throw new UndoubleableLetterException();
 		}
@@ -31,7 +41,7 @@ public final class AlphabeticalStatistics {
 		    // Process message and return default value
 			System.out.println(ex.getMessage());
 			return false;
-		}
+		}*/
 		
 	}
 }
