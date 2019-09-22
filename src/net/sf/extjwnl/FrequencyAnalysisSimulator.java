@@ -61,7 +61,7 @@ public class FrequencyAnalysisSimulator {
 		else if (action.equals(ACTION.ENCRYPT))
 			handleEncrypt();
 		else if (action.equals(ACTION.MAGIC))
-			System.out.println(decipherMonoalphabetic("OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL."));
+			System.out.print(decipherMonoalphabetic("OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL."));
 	}
 	
 	/**
@@ -276,6 +276,13 @@ public class FrequencyAnalysisSimulator {
 		return frequencyOfLetter;
 	}
 	
+	private static long getOccurences(String text, String letters) {
+		long frequencyOfLetter = convertStringToListOfStrings(text).stream().filter(e -> {
+			return e.contains(letters);
+		}).count();
+		return frequencyOfLetter;
+	}
+	
 	/**
 	 * @param text
 	 * @return
@@ -300,8 +307,6 @@ public class FrequencyAnalysisSimulator {
 		}
 		
 		Object[][] letterOccurencesPairs1 = toMultiDimensionalArray(letterOccurencesPairs);
-		
-		System.out.println("list of occurences:\n" + Arrays.deepToString(letterOccurencesPairs1));
 		
 		return letterOccurencesPairs1;
 		
@@ -344,8 +349,6 @@ public class FrequencyAnalysisSimulator {
 			    return quantityOne.compareTo(quantityTwo);
 			}
 		} );
-
-		System.out.println("sorted list of occurences:\n" + Arrays.deepToString(listOfOccurences));
 		
 		return listOfOccurences;
 	}
@@ -367,14 +370,13 @@ public class FrequencyAnalysisSimulator {
 			); 
 		}
 		
-		System.out.println("List of differences:\n" + Arrays.deepToString(sortedListOfData));
-		
 		return sortedListOfData;
 	}
 	
 	private static ArrayList<Integer> getColAsInts(Object[][] matrix, int colIndex) {
 		ArrayList<Integer> intCol = new ArrayList<Integer>();
-		for (Object[] row : matrix) {
+		for (int i = 1; i < matrix.length; i++) {
+			Object[] row = matrix[i];
 			intCol.add((Integer)row[colIndex]);
 		}
 		
@@ -398,6 +400,7 @@ public class FrequencyAnalysisSimulator {
 	 */
 	private static int maxCol(Object [][] matrix, int colIndex) {
 	    Integer max = Collections.max(getColAsInts(matrix, colIndex));
+
 	    return max;
 	}
 	
@@ -409,7 +412,7 @@ public class FrequencyAnalysisSimulator {
 	private static int getHighestDifference(String ciphertext) {
 		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);
 		int highestDifference = maxCol(listOfDifferences, 2);
-		System.out.println(highestDifference);
+		
 		return highestDifference;
 	}
 	
@@ -419,10 +422,12 @@ public class FrequencyAnalysisSimulator {
 	 * @return
 	 */
 	protected static int getLeastFrequentMostFrequentLetterFrequency(String ciphertext) {
+		
 		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);
 		int highestDifference = getHighestDifference(ciphertext);
 		for (int i = 1; i < ALPHABET.size(); i++) {
 			if ((int)listOfDifferences[i][2] == highestDifference) {
+				
 				return Math.toIntExact((long)listOfDifferences[i][1]);
 			}
 		}
@@ -435,23 +440,39 @@ public class FrequencyAnalysisSimulator {
 	 * @return
 	 */
 	protected static Object[][] getMostFrequentLetters(String ciphertext) {
-		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);
+		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);			
+		
 		int leastFrequentMostFrequentLetterFrequency = getLeastFrequentMostFrequentLetterFrequency(ciphertext);
 		Object[][] mostFrequentLetters = Arrays.asList(listOfDifferences).stream().filter(a -> {
-			
+
 			return (long)a[1] >= leastFrequentMostFrequentLetterFrequency;
 		}).toArray(Object[][]::new);
+		
 		return mostFrequentLetters;
 	} 
 	
-	private static void findBasedOnBigrams(String ciphertext) {
+	private static String findBasedOnBigrams(String ciphertext) {
 		Character[] mostFrequentLetters = getColAsChars(getMostFrequentLetters(ciphertext), 0).toArray(new Character[getMostFrequentLetters(ciphertext).length]);
-		for (char bigramLetter : AlphabeticalStatistics.DOUBLE_LETTERS) {
-			boolean hasDoubleLetters = AlphabeticalStatistics.hasDoubleLetters(ciphertext, mostFrequentLetters[0]);
-			if (hasDoubleLetters) {
-				
-			}
+		List<Long> doubleLetterOccurences = new ArrayList<Long>();
+		// Loop through the most frequent letters
+		for (Character letter : ALPHABET) {
+			String bigram = "" + letter + letter;
+			//System.out.print(bigram);
+			//System.out.print(String.valueOf(getOccurences(ciphertext, bigram) + ";\n"));
+			doubleLetterOccurences.add(getOccurences(ciphertext, bigram));
 		}
+		
+		/*
+		 * Gets the double letter occurences of each letter
+		 * Find the maximum in the list of all numbers of occurences
+		 * Find the index of this one
+		 * Gets the element from most frequent letters of this index
+		 * This is E
+		 */
+		//System.out.println("-1?" + doubleLetterOccurences.toString());
+		char plaintextE = mostFrequentLetters[doubleLetterOccurences.indexOf(Collections.max(doubleLetterOccurences))];
+		return ciphertext.replace(plaintextE, 'e');
+
 	}
 	
 	/** 
@@ -462,11 +483,8 @@ public class FrequencyAnalysisSimulator {
 		// TODO Implement decipherMonoalphabetic(String ciphertext) method
 		
 		Object[][] mostFrequentLetters = getMostFrequentLetters(ciphertext);
-		System.out.println("hello has the double letter l: " + AlphabeticalStatistics.hasDoubleLetters("hello", 'l'));
-		
-		findBasedOnBigrams(ciphertext);
-				
-		return "" + Arrays.deepToString(mostFrequentLetters); 
+			
+		return findBasedOnBigrams(ciphertext);
 	}
 	
 	/** Creates a cipher alphabet
