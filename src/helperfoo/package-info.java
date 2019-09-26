@@ -1,0 +1,8 @@
+/**
+ * 
+ */
+/**
+ * @author VSpoe
+ *
+ */
+package helperfoo;

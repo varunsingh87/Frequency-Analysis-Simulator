@@ -2,8 +2,6 @@ package alphastats;
 
 import java.util.Arrays;
 
-import net.sf.extjwnl.FrequencyAnalysisSimulator;
-
 /**
  * class for alphabetical stats
  * @author Varun Singh
