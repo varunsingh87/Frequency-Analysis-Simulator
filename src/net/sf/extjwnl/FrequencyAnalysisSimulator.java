@@ -19,6 +19,8 @@ import java.util.stream.Stream;
 
 import alphastats.*; // Uses my custom package for statistics and generalizations
 
+import helperfoo.Converters;
+
 import net.sf.extjwnl.data.POS;
 import net.sf.extjwnl.dictionary.Dictionary;
 
@@ -171,7 +173,7 @@ public class FrequencyAnalysisSimulator {
 	private static String shiftLetters(final int key, String unshiftedText) {
 		// DONE Implement shiftLetters(final int key, String unshiftedText)
 		
-		List<Character> unshiftedChars = convertStringToListOfCharacters(unshiftedText);
+		List<Character> unshiftedChars = Converters.convertStringToListOfCharacters(unshiftedText);
 		
 	    List<Character> shiftedText = unshiftedChars.stream()
 	      .map( c -> {
@@ -205,8 +207,8 @@ public class FrequencyAnalysisSimulator {
 		
 		Collection<POS> POSList = EnumSet.allOf(POS.class);
 		
-		List<String> reflexivepronouns = convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
-		List<String> outliers = convertStringToListOfStrings("the this that of these those and you for");
+		List<String> reflexivepronouns = Converters.convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
+		List<String> outliers = Converters.convertStringToListOfStrings("the this that of these those and you for");
 		List<String> combinedOutliers = Stream.of(reflexivepronouns, outliers)
 	            .flatMap(x -> x.stream())
 	            .collect(Collectors.toList());
@@ -272,14 +274,14 @@ public class FrequencyAnalysisSimulator {
 	 * @return the number of occurences of the letter as a long
 	 */
 	private static long getOccurences(String text, char letter) {
-		long frequencyOfLetter = convertStringToListOfCharacters(text).stream().filter(e -> {
+		long frequencyOfLetter = Converters.convertStringToListOfCharacters(text).stream().filter(e -> {
 			return e.equals(letter);
 		}).count();
 		return frequencyOfLetter;
 	}
 	
 	private static long getOccurences(String text, String letters) {
-		long frequencyOfLetter = convertStringToListOfStrings(text).stream().filter(e -> {
+		long frequencyOfLetter = Converters.convertStringToListOfStrings(text).stream().filter(e -> {
 			return e.contains(letters);
 		}).count();
 		return frequencyOfLetter;
@@ -475,7 +477,7 @@ public class FrequencyAnalysisSimulator {
 				.collect(
 					Collectors.toList()
 				);
-		System.out.println(convertListToString(goodWords));
+		System.out.println(Converters.convertListToString(goodWords));
 		for (String word : goodWords) {
 			for (Character c : AlphabeticalStatistics.DOUBLE_LETTERS) {
 				char doub = AlphabeticalStatistics.doubleLetterInWord(word);
@@ -553,41 +555,5 @@ public class FrequencyAnalysisSimulator {
 		System.out.println(b);
 		String plaintext = decipherMonoalphabetic(ciphertext);
 		return plaintext; 
-	}
-
-	/**
-	 * @param list the list of objects of type T
-	 * @return the converted string
-	 */
-	private static <T> String convertListToString(List<T> list) {    
-		String s = "";
-
-		for (int i = 0; i < list.size(); i++) {
-		    s += list.get(i).toString();
-		}
-
-		return s;
-	}
-	
-	/**
-	 * Used for ease when copying lists from the web
-	 * @param value the set of strings divided by spaces as one string
-	 * @return the set of strings as an array list of strings
-	 */
-	private static List<String> convertStringToListOfStrings(String value) {
-		return new ArrayList<String>(Arrays.asList(value.split(" ")));
-	}
-	
-	/** Converts a string to a list of characters
-	 * @param value of the string that needs to be converted
-	 * @return the converted list
-	 */
-	private static List<Character> convertStringToListOfCharacters(String value) {
-		List<Character> cipherchars = new ArrayList<Character>();
-		for (char ch: value.toCharArray()) {
-			cipherchars.add(Character.toLowerCase(ch));
-		}
-		
-		return cipherchars;
 	}
 }

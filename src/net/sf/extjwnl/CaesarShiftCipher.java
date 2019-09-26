@@ -20,7 +20,7 @@ public class CaesarShiftCipher extends Cipher {
 	
 		for (int i = 1; i <= 26; i++) {
 			final int key = i;
-			String shiftedText = shiftLetters(key, text);
+			String shiftedText = this.shiftLetters(key);
 		    if (isSentence(shiftedText.split(" "))) {
 		    	return shiftedText;
 		    }
@@ -32,13 +32,18 @@ public class CaesarShiftCipher extends Cipher {
 	 * 
 	 */
 	public String encrypt() {
-		String ciphertext = shiftLetters((int)(Math.random() * 25), text);
+		String ciphertext = this.shiftLetters((int)(Math.random() * 25));
 		return ciphertext;
 		
 	}
 	
-	private static String shiftLetters(String unshiftedText) {
-		List<Character> unshiftedChars = convertStringToListOfCharacters(unshiftedText);
+	/**
+	 * @param key the number of letters to shift to the right from the original letter
+	 * @param unshiftedText the ciphertext or the plaintext
+	 * @return the shifted output message
+	 */
+	private String shiftLetters(int key) {
+		List<Character> unshiftedChars = convertStringToListOfCharacters(text);
 		
 	    List<Character> shiftedText = unshiftedChars.stream()
 	      .map( c -> {
