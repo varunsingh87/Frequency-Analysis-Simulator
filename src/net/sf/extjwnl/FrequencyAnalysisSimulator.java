@@ -46,8 +46,7 @@ public class FrequencyAnalysisSimulator {
 		DECRYPT,
 		MAGIC
 	}
-	public static List<Character> ALPHABET = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
-	static char[] CHARS_TO_SKIP = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}'};
+
 	static Exception InvalidInputException = new Exception("You did not enter valid input. Please rerun the program and try again");
 	
 	/**
@@ -144,21 +143,7 @@ public class FrequencyAnalysisSimulator {
 		}
 	}
 	
-	/**
-	 * Returns whether or not a given character is a space or a punctuation mark
-	 * @param c the character being checked
-	 * @return true if a character is either a space or a punctuation
-	 * false if the character is anything else
-	 */
-	private static boolean isSpaceOrPunctuation(Character c) {
-		for (char item : CHARS_TO_SKIP) {
-			if (c.equals(item)) {
-				return true; // No need to look further.
-			} 
-		}
-		
-		return false;
-	}
+
 	
 	/**
 	 * @param key the number of letters to shift to the right from the original letter
@@ -173,18 +158,18 @@ public class FrequencyAnalysisSimulator {
 	    List<Character> shiftedText = unshiftedChars.stream()
 	      .map( c -> {
 	    	  
-	    	  if (isSpaceOrPunctuation(c)) {
+	    	  if (EnglishDeterminer.isSpaceOrPunctuation(c)) {
 	    		  return c;
 	    	  }
 	
 	    	  // Shift the letter by an integer, key
-	    	  int index = ALPHABET.indexOf(c);
+	    	  int index = EnglishDeterminer.ALPHABET.indexOf(c);
 	    	  int newPosition = index + key;
 	    	  if (newPosition > 25) {
 	    		  newPosition -= 26; 
 	    	  }
 	    	  
-	    	  return ALPHABET.get(newPosition); // Return the new position
+	    	  return EnglishDeterminer.ALPHABET.get(newPosition); // Return the new position
 	      }).collect(Collectors.toList());
 	    
 	      return Converters.convertListToString(shiftedText);
@@ -242,16 +227,16 @@ public class FrequencyAnalysisSimulator {
 	 * @return
 	 */
 	private static Object[][] getListOfOccurences(String text) {
-		Stream<Long> alphabetCollection = ALPHABET.stream().map(l -> {
+		Stream<Long> alphabetCollection = EnglishDeterminer.ALPHABET.stream().map(l -> {
 			return getOccurences(text, l);
 		});
 		
 		List<Long> listOfOccurences = alphabetCollection.collect(Collectors.toList());
 		ArrayList<ArrayList<Object>> letterOccurencesPairs = new ArrayList<ArrayList<Object>>();
-		for (int i = 0; i < ALPHABET.size(); i++) {
+		for (int i = 0; i < EnglishDeterminer.ALPHABET.size(); i++) {
 			ArrayList<Object> letterOccurencesPair = new ArrayList<Object>();
 			// First element is letter as Character
-			letterOccurencesPair.add(ALPHABET.get(i)); 
+			letterOccurencesPair.add(EnglishDeterminer.ALPHABET.get(i)); 
 			// Second element is number of occurences as Long
 			letterOccurencesPair.add(listOfOccurences.get(i)); 
 			// Third element is to be set as difference between the index 1 and index 1 of the previous array
@@ -376,7 +361,7 @@ public class FrequencyAnalysisSimulator {
 	 */
 	protected static int getLeastFrequentMostFrequentLetterFrequency(String ciphertext, Object[][] listOfDifferences) {
 		int highestDifference = getHighestDifference(ciphertext, listOfDifferences);
-		for (int i = 1; i < ALPHABET.size(); i++) {
+		for (int i = 1; i < EnglishDeterminer.ALPHABET.size(); i++) {
 			if ((int)listOfDifferences[i][2] == highestDifference) {
 				
 				return Math.toIntExact((long)listOfDifferences[i][1]);
@@ -461,7 +446,7 @@ public class FrequencyAnalysisSimulator {
 	 */
 	private static List<Character> generateCipherAlphabet() {
 		List<Character> cipheralphabet = new ArrayList<Character>();
-		for (char letter : ALPHABET) {
+		for (char letter : EnglishDeterminer.ALPHABET) {
 		    cipheralphabet.add(letter);
 		}
 		
@@ -478,10 +463,10 @@ public class FrequencyAnalysisSimulator {
 	public static String encryptMonoalphabetic(String plaintext) {
 		List<Character> plaintextchars = Converters.convertStringToListOfCharacters(plaintext);
 		List<Character> cipherAlphabet = generateCipherAlphabet();
-		List<Character> plainAlphabet = ALPHABET;
+		List<Character> plainAlphabet = EnglishDeterminer.ALPHABET;
 		
 		List<Character> cipherchars = plaintextchars.stream().map(p -> {
-			if (isSpaceOrPunctuation(p)) {
+			if (EnglishDeterminer.isSpaceOrPunctuation(p)) {
 				return p;
 			}
 			
