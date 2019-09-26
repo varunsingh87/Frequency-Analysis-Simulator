@@ -6,10 +6,8 @@ package net.sf.extjwnl; // Uses the extjwnl package to determine if strings are 
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -19,10 +17,7 @@ import java.util.stream.Stream;
 
 import alphastats.*; // Uses my custom package for statistics and generalizations
 
-import helperfoo.Converters;
-
-import net.sf.extjwnl.data.POS;
-import net.sf.extjwnl.dictionary.Dictionary;
+import helperfoo.*; // Uses my custom package for helper methods in "static" classes
 
 /**
  * Frequency Analysis Simulator
@@ -195,51 +190,6 @@ public class FrequencyAnalysisSimulator {
 	      return Converters.convertListToString(shiftedText);
 	}
 
-	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
-	 * @param pos
-	 * @param word
-	 * @return whether the given string is an English word
-	 * @throws JWNLException
-	 */
-	protected static boolean isWord(String word) throws JWNLException {
-		// DONE Implement isWord(String word) method
-		Dictionary d = Dictionary.getDefaultResourceInstance();
-		
-		Collection<POS> POSList = EnumSet.allOf(POS.class);
-		
-		List<String> reflexivepronouns = Converters.convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
-		List<String> outliers = Converters.convertStringToListOfStrings("the this that of these those and you for");
-		List<String> combinedOutliers = Stream.of(reflexivepronouns, outliers)
-	            .flatMap(x -> x.stream())
-	            .collect(Collectors.toList());
-		boolean isWord = POSList.stream().anyMatch(c -> {
-			try {
-				return d.lookupIndexWord(c, word) != null;
-			} catch (JWNLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
-			}
-		});
-		
-		return isWord || combinedOutliers.contains(word);
-	}
-
-	/**
-	 * 
-	 * @param words
-	 * @return
-	 * @throws JWNLException
-	 */
-	private static boolean isSentence(String[] words) throws JWNLException {
-		for (String word : words) {
-			if (!isWord(word))
-				return false;
-		}
-		
-		return true;
-	}
-
 	/**
 	 * 
 	 * @param ciphertext
@@ -252,7 +202,7 @@ public class FrequencyAnalysisSimulator {
 		for (int i = 1; i <= 26; i++) {
 			final int key = i;
 			String shiftedText = shiftLetters(key, ciphertext);
-		    if (isSentence(shiftedText.split(" "))) {
+		    if (EnglishDeterminer.isSentence(shiftedText.split(" "))) {
 		    	return shiftedText;
 		    }
 		}
@@ -485,7 +435,7 @@ public class FrequencyAnalysisSimulator {
 				String word1 = word.replace(doub, c);
 				System.out.println(word1);
 				
-				if (isWord(word1) ) {
+				if (EnglishDeterminer.isWord(word1) ) {
 					ciphertext1 = ciphertext.replace(word, word1.toLowerCase());
 				}
 			}
