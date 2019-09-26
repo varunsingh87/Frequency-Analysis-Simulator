@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import helperfoo.Converters;
+import helperfoo.EnglishDeterminer;
+import net.sf.extjwnl.JWNLException;
 
 public class CaesarShiftCipher extends Cipher {
 	private String text;
@@ -13,19 +15,25 @@ public class CaesarShiftCipher extends Cipher {
 	}
 	
 	/**
-		 * 
-		 * @param ciphertext
-		 * @param key
-		 * @return the plaintext
+	 * 
+	 * @param ciphertext
+	 * @param key
+	 * @return the plaintext
+	 * @throws JWNLException 
 	 */
 	public String decrypt() {
 	
 		for (int i = 1; i <= 26; i++) {
 			final int key = i;
 			String shiftedText = this.shiftLetters(key);
-		    if (isSentence(shiftedText.split(" "))) {
-		    	return shiftedText;
-		    }
+		    try {
+				if (EnglishDeterminer.isSentence(shiftedText.split(" "))) {
+					return shiftedText;
+				}
+			} catch (JWNLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return "This ciphertext has non-English plaintext";
 	}
@@ -43,7 +51,8 @@ public class CaesarShiftCipher extends Cipher {
 	 * 
 	 */
 	public String magic() {
-		
+		text = "OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.";
+		return this.decrypt();
 	}
 	
 	/**
@@ -54,23 +63,24 @@ public class CaesarShiftCipher extends Cipher {
 	private String shiftLetters(int key) {
 		List<Character> unshiftedChars = Converters.convertStringToListOfCharacters(text);
 		
-	    List<Character> shiftedText = unshiftedChars.stream()
+	    List<Character> shiftedText = unshiftedChars
+	      .stream()
 	      .map( c -> {
 	    	  
-	    	  if (isSpaceOrPunctuation(c)) {
+	    	  if (EnglishDeterminer.isSpaceOrPunctuation(c)) {
 	    		  return c;
 	    	  }
 	
 	    	  // Shift the letter by an integer, key
-	    	  int index = ALPHABET.indexOf(c);
+	    	  int index = EnglishDeterminer.ALPHABET.indexOf(c);
 	    	  int newPosition = index + key;
 	    	  if (newPosition > 25) {
 	    		  newPosition -= 26; 
 	    	  }
 	    	  
-	    	  return ALPHABET.get(newPosition); // Return the new position
+	    	  return EnglishDeterminer.ALPHABET.get(newPosition); // Return the new position
 	      }).collect(Collectors.toList());
 	    
-	      return convertListToString(shiftedText);
+	      return Converters.convertListToString(shiftedText);
 	}
 }

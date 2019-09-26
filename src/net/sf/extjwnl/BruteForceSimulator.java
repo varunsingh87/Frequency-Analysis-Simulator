@@ -2,6 +2,8 @@ package net.sf.extjwnl;
 
 import java.util.Scanner;
 
+import helperfoo.EnglishDeterminer;
+
 class BruteForceSimulator {
 	static Scanner userInput = new Scanner(System.in);
 	public static void main(String[] args) throws JWNLException {
@@ -11,7 +13,7 @@ class BruteForceSimulator {
 		for (char l : ciphertext.toCharArray()) {
 			for (char m : ciphertext.toCharArray()) {
 				System.out.println(l + ", " + m);
-				if (FrequencyAnalysisSimulator.isWord(ciphertext.replace(l, m))) {
+				if (EnglishDeterminer.isWord(ciphertext.replace(l, m))) {
 					
 					ciphertext = ciphertext.replace(l, m);
 				}

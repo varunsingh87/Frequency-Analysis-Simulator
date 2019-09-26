@@ -1,5 +1,6 @@
 package helperfoo;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
@@ -11,6 +12,8 @@ import net.sf.extjwnl.data.POS;
 import net.sf.extjwnl.dictionary.Dictionary;
 
 public final class EnglishDeterminer {
+	public static List<Character> ALPHABET = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+	
 	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
 	 * @param pos
 	 * @param word
@@ -54,5 +57,22 @@ public final class EnglishDeterminer {
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Returns whether or not a given character is a space or a punctuation mark
+	 * @param c the character being checked
+	 * @return true if a character is either a space or a punctuation
+	 * false if the character is anything else
+	 */
+	public static boolean isSpaceOrPunctuation(Character c) {
+		char[] charsToSkip = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}'};
+		for (char item : charsToSkip) {
+			if (c.equals(item)) {
+				return true; // No need to look further.
+			} 
+		}
+		
+		return false;
 	}
 }
