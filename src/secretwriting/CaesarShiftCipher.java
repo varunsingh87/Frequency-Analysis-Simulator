@@ -1,4 +1,4 @@
-package net.sf.extjwnl;
+package secretwriting;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +43,7 @@ public class CaesarShiftCipher extends Cipher {
 	 * @return the shifted output message
 	 */
 	private String shiftLetters(int key) {
-		List<Character> unshiftedChars = convertStringToListOfCharacters(text);
+		List<Character> unshiftedChars = Converters.convertStringToListOfCharacters(text);
 		
 	    List<Character> shiftedText = unshiftedChars.stream()
 	      .map( c -> {

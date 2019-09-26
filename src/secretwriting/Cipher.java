@@ -1,6 +1,6 @@
-package net.sf.extjwnl;
+package secretwriting;
 
-public abstract class Cipher {
+public abstract class Cipher extends SecretWriting {
 	public abstract String decrypt();
 	
 	public abstract String encrypt();
