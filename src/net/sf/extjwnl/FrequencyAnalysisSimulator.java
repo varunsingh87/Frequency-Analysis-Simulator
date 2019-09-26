@@ -192,7 +192,7 @@ public class FrequencyAnalysisSimulator {
 	    	  return ALPHABET.get(newPosition); // Return the new position
 	      }).collect(Collectors.toList());
 	    
-	      return convertListToString(shiftedText);
+	      return Converters.convertListToString(shiftedText);
 	}
 
 	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
@@ -526,7 +526,7 @@ public class FrequencyAnalysisSimulator {
 	 * @return
 	 */
 	public static String encryptMonoalphabetic(String plaintext) {
-		List<Character> plaintextchars = convertStringToListOfCharacters(plaintext);
+		List<Character> plaintextchars = Converters.convertStringToListOfCharacters(plaintext);
 		List<Character> cipherAlphabet = generateCipherAlphabet();
 		List<Character> plainAlphabet = ALPHABET;
 		
@@ -540,7 +540,7 @@ public class FrequencyAnalysisSimulator {
 			return cipherAlphabet.get(nthLetter);
 		}).collect(Collectors.toList());	
 		
-		return convertListToString(cipherchars);
+		return Converters.convertListToString(cipherchars);
 	}
 	
 	/** 
