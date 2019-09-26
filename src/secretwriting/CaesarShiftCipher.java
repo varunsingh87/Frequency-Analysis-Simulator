@@ -3,6 +3,8 @@ package secretwriting;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import helperfoo.Converters;
+
 public class CaesarShiftCipher extends Cipher {
 	private String text;
 	
@@ -34,6 +36,13 @@ public class CaesarShiftCipher extends Cipher {
 	public String encrypt() {
 		String ciphertext = this.shiftLetters((int)(Math.random() * 25));
 		return ciphertext;
+		
+	}
+	
+	/**
+	 * 
+	 */
+	public String magic() {
 		
 	}
 	
