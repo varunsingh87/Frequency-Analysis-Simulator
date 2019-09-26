@@ -38,6 +38,8 @@ import net.sf.extjwnl.dictionary.Dictionary;
  	* Stack Overflow, Inc.
  	* <br>
  	* Gale......
+ 	* <br>
+ 	* The Code Book
  */
 public class FrequencyAnalysisSimulator {
 	
@@ -47,7 +49,7 @@ public class FrequencyAnalysisSimulator {
 		DECRYPT,
 		MAGIC
 	}
-	static List<Character> ALPHABET = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+	public static List<Character> ALPHABET = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 	static char[] CHARS_TO_SKIP = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}'};
 	static Exception InvalidInputException = new Exception("You did not enter valid input. Please rerun the program and try again");
 	
@@ -197,7 +199,7 @@ public class FrequencyAnalysisSimulator {
 	 * @return whether the given string is an English word
 	 * @throws JWNLException
 	 */
-	private static boolean isWord(String word) throws JWNLException {
+	protected static boolean isWord(String word) throws JWNLException {
 		// DONE Implement isWord(String word) method
 		Dictionary d = Dictionary.getDefaultResourceInstance();
 		
@@ -409,8 +411,7 @@ public class FrequencyAnalysisSimulator {
 	 * @param ciphertext
 	 * @return
 	 */
-	private static int getHighestDifference(String ciphertext) {
-		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);
+	private static int getHighestDifference(String ciphertext, Object[][] listOfDifferences) {
 		int highestDifference = maxCol(listOfDifferences, 2);
 		
 		return highestDifference;
@@ -421,10 +422,8 @@ public class FrequencyAnalysisSimulator {
 	 * @param ciphertext
 	 * @return
 	 */
-	protected static int getLeastFrequentMostFrequentLetterFrequency(String ciphertext) {
-		
-		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);
-		int highestDifference = getHighestDifference(ciphertext);
+	protected static int getLeastFrequentMostFrequentLetterFrequency(String ciphertext, Object[][] listOfDifferences) {
+		int highestDifference = getHighestDifference(ciphertext, listOfDifferences);
 		for (int i = 1; i < ALPHABET.size(); i++) {
 			if ((int)listOfDifferences[i][2] == highestDifference) {
 				
@@ -439,52 +438,70 @@ public class FrequencyAnalysisSimulator {
 	 * @param ciphertext
 	 * @return
 	 */
-	protected static Object[][] getMostFrequentLetters(String ciphertext) {
-		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);			
+	protected static Object[][] getMostFrequentLetters(String ciphertext, Object[][] listOfDifferences) {	
 		
-		int leastFrequentMostFrequentLetterFrequency = getLeastFrequentMostFrequentLetterFrequency(ciphertext);
+		int leastFrequentMostFrequentLetterFrequency = getLeastFrequentMostFrequentLetterFrequency(ciphertext, listOfDifferences);
 		Object[][] mostFrequentLetters = Arrays.asList(listOfDifferences).stream().filter(a -> {
 
 			return (long)a[1] >= leastFrequentMostFrequentLetterFrequency;
 		}).toArray(Object[][]::new);
 		
 		return mostFrequentLetters;
-	} 
+	}
+
 	
-	private static String findBasedOnBigrams(String ciphertext) {
-		Character[] mostFrequentLetters = getColAsChars(getMostFrequentLetters(ciphertext), 0).toArray(new Character[getMostFrequentLetters(ciphertext).length]);
-		List<Long> doubleLetterOccurences = new ArrayList<Long>();
-		// Loop through the most frequent letters
-		for (Character letter : ALPHABET) {
-			String bigram = "" + letter + letter;
-			//System.out.print(bigram);
-			//System.out.print(String.valueOf(getOccurences(ciphertext, bigram) + ";\n"));
-			doubleLetterOccurences.add(getOccurences(ciphertext, bigram));
+	/**
+	 * Deciphers certain letters based on their bigrams and double letters
+	 * @param ciphertext
+	 * @param listOfDifferences
+	 * @return text with the letters that have been deciphered replaced with lowercase plaintext letters
+	 */
+	private static String findBasedOnBigrams(String ciphertext) throws JWNLException {
+		String ciphertext1 = ""; 
+		List<String> goodWords = Arrays.asList(
+			ciphertext.split(" "))
+				.stream()
+				.filter(
+					word -> {
+						System.out.println(word);
+						return AlphabeticalStatistics.meetsAllConditions(
+								AlphabeticalStatistics.isNWords(
+										word, 3), 
+								AlphabeticalStatistics.hasDoubleInWord(
+										word)
+						);
+					}
+				)
+				.collect(
+					Collectors.toList()
+				);
+		System.out.println(convertListToString(goodWords));
+		for (String word : goodWords) {
+			for (Character c : AlphabeticalStatistics.DOUBLE_LETTERS) {
+				char doub = AlphabeticalStatistics.doubleLetterInWord(word);
+				System.out.println(doub + ", " + c);
+				String word1 = word.replace(doub, c);
+				System.out.println(word1);
+				
+				if (isWord(word1) ) {
+					ciphertext1 = ciphertext.replace(word, word1.toLowerCase());
+				}
+			}
 		}
 		
-		/*
-		 * Gets the double letter occurences of each letter
-		 * Find the maximum in the list of all numbers of occurences
-		 * Find the index of this one
-		 * Gets the element from most frequent letters of this index
-		 * This is E
-		 */
-		//System.out.println("-1?" + doubleLetterOccurences.toString());
-		char plaintextE = mostFrequentLetters[doubleLetterOccurences.indexOf(Collections.max(doubleLetterOccurences))];
-		return ciphertext.replace(plaintextE, 'e');
-
+		return ciphertext1;
 	}
 	
 	/** 
 	 * @param ciphertext the cipher that is deciphered
 	 * @return the completely deciphered or almost completely deciphered monoalphabetic substitution cipher in plaintext
 	 */
-	public static String decipherMonoalphabetic(String ciphertext) {
+	public static String decipherMonoalphabetic(String ciphertext) throws JWNLException {
 		// TODO Implement decipherMonoalphabetic(String ciphertext) method
-		
-		Object[][] mostFrequentLetters = getMostFrequentLetters(ciphertext);
-			
-		return findBasedOnBigrams(ciphertext);
+		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);
+		Object[][] mostFrequentLetters = getMostFrequentLetters(ciphertext, listOfDifferences);
+		String bigramData = findBasedOnBigrams(ciphertext);
+		return bigramData;
 	}
 	
 	/** Creates a cipher alphabet
@@ -528,7 +545,7 @@ public class FrequencyAnalysisSimulator {
 	 * @param ciphertext
 	 * @return the completely deciphered or almost completely deciphered Vigenere cipher in plaintext
 	 */
-	public static String decipherVigenere(String ciphertext) {
+	public static String decipherVigenere(String ciphertext) throws JWNLException {
 		// TODO Implement decipherVigenere(String ciphertext) method
 		Pattern p = Pattern.compile(".*(.+).*\1.*");
 		Matcher m = p.matcher(ciphertext);
@@ -539,17 +556,17 @@ public class FrequencyAnalysisSimulator {
 	}
 
 	/**
-	 * @param list the list of characters
+	 * @param list the list of objects of type T
 	 * @return the converted string
 	 */
-	private static String convertListToString(List<Character> list)
-	{    
-	    StringBuilder builder = new StringBuilder(list.size());
-	    for(Object ch: list)
-	    {
-	        builder.append(ch);
-	    }
-	    return builder.toString();
+	private static <T> String convertListToString(List<T> list) {    
+		String s = "";
+
+		for (int i = 0; i < list.size(); i++) {
+		    s += list.get(i).toString();
+		}
+
+		return s;
 	}
 	
 	/**
