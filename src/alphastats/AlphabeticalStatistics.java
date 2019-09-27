@@ -10,7 +10,8 @@ import java.util.Arrays;
 
 // Make final class so class cannot be extended
 public final class AlphabeticalStatistics {
-	public static char[] DOUBLE_LETTERS = {'S', 'E', 'T', 'F', 'L', 'M', 'O'};
+	public final static char[] DOUBLE_LETTERS = {'S', 'E', 'T', 'F', 'L', 'M', 'O'};
+	public final static String[] DIGRAPHS = {"th", "er", "on", "an", "re", "he", "in", "ed", "nd", "ha", "at", "en", "es", "of", "or", "nt", "ea", "ti", "to", "it", "st", "io", "le", "is", "ou", "ar", "as", "de", "rt", "ve"};
 	
 	// Make private constructor so no instances can be made
 	private AlphabeticalStatistics() {
