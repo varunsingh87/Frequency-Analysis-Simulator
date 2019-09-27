@@ -53,6 +53,7 @@ public class FrequencyAnalysisSimulator {
 	 * @param args
 	 */
 	public static void main(String[] args) throws JWNLException {
+		Converters.printArray(Converters.convertStringToStringArray("th er on an re he in ed nd ha at en es of or nt ea ti to it st io le is ou ar as de rt ve"));
 		ACTION action = determineAction();
 		if (action.equals(ACTION.DECRYPT))
 			handleDecrypt();
