@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 // Make final class so class cannot be extended
 public final class AlphabeticalStatistics {
-	public static char[] DOUBLE_LETTERS = {'E', 'T', 'F', 'L', 'M', 'O', 'P', 'R', 'M', 'C', 'D', 'E'};
+	public static char[] DOUBLE_LETTERS = {'S', 'E', 'T', 'F', 'L', 'M', 'O'};
 	
 	// Make private constructor so no instances can be made
 	private AlphabeticalStatistics() {
@@ -23,8 +23,8 @@ public final class AlphabeticalStatistics {
 	 * @param letter the letter that is checked for two-in-a-row repetition
 	 * @param plaintext whether or not the letter and text is in plaintext
 	 * @return TRUE if the word has the specified double letter and FALSE if it does not
-	 * @throws UndoubleableLetterException custom exception if the letter passed in is not possible to be in double letters in the English language
-	 * @exception UndoubleableLetterException when caught, it returns false
+	 * @throws IllegalArgumentException custom exception if the letter passed in is not possible to be in double letters in the English language
+	 * @exception IllegalArgumentException when caught, it returns false
 	 */
 	public static boolean hasDoubleLetters(String text, char letter, boolean plaintext) {
 		
@@ -48,7 +48,7 @@ public final class AlphabeticalStatistics {
 		
 	}
 	
-	public static boolean isNWords(String word, int n) {
+	public static boolean isNLetters(String word, int n) {
 		return word.length() == n;
 	}
 	

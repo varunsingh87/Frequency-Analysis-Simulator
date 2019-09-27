@@ -402,7 +402,7 @@ public class FrequencyAnalysisSimulator {
 					word -> {
 						System.out.println(word);
 						return AlphabeticalStatistics.meetsAllConditions(
-								AlphabeticalStatistics.isNWords(
+								AlphabeticalStatistics.isNLetters(
 										word, 3), 
 								AlphabeticalStatistics.hasDoubleInWord(
 										word)
