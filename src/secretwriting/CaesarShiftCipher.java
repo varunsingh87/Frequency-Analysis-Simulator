@@ -1,5 +1,6 @@
 package secretwriting;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,10 +9,9 @@ import helperfoo.EnglishDeterminer;
 import net.sf.extjwnl.JWNLException;
 
 public class CaesarShiftCipher extends Cipher {
-	private String text;
 	
 	public CaesarShiftCipher(String givenText) {
-		text = givenText;
+		super(givenText);
 	}
 	
 	/**
@@ -48,10 +48,10 @@ public class CaesarShiftCipher extends Cipher {
 	}
 	
 	/**
-	 * 
+	 * Automatically decrypts the testing cipher so the beta tester does not have to go through the redundant (for him/her) process of inputting 
 	 */
 	public String magic() {
-		text = "OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.";
+		setText("OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.");
 		return this.decrypt();
 	}
 	
@@ -61,7 +61,7 @@ public class CaesarShiftCipher extends Cipher {
 	 * @return the shifted output message
 	 */
 	private String shiftLetters(int key) {
-		List<Character> unshiftedChars = Converters.convertStringToListOfCharacters(text);
+		List<Character> unshiftedChars = Converters.convertStringToListOfCharacters(getText());
 		
 	    List<Character> shiftedText = unshiftedChars
 	      .stream()
@@ -82,5 +82,16 @@ public class CaesarShiftCipher extends Cipher {
 	      }).collect(Collectors.toList());
 	    
 	      return Converters.convertListToString(shiftedText);
+	}
+
+	public ArrayList<Character> generateCipherAlphabet() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void printCipherAlphabetAsTable() {
+		// TODO Auto-generated method stub
+		
 	}
 }
