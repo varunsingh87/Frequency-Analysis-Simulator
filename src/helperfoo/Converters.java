@@ -47,19 +47,11 @@ public final class Converters {
 		return s;
 	}
 	
-	public static String[] convertStringToStringArray(String s) {
-		return s.split(" ");
-	}
-	
-	public static String[] convertStringToStringArray(String s, String regex) {
-		return s.split(regex);
-	}
-	
 	public static void printArray(String[] arr) {
 		System.out.print("{");
         for (String element: arr) {
             System.out.print("\"" + element + "\", ");
         }
-        System.out.print("}");
+        System.out.print("}\n");
 	}
 }

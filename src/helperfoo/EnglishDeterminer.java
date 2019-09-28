@@ -26,9 +26,10 @@ public final class EnglishDeterminer {
 		
 		Collection<POS> POSList = EnumSet.allOf(POS.class);
 		
-		List<String> reflexivepronouns = Converters.convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
-		List<String> outliers = Converters.convertStringToListOfStrings("the this that of these those and you for");
-		List<String> combinedOutliers = Stream.of(reflexivepronouns, outliers)
+		List<String> reflexivePronouns = Converters.convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
+		List<String> outliers = Converters.convertStringToListOfStrings("the this that of these those and you for to with");
+		List<String> personalPronouns = Converters.convertStringToListOfStrings("she we");
+		List<String> combinedOutliers = Stream.of(reflexivePronouns, outliers, personalPronouns)
 	            .flatMap(x -> x.stream())
 	            .collect(Collectors.toList());
 		boolean isWord = POSList.stream().anyMatch(c -> {
@@ -50,7 +51,7 @@ public final class EnglishDeterminer {
 	 * @return
 	 * @throws JWNLException
 	 */
-	public static boolean isSentence(String[] words) throws JWNLException {
+	public static boolean isSentence(String ...words) throws JWNLException {
 		for (String word : words) {
 			if (!isWord(word))
 				return false;
