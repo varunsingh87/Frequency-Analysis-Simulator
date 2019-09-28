@@ -2,6 +2,10 @@ package secretwriting;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import helperfoo.Converters;
 import helperfoo.EnglishDeterminer;
 
 public class MonoalphabeticCipher extends Cipher {
@@ -29,9 +33,27 @@ public class MonoalphabeticCipher extends Cipher {
 		return null;
 	}
 
+	/** 
+	 * Encrypts a message into a monoalphabetic cipher
+	 * @param plaintext
+	 * @return
+	 */
 	public String encrypt() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Character> plaintextchars = Converters.convertStringToListOfCharacters(text);
+		List<Character> cipherAlphabet = generateCipherAlphabet();
+		List<Character> plainAlphabet = EnglishDeterminer.ALPHABET;
+		
+		List<Character> cipherchars = plaintextchars.stream().map(p -> {
+			if (EnglishDeterminer.isSpaceOrPunctuation(p)) {
+				return p;
+			}
+			
+			int nthLetter = plainAlphabet.indexOf(p);
+			
+			return cipherAlphabet.get(nthLetter);
+		}).collect(Collectors.toList());	
+		
+		return Converters.convertListToString(cipherchars);
 	}
 
 	public String magic() {
