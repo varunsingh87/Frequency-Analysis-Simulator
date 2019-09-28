@@ -19,6 +19,10 @@ import alphastats.*; // Uses my custom package for statistics and generalization
 
 import helperfoo.*; // Uses my custom package for helper methods in "static" classes
 
+import secretwriting.CaesarShiftCipher;
+import secretwriting.MonoalphabeticCipher;
+import secretwriting.VigenereCipher;
+
 /**
  * Frequency Analysis Simulator
  * By Varun Singh
@@ -53,7 +57,10 @@ public class FrequencyAnalysisSimulator {
 	 * @param args
 	 */
 	public static void main(String[] args) throws JWNLException {
-		Converters.printArray(Converters.convertStringToStringArray("th er on an re he in ed nd ha at en es of or nt ea ti to it st io le is ou ar as de rt ve"));
+		System.out.println(EnglishDeterminer.isWord(
+				"it"// did. "
+			)
+		);
 		ACTION action = determineAction();
 		if (action.equals(ACTION.DECRYPT))
 			handleDecrypt();
@@ -61,7 +68,7 @@ public class FrequencyAnalysisSimulator {
 			handleEncrypt();
 		else if (action.equals(ACTION.MAGIC))
 			System.out.print(decipherMonoalphabetic("OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL."));
-	}
+		}
 	
 	/**
 	 * @return whether to encrypt or decipher
@@ -123,7 +130,7 @@ public class FrequencyAnalysisSimulator {
 		String ciphertext = determineCiphertext();
 		String ciphertype = determineCipherType(ACTION.DECRYPT);
 		if (ciphertype.equalsIgnoreCase("Caesar shift")) {
-			System.out.println(decipherCaesarShift(ciphertext));
+			System.out.println(new CaesarShiftCipher(ciphertext).decrypt());
 		} else if (ciphertype.equals("monoalphabetic")) {
 			System.out.println(decipherMonoalphabetic(ciphertext));
 		} else if (ciphertype.equals("Vigenere")) {
@@ -174,25 +181,6 @@ public class FrequencyAnalysisSimulator {
 	      }).collect(Collectors.toList());
 	    
 	      return Converters.convertListToString(shiftedText);
-	}
-
-	/**
-	 * 
-	 * @param ciphertext
-	 * @param key
-	 * @return the plaintext
-	 */
-	public static String decipherCaesarShift(String ciphertext) throws JWNLException {
-		// DONE Implement decipherCaesarShift (String ciphertext)
-		
-		for (int i = 1; i <= 26; i++) {
-			final int key = i;
-			String shiftedText = shiftLetters(key, ciphertext);
-		    if (EnglishDeterminer.isSentence(shiftedText.split(" "))) {
-		    	return shiftedText;
-		    }
-		}
-		return "This ciphertext has non-English plaintext";
 	}
 	
 	/** Generates a random integer key between 1 and 26 (inclusive) and shifts all letters in the given plain text by this key

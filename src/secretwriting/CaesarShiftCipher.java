@@ -56,6 +56,7 @@ public class CaesarShiftCipher extends Cipher {
 	}
 	
 	/**
+	 * @author Varun Singh
 	 * @param key the number of letters to shift to the right from the original letter
 	 * @param unshiftedText the ciphertext or the plaintext
 	 * @return the shifted output message
@@ -77,21 +78,20 @@ public class CaesarShiftCipher extends Cipher {
 	    	  if (newPosition > 25) {
 	    		  newPosition -= 26; 
 	    	  }
-	    	  
 	    	  return EnglishDeterminer.ALPHABET.get(newPosition); // Return the new position
 	      }).collect(Collectors.toList());
+	    System.out.println(Converters.convertListToString(shiftedText));
 	    
 	      return Converters.convertListToString(shiftedText);
 	}
 
 	public ArrayList<Character> generateCipherAlphabet() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
-	@Override
 	public void printCipherAlphabetAsTable() {
-		// TODO Auto-generated method stub
 		
+		System.out.println(generateCipherAlphabet());
 	}
 }
