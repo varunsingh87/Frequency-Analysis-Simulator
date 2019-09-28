@@ -67,7 +67,7 @@ public final class EnglishDeterminer {
 	 * false if the character is anything else
 	 */
 	public static boolean isSpaceOrPunctuation(Character c) {
-		char[] charsToSkip = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}'};
+		char[] charsToSkip = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}', '-'};
 		for (char item : charsToSkip) {
 			if (c.equals(item)) {
 				return true; // No need to look further.

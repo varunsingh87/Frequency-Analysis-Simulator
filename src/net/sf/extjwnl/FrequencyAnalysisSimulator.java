@@ -57,17 +57,13 @@ public class FrequencyAnalysisSimulator {
 	 * @param args
 	 */
 	public static void main(String[] args) throws JWNLException {
-		System.out.println(EnglishDeterminer.isWord(
-				"it"// did. "
-			)
-		);
 		ACTION action = determineAction();
 		if (action.equals(ACTION.DECRYPT))
 			handleDecrypt();
 		else if (action.equals(ACTION.ENCRYPT))
 			handleEncrypt();
 		else if (action.equals(ACTION.MAGIC))
-			System.out.print(decipherMonoalphabetic("OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL."));
+			System.out.print(new MonoalphabeticCipher("OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.").decrypt());
 		}
 	
 	/**
@@ -145,50 +141,12 @@ public class FrequencyAnalysisSimulator {
 		String plaintext = determinePlaintext();
 		String ciphertype = determineCipherType(ACTION.ENCRYPT);
 		if (ciphertype.equalsIgnoreCase("Caesar shift")) {
-			System.out.println(encryptCaesarShift(plaintext));
+			System.out.println(new CaesarShiftCipher(plaintext).encrypt());
 		} else if (ciphertype.equalsIgnoreCase("monoalphabetic")) {
-			System.out.println(encryptMonoalphabetic(plaintext));
+			System.out.println(new MonoalphabeticCipher(plaintext).encrypt());
+		} else if (ciphertype.equalsIgnoreCase("Vigenere")) {
+			System.out.println(new VigenereCipher(plaintext).encrypt());
 		}
-	}
-	
-
-	
-	/**
-	 * @param key the number of letters to shift to the right from the original letter
-	 * @param unshiftedText the ciphertext or the plaintext
-	 * @return the shifted output message
-	 */
-	private static String shiftLetters(final int key, String unshiftedText) {
-		// DONE Implement shiftLetters(final int key, String unshiftedText)
-		
-		List<Character> unshiftedChars = Converters.convertStringToListOfCharacters(unshiftedText);
-		
-	    List<Character> shiftedText = unshiftedChars.stream()
-	      .map( c -> {
-	    	  
-	    	  if (EnglishDeterminer.isSpaceOrPunctuation(c)) {
-	    		  return c;
-	    	  }
-	
-	    	  // Shift the letter by an integer, key
-	    	  int index = EnglishDeterminer.ALPHABET.indexOf(c);
-	    	  int newPosition = index + key;
-	    	  if (newPosition > 25) {
-	    		  newPosition -= 26; 
-	    	  }
-	    	  
-	    	  return EnglishDeterminer.ALPHABET.get(newPosition); // Return the new position
-	      }).collect(Collectors.toList());
-	    
-	      return Converters.convertListToString(shiftedText);
-	}
-	
-	/** Generates a random integer key between 1 and 26 (inclusive) and shifts all letters in the given plain text by this key
-	 * @return the Caesar-shift-cipher-encrypted cipher text
-	 */
-	public static String encryptCaesarShift(String plaintext) {
-		String ciphertext = shiftLetters((int)(Math.random() * 25), plaintext);
-		return ciphertext;
 	}
 	
 	/** 
@@ -442,29 +400,6 @@ public class FrequencyAnalysisSimulator {
 		Collections.shuffle(cipheralphabet);
 		
 		return cipheralphabet;
-	}
-
-	/** 
-	 * Encrypts a message into a monoalphabetic cipher
-	 * @param plaintext
-	 * @return
-	 */
-	public static String encryptMonoalphabetic(String plaintext) {
-		List<Character> plaintextchars = Converters.convertStringToListOfCharacters(plaintext);
-		List<Character> cipherAlphabet = generateCipherAlphabet();
-		List<Character> plainAlphabet = EnglishDeterminer.ALPHABET;
-		
-		List<Character> cipherchars = plaintextchars.stream().map(p -> {
-			if (EnglishDeterminer.isSpaceOrPunctuation(p)) {
-				return p;
-			}
-			
-			int nthLetter = plainAlphabet.indexOf(p);
-			
-			return cipherAlphabet.get(nthLetter);
-		}).collect(Collectors.toList());	
-		
-		return Converters.convertListToString(cipherchars);
 	}
 	
 	/** 

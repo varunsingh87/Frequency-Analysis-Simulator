@@ -38,8 +38,8 @@ public class CaesarShiftCipher extends Cipher {
 		return "This ciphertext has non-English plaintext";
 	}
 	
-	/**
-	 * 
+	/** Generates a random integer key between 1 and 26 (inclusive) and shifts all letters in the given plain text by this key
+	 * @return the Caesar-shift-cipher-encrypted cipher text
 	 */
 	public String encrypt() {
 		String ciphertext = this.shiftLetters((int)(Math.random() * 25));
@@ -62,7 +62,7 @@ public class CaesarShiftCipher extends Cipher {
 	 * @return the shifted output message
 	 */
 	private String shiftLetters(int key) {
-		List<Character> unshiftedChars = Converters.convertStringToListOfCharacters(getText());
+		List<Character> unshiftedChars = Converters.convertStringToListOfCharacters(text);
 		
 	    List<Character> shiftedText = unshiftedChars
 	      .stream()
