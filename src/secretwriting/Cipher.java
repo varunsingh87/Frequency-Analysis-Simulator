@@ -1,6 +1,6 @@
 package secretwriting;
 
-public abstract class Cipher extends SecretWriting implements Encipherable {
+public abstract class Cipher extends Substitution implements Encipherable {
 	private String text;
 	
 	public abstract String decrypt();
