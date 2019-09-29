@@ -86,6 +86,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Acknowledgments
 
 * Inspiration from _The Code Book_ by Simon Singh
+* _The Cryptanalyst_ 
 * etc
 
 Copyright 2019 Varun Singh
