@@ -10,15 +10,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import alphastats.*; // Uses my custom package for statistics and generalizations
+// Uses my custom package for statistics and generalizations
+import alphastats.AlphabeticalStatistics;
+// Uses my custom package for helper methods in "static" classes
+import helperfoo.Converters;
+import helperfoo.EnglishDeterminer;
 
-import helperfoo.*; // Uses my custom package for helper methods in "static" classes
-
+// Import secretwriting needed classes
 import secretwriting.CaesarShiftCipher;
 import secretwriting.MonoalphabeticCipher;
 import secretwriting.VigenereCipher;
@@ -130,7 +131,7 @@ public class FrequencyAnalysisSimulator {
 		} else if (ciphertype.equals("monoalphabetic")) {
 			System.out.println(decipherMonoalphabetic(ciphertext));
 		} else if (ciphertype.equals("Vigenere")) {
-			System.out.println(decipherVigenere(ciphertext));
+			System.out.println(new VigenereCipher(ciphertext).decrypt());
 		}
 	}
 	
@@ -387,32 +388,5 @@ public class FrequencyAnalysisSimulator {
 		String bigramData = findBasedOnBigrams(ciphertext);
 		return bigramData;
 	}
-	
-	/** Creates a cipher alphabet
-	 * @return the cipher alphabet - the shuffled plaintext alphabet
-	 */
-	private static List<Character> generateCipherAlphabet() {
-		List<Character> cipheralphabet = new ArrayList<Character>();
-		for (char letter : EnglishDeterminer.ALPHABET) {
-		    cipheralphabet.add(letter);
-		}
-		
-		Collections.shuffle(cipheralphabet);
-		
-		return cipheralphabet;
-	}
-	
-	/** 
-	 * @param ciphertext
-	 * @return the completely deciphered or almost completely deciphered Vigenere cipher in plaintext
-	 */
-	public static String decipherVigenere(String ciphertext) throws JWNLException {
-		// TODO Implement decipherVigenere(String ciphertext) method
-		Pattern p = Pattern.compile(".*(.+).*\1.*");
-		Matcher m = p.matcher(ciphertext);
-		Boolean b = m.matches();
-		System.out.println(b);
-		String plaintext = decipherMonoalphabetic(ciphertext);
-		return plaintext; 
-	}
+
 }

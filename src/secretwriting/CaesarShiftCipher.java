@@ -61,7 +61,7 @@ public class CaesarShiftCipher extends Cipher {
 	 * @param unshiftedText the ciphertext or the plaintext
 	 * @return the shifted output message
 	 */
-	private String shiftLetters(int key) {
+	protected String shiftLetters(int key) {
 		List<Character> unshiftedChars = Converters.convertStringToListOfCharacters(text);
 		
 	    List<Character> shiftedText = unshiftedChars

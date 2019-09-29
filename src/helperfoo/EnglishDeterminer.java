@@ -21,7 +21,6 @@ public final class EnglishDeterminer {
 	 * @throws JWNLException
 	 */
 	public static boolean isWord(String word) throws JWNLException {
-		// DONE Implement isWord(String word) method
 		Dictionary d = Dictionary.getDefaultResourceInstance();
 		
 		Collection<POS> POSList = EnumSet.allOf(POS.class);
