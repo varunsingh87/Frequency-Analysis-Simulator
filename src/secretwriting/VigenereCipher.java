@@ -1,8 +1,13 @@
 package secretwriting;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import helperfoo.EnglishDeterminer;
+
+import net.sf.extjwnl.JWNLException;
+import net.sf.extjwnl.data.IndexWord;
+import net.sf.extjwnl.data.POS;
+import net.sf.extjwnl.dictionary.Dictionary;
 
 public class VigenereCipher extends Cipher {
 	
@@ -11,22 +16,38 @@ public class VigenereCipher extends Cipher {
 	}
 
 	public String decrypt() {
-		// TODO Implement decipherVigenere(String ciphertext) method
-		Pattern p = Pattern.compile(".*(.+).*\1.*");
-		Matcher m = p.matcher(getText());
-		Boolean b = m.matches();
-		System.out.println(b);
-		String plaintext = new MonoalphabeticCipher(getText()).decrypt();
-		return plaintext; 
+		return text; 
 	}
 
 	public String encrypt() {
-		// TODO Auto-generated method stub
+		try {
+			Dictionary d = Dictionary.getDefaultResourceInstance();	
+			IndexWord key = d.getRandomIndexWord(POS.NOUN);
+			this.encrypt(key.toString());
+		} catch (JWNLException e) {
+			e.printStackTrace();
+		}
+		
 		return null;
+	}
+	
+	public String encrypt(String key) {
+		String encryptedText = "";
+		for (char keyChar : key.toCharArray()) {
+			// n in the nth letter in the entire key where
+			int indexOfKey = key.indexOf(keyChar); 
+			// n in the nth letter in the alphabet which represents the current letter in the key
+			int keyInSeries = EnglishDeterminer.ALPHABET.indexOf(keyChar) + 1; 
+			String cipherSubset = new CaesarShiftCipher("").shiftLetters(keyInSeries);
+			for (int i = 0; i < text.length(); i++) {
+				encryptedText = text.replace(text.charAt(i * key.length() + indexOfKey), cipherSubset.charAt(i));
+			}
+		}
+		return encryptedText;
+		
 	}
 
 	public String magic() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -35,10 +56,8 @@ public class VigenereCipher extends Cipher {
 		
 	}
 
-	@Override
 	public void printCipherAlphabetAsTable() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("");
 	}
 
 }
