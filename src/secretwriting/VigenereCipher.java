@@ -23,7 +23,7 @@ public class VigenereCipher extends Cipher {
 		try {
 			Dictionary d = Dictionary.getDefaultResourceInstance();	
 			IndexWord key = d.getRandomIndexWord(POS.NOUN);
-			this.encrypt(key.toString());
+			this.encrypt(key.getLemma());
 		} catch (JWNLException e) {
 			e.printStackTrace();
 		}
@@ -32,23 +32,27 @@ public class VigenereCipher extends Cipher {
 	}
 	
 	public String encrypt(String key) {
-		String encryptedText = "";
+		
 		for (char keyChar : key.toCharArray()) {
-			// n in the nth letter in the entire key where
+			// n in the nth letter in the entire key
 			int indexOfKey = key.indexOf(keyChar); 
 			// n in the nth letter in the alphabet which represents the current letter in the key
 			int keyInSeries = EnglishDeterminer.ALPHABET.indexOf(keyChar) + 1; 
-			String cipherSubset = new CaesarShiftCipher("").shiftLetters(keyInSeries);
-			for (int i = 0; i < text.length(); i++) {
-				encryptedText = text.replace(text.charAt(i * key.length() + indexOfKey), cipherSubset.charAt(i));
+			
+			String cipherSubset = new CaesarShiftCipher(getText()).shiftLetters(keyInSeries);
+			System.out.println(cipherSubset + "\n\n");
+			for (int i = indexOfKey; i < getText().length(); i+=key.length()) {
+				char charToReplace = getText().charAt(i);
+				char charThatReplaces = cipherSubset.charAt(i);
+				setText(getText().replace(charToReplace, charThatReplaces));
 			}
 		}
-		return encryptedText;
+		return getText();
 		
 	}
 
-	public String magic() {
-		return null;
+	public static String magic() {
+		return new VigenereCipher("In the 34 years since the R.M.S. Titanic was discovered on the seafloor south of Newfoundland, it has become the world’s most famous shipwreck — a rusting hulk assailed by hundreds of explorers and moviemakers, salvors and tourists, scientists and federal watchdogs. All agree that the once-grand ship is rapidly falling apart. Resting on the icy North Atlantic seabed more than two miles down, upright but split in two, the fragile mass is slowly succumbing to rust, corrosive salts, microbes and colonies of deep-sea creatures.").encrypt();
 	}
 	
 	public ArrayList<Character> generateCipherAlphabet() {

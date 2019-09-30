@@ -7,8 +7,6 @@ public abstract class Cipher extends Substitution implements Encipherable, Decip
 	
 	public abstract String encrypt();
 	
-	public abstract String magic();
-	
 	public Cipher(String givenText) {
 		setText(givenText);
 	}

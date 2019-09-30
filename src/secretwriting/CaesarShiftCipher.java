@@ -1,6 +1,7 @@
 package secretwriting;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,13 @@ public class CaesarShiftCipher extends Cipher {
 			final int key = i;
 			String shiftedText = this.shiftLetters(key);
 		    try {
-				if (EnglishDeterminer.isSentence(shiftedText.split(" "))) {
+				if (
+						EnglishDeterminer.isSentence(
+								shiftedText.split(
+										new String(EnglishDeterminer.CHARS_TO_SKIP)
+										)
+								)
+						) {
 					return shiftedText;
 				}
 			} catch (JWNLException e) {
@@ -50,9 +57,8 @@ public class CaesarShiftCipher extends Cipher {
 	/**
 	 * Automatically decrypts the testing cipher so the beta tester does not have to go through the redundant (for him/her) process of inputting 
 	 */
-	public String magic() {
-		setText("OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.");
-		return this.decrypt();
+	public static String magic() {
+		return new CaesarShiftCipher("OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.").decrypt();
 	}
 	
 	/**
@@ -62,26 +68,26 @@ public class CaesarShiftCipher extends Cipher {
 	 * @return the shifted output message
 	 */
 	protected String shiftLetters(int key) {
-		List<Character> unshiftedChars = Converters.convertStringToListOfCharacters(text);
+
+		List<Character> unshiftedChars = Converters.convertStringToListOfCharacters(getText());
 		
 	    List<Character> shiftedText = unshiftedChars
 	      .stream()
 	      .map( c -> {
 	    	  
-	    	  if (EnglishDeterminer.isSpaceOrPunctuation(c)) {
+	    	  if (EnglishDeterminer.isSpaceOrPunctuation(c) || EnglishDeterminer.isInteger(c.toString())) {
 	    		  return c;
 	    	  }
 	
 	    	  // Shift the letter by an integer, key
-	    	  int index = EnglishDeterminer.ALPHABET.indexOf(c);
+	    	  int index = EnglishDeterminer.ALPHABET.indexOf(Character.toLowerCase(c));
 	    	  int newPosition = index + key;
 	    	  if (newPosition > 25) {
 	    		  newPosition -= 26; 
 	    	  }
 	    	  return EnglishDeterminer.ALPHABET.get(newPosition); // Return the new position
 	      }).collect(Collectors.toList());
-	    System.out.println(Converters.convertListToString(shiftedText));
-	    
+	    System.out.println(Converters.convertListToString(shiftedText) + "\n");
 	      return Converters.convertListToString(shiftedText);
 	}
 
