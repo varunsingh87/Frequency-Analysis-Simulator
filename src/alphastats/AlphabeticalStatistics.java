@@ -73,4 +73,5 @@ public final class AlphabeticalStatistics {
 		System.out.println(Arrays.asList(Arrays.toString(conditions)));
 		return !Arrays.asList(conditions).contains(false);
 	}
+
 }

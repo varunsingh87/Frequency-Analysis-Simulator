@@ -13,7 +13,8 @@ import net.sf.extjwnl.dictionary.Dictionary;
 
 public final class EnglishDeterminer {
 	public static List<Character> ALPHABET = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
-	
+	public static char[] CHARS_TO_SKIP = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}', '-', '—', '’'};
+
 	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
 	 * @param pos
 	 * @param word
@@ -52,7 +53,7 @@ public final class EnglishDeterminer {
 	 */
 	public static boolean isSentence(String ...words) throws JWNLException {
 		for (String word : words) {
-			if (!isWord(word))
+			if (!isWord(word) && !isInteger(word))
 				return false;
 		}
 		
@@ -66,13 +67,27 @@ public final class EnglishDeterminer {
 	 * false if the character is anything else
 	 */
 	public static boolean isSpaceOrPunctuation(Character c) {
-		char[] charsToSkip = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}', '-'};
-		for (char item : charsToSkip) {
+		for (char item : CHARS_TO_SKIP) {
 			if (c.equals(item)) {
 				return true; // No need to look further.
 			} 
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Copied from <a href = "https://stackoverflow.com/questions/237159/whats-the-best-way-to-check-if-a-string-represents-an-integer-in-java">a Stack Overflow question and answer</a>
+	 * @param input
+	 * @return
+	 */
+	public static boolean isInteger( String input ) {
+	    try {
+	        Integer.parseInt( input );
+	        return true;
+	    }
+	    catch(NumberFormatException e ) {
+	        return false;
+	    }
 	}
 }

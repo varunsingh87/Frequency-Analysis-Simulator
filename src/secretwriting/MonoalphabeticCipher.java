@@ -44,11 +44,11 @@ public class MonoalphabeticCipher extends Cipher {
 		List<Character> plainAlphabet = EnglishDeterminer.ALPHABET;
 		
 		List<Character> cipherchars = plaintextchars.stream().map(p -> {
-			if (EnglishDeterminer.isSpaceOrPunctuation(p)) {
+			if (EnglishDeterminer.isSpaceOrPunctuation(p) || EnglishDeterminer.isInteger(p.toString())) {
 				return p;
 			}
 			
-			int nthLetter = plainAlphabet.indexOf(p);
+			int nthLetter = plainAlphabet.indexOf(Character.toLowerCase(p));
 			
 			return cipherAlphabet.get(nthLetter);
 		}).collect(Collectors.toList());	
