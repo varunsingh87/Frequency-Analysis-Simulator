@@ -13,7 +13,7 @@ import net.sf.extjwnl.dictionary.Dictionary;
 
 public final class EnglishDeterminer {
 	public static List<Character> ALPHABET = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
-	public static char[] CHARS_TO_SKIP = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}', '-', '—', '’'};
+	public static Character[] CHARS_TO_SKIP = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}', '-', '—', '’'};
 
 	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
 	 * @param pos
@@ -27,9 +27,11 @@ public final class EnglishDeterminer {
 		Collection<POS> POSList = EnumSet.allOf(POS.class);
 		
 		List<String> reflexivePronouns = Converters.convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
-		List<String> outliers = Converters.convertStringToListOfStrings("the this that of these those and you for to with");
+		List<String> outliers = Converters.convertStringToListOfStrings("the this that of these those and you for to with seafloor moviemakers than");
 		List<String> personalPronouns = Converters.convertStringToListOfStrings("she we");
-		List<String> combinedOutliers = Stream.of(reflexivePronouns, outliers, personalPronouns)
+		List<String> prepositions = Converters.convertStringToListOfStrings("");
+		List<String> conjunctions = Converters.convertStringToListOfStrings("since");
+		List<String> combinedOutliers = Stream.of(reflexivePronouns, outliers, personalPronouns, prepositions, conjunctions)
 	            .flatMap(x -> x.stream())
 	            .collect(Collectors.toList());
 		boolean isWord = POSList.stream().anyMatch(c -> {
@@ -53,6 +55,7 @@ public final class EnglishDeterminer {
 	 */
 	public static boolean isSentence(String ...words) throws JWNLException {
 		for (String word : words) {
+			System.out.println("isWord or isInteger: " + word + " ? " + (isWord(word) || isInteger(word)));
 			if (!isWord(word) && !isInteger(word))
 				return false;
 		}

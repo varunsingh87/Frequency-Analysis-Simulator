@@ -3,6 +3,7 @@ package secretwriting;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 import helperfoo.Converters;
@@ -27,17 +28,16 @@ public class CaesarShiftCipher extends Cipher {
 		for (int i = 1; i <= 26; i++) {
 			final int key = i;
 			String shiftedText = this.shiftLetters(key);
-		    try {
-				if (
-						EnglishDeterminer.isSentence(
-								shiftedText.split(
-										new String(EnglishDeterminer.CHARS_TO_SKIP)
-										)
-								)
-						) {
+		    try {    	
+		    	String[] splitText = shiftedText.split(" |\\.|—|,");
+		    	System.out.println(Arrays.toString(splitText));
+				boolean isSentence = EnglishDeterminer.isSentence(splitText);
+		    	if (isSentence) {
 					return shiftedText;
 				}
-			} catch (JWNLException e) {
+		    } catch (PatternSyntaxException e) {
+		    	System.out.println(e.getDescription());
+		    } catch (JWNLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
