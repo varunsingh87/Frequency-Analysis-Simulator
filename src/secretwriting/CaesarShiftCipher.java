@@ -81,13 +81,13 @@ public class CaesarShiftCipher extends Cipher {
 	
 	    	  // Shift the letter by an integer, key
 	    	  int index = EnglishDeterminer.ALPHABET.indexOf(Character.toLowerCase(c));
-	    	  int newPosition = index + key;
+	    	  int newPosition = index + key % 26;
 	    	  if (newPosition > 25) {
 	    		  newPosition -= 26; 
 	    	  }
 	    	  return EnglishDeterminer.ALPHABET.get(newPosition); // Return the new position
 	      }).collect(Collectors.toList());
-	    System.out.println(Converters.convertListToString(shiftedText) + "\n");
+
 	      return Converters.convertListToString(shiftedText);
 	}
 

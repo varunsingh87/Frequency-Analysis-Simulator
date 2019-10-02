@@ -2,6 +2,10 @@
 OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.
 */
 
+/*
+In the 34 years since the R.M.S. Titanic was discovered on the seafloor south of Newfoundland, it has become the world’s most famous shipwreck — a rusting hulk assailed by hundreds of explorers and moviemakers, salvors and tourists, scientists and federal watchdogs. All agree that the once-grand ship is rapidly falling apart. Resting on the icy North Atlantic seabed more than two miles down, upright but split in two, the fragile mass is slowly succumbing to rust, corrosive salts, microbes and colonies of deep-sea creatures.
+*/
+
 package net.sf.extjwnl; // Uses the extjwnl package to determine if strings are sentences
 
 import java.util.ArrayList;
@@ -146,7 +150,7 @@ public class FrequencyAnalysisSimulator {
 		} else if (ciphertype.equalsIgnoreCase("monoalphabetic")) {
 			System.out.println(new MonoalphabeticCipher(plaintext).encrypt());
 		} else if (ciphertype.equalsIgnoreCase("Vigenere")) {
-			System.out.println(new VigenereCipher(plaintext).encrypt());
+			System.out.println("Result: " + new VigenereCipher(plaintext).encrypt());
 		}
 	}
 	

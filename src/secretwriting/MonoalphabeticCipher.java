@@ -39,7 +39,7 @@ public class MonoalphabeticCipher extends Cipher {
 	 * @return
 	 */
 	public String encrypt() {
-		List<Character> plaintextchars = Converters.convertStringToListOfCharacters(text);
+		List<Character> plaintextchars = Converters.convertStringToListOfCharacters(getText());
 		List<Character> cipherAlphabet = generateCipherAlphabet();
 		List<Character> plainAlphabet = EnglishDeterminer.ALPHABET;
 		

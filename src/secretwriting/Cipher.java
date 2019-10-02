@@ -1,7 +1,8 @@
 package secretwriting;
 
 public abstract class Cipher extends Substitution implements Encipherable, Decipherable {
-	protected String text;
+	private String text;
+	final private int textLength;
 	
 	public abstract String decrypt();
 	
@@ -9,6 +10,7 @@ public abstract class Cipher extends Substitution implements Encipherable, Decip
 	
 	public Cipher(String givenText) {
 		setText(givenText);
+		textLength = givenText.length();
 	}
 
 	public String getText() {
@@ -17,5 +19,9 @@ public abstract class Cipher extends Substitution implements Encipherable, Decip
 
 	public void setText(String text) {
 		this.text = text;
+	}
+	
+	public int length() {
+		return textLength;
 	}
 }
