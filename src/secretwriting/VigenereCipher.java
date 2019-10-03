@@ -35,7 +35,7 @@ public class VigenereCipher extends Cipher {
 	}
 	
 	public String encrypt(String key) {
-		final String textWithoutSpaces = getText().replace(" ", "").replace("3", "").replace("4", "").replace(".", "").replace(",", ""); // Removes spaces for accuracy of encryption
+		final String textWithoutSpaces = getText().replace(" ", "").replace("3", "").replace("4", "").replace(".", "").replace(",", "").replace("—", "").replace("’", "").replace("-", ""); // Removes spaces for accuracy of encryption
 		StringBuilder mutatableText = new StringBuilder(textWithoutSpaces);
 	
 		System.out.println(key);
@@ -47,7 +47,7 @@ public class VigenereCipher extends Cipher {
 			// index of keyChar in the English alphabet
 			int indexInAlphabet = EnglishDeterminer.ALPHABET.indexOf(keyChar); 
 			String cipherSubset = new CaesarShiftCipher(textWithoutSpaces).shiftLetters(indexInAlphabet);
-			System.out.println("\n" + cipherSubset);
+
 			/*
 			 * Loop through the text
 			 * Starting at the index of keyChar in key
