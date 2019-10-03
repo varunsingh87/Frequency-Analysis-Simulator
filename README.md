@@ -85,8 +85,8 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Vineet Reynolds for the `getStringRepresentation()` method (Named `convertListToString()` in code)
 * Inspiration from _The Code Book_ by Simon Singh
+* _The Cryptanalyst_ 
 * etc
 
 Copyright 2019 Varun Singh

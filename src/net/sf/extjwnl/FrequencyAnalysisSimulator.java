@@ -1,41 +1,61 @@
+/*
+OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.
+*/
+
+/*
+In the 34 years since the R.M.S. Titanic was discovered on the seafloor south of Newfoundland, it has become the world’s most famous shipwreck — a rusting hulk assailed by hundreds of explorers and moviemakers, salvors and tourists, scientists and federal watchdogs. All agree that the once-grand ship is rapidly falling apart. Resting on the icy North Atlantic seabed more than two miles down, upright but split in two, the fragile mass is slowly succumbing to rust, corrosive salts, microbes and colonies of deep-sea creatures.
+*/
+
+package net.sf.extjwnl; // Uses the extjwnl package to determine if strings are sentences
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+// Uses my custom package for statistics and generalizations
+import alphastats.AlphabeticalStatistics;
+// Uses my custom package for helper methods in "static" classes
+import helperfoo.Converters;
+import helperfoo.EnglishDeterminer;
+
+// Import secretwriting needed classes
+import secretwriting.CaesarShiftCipher;
+import secretwriting.MonoalphabeticCipher;
+import secretwriting.VigenereCipher;
+
 /**
  * Frequency Analysis Simulator
  * By Varun Singh
  */
 
 /**
+ * <h1>Frequency Analysis Simulator</h1>
+ * <p>Frequency Analysis Simulator is a Java program that simulates frequency analysis in which the user inputs cipher text into the console and the System outputs as close to the corresponding plain text as possible. If the type of cipher has been identified, the process may be sped up after the user inputs the type of cipher (monoalphabetic or Vigenere) on prompt. Furthermore, Frequency Analysis Simulator can decipher the caesar shift cipher, a cipher that does not involve the use of frequency analysis for decipherment. As another added bonus, the application is able to encrypt messages.</p>
  * @author Varun Singh
  * @inspiration The Code Book by Simon Singh
  * @citations
- 	* Princeton University "About WordNet." WordNet. Princeton University. 2010. 
+ 	* Princeton University "About WordNet." WordNet. Princeton University. 2010.
+ 	* <br>
  	* Stack Overflow, Inc.
+ 	* <br>
+ 	* Gale......
+ 	* <br>
+ 	* The Code Book
  */
-
-package net.sf.extjwnl;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import net.sf.extjwnl.data.POS;
-import net.sf.extjwnl.dictionary.Dictionary;
-
 public class FrequencyAnalysisSimulator {
 	
 	static Scanner userInput = new Scanner (System.in);
 	static enum ACTION {
 		ENCRYPT,
-		DECRYPT
+		DECRYPT,
+		MAGIC
 	}
-	static List<Character> alphabet = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
-	static char[] charsToSkip = { ' ', '!', '.', '?', ',', ';', '\''};
+
 	static Exception InvalidInputException = new Exception("You did not enter valid input. Please rerun the program and try again");
 	
 	/**
@@ -47,7 +67,9 @@ public class FrequencyAnalysisSimulator {
 			handleDecrypt();
 		else if (action.equals(ACTION.ENCRYPT))
 			handleEncrypt();
-	}
+		else if (action.equals(ACTION.MAGIC))
+			System.out.print(VigenereCipher.magic());
+		}
 	
 	/**
 	 * @return whether to encrypt or decipher
@@ -109,11 +131,11 @@ public class FrequencyAnalysisSimulator {
 		String ciphertext = determineCiphertext();
 		String ciphertype = determineCipherType(ACTION.DECRYPT);
 		if (ciphertype.equalsIgnoreCase("Caesar shift")) {
-			System.out.println(decipherCaesarShift(ciphertext));
+			System.out.println(new CaesarShiftCipher(ciphertext).decrypt());
 		} else if (ciphertype.equals("monoalphabetic")) {
 			System.out.println(decipherMonoalphabetic(ciphertext));
 		} else if (ciphertype.equals("Vigenere")) {
-			System.out.println(decipherVigenere(ciphertext));
+			System.out.println(new VigenereCipher(ciphertext).decrypt());
 		}
 	}
 	
@@ -124,224 +146,251 @@ public class FrequencyAnalysisSimulator {
 		String plaintext = determinePlaintext();
 		String ciphertype = determineCipherType(ACTION.ENCRYPT);
 		if (ciphertype.equalsIgnoreCase("Caesar shift")) {
-			System.out.println(encryptCaesarShift(plaintext));
+			System.out.println(new CaesarShiftCipher(plaintext).encrypt());
 		} else if (ciphertype.equalsIgnoreCase("monoalphabetic")) {
-			System.out.println(encryptMonoalphabetic(plaintext));
+			System.out.println(new MonoalphabeticCipher(plaintext).encrypt());
+		} else if (ciphertype.equalsIgnoreCase("Vigenere")) {
+			System.out.println("Result: " + new VigenereCipher(plaintext).encrypt());
 		}
 	}
 	
-	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
-	 * @param pos
-	 * @param word
-	 * @return whether the given string is an English word
-	 * @throws JWNLException
+	/** 
+	 * Get the number of occurences of a given letter in a given text
+	 * @param text the excerpt from which the number of occurences of the letter is counted
+	 * @param letter the character that is being counted
+	 * @return the number of occurences of the letter as a long
 	 */
-	private static boolean isWord(String word) throws JWNLException {
-		// DONE Implement isWord(String word) method
-		Dictionary d = Dictionary.getDefaultResourceInstance();
-		List<POS> POSList =
-                new ArrayList<POS>(EnumSet.allOf(POS.class));
-		
-		List<String> reflexivepronouns = convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
-		List<String> outliers = convertStringToListOfStrings("the this that of these those and you for");
-		List<String> combinedOutliers = Stream.of(reflexivepronouns, outliers)
-                .flatMap(x -> x.stream())
-                .collect(Collectors.toList());
-		boolean isWord = POSList.stream().anyMatch(c -> {
-			try {
-				return d.lookupIndexWord(c, word) != null;
-			} catch (JWNLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
-			}
+	private static long getOccurences(String text, char letter) {
+		long frequencyOfLetter = Converters.convertStringToListOfCharacters(text).stream().filter(e -> {
+			return e.equals(letter);
+		}).count();
+		return frequencyOfLetter;
+	}
+	
+	private static long getOccurences(String text, String letters) {
+		long frequencyOfLetter = Converters.convertStringToListOfStrings(text).stream().filter(e -> {
+			return e.contains(letters);
+		}).count();
+		return frequencyOfLetter;
+	}
+	
+	/**
+	 * @param text
+	 * @return
+	 */
+	private static Object[][] getListOfOccurences(String text) {
+		Stream<Long> alphabetCollection = EnglishDeterminer.ALPHABET.stream().map(l -> {
+			return getOccurences(text, l);
 		});
 		
-		return isWord || combinedOutliers.contains(word);
+		List<Long> listOfOccurences = alphabetCollection.collect(Collectors.toList());
+		ArrayList<ArrayList<Object>> letterOccurencesPairs = new ArrayList<ArrayList<Object>>();
+		for (int i = 0; i < EnglishDeterminer.ALPHABET.size(); i++) {
+			ArrayList<Object> letterOccurencesPair = new ArrayList<Object>();
+			// First element is letter as Character
+			letterOccurencesPair.add(EnglishDeterminer.ALPHABET.get(i)); 
+			// Second element is number of occurences as Long
+			letterOccurencesPair.add(listOfOccurences.get(i)); 
+			// Third element is to be set as difference between the index 1 and index 1 of the previous array
+
+			// Add the array list to the outer array list
+			letterOccurencesPairs.add(letterOccurencesPair);
+		}
+		
+		Object[][] letterOccurencesPairs1 = toMultiDimensionalArray(letterOccurencesPairs);
+		
+		return letterOccurencesPairs1;
+		
+	}
+	
+	private static Object[][] toMultiDimensionalArray(ArrayList<ArrayList<Object>> ec) {
+		Object[][] ei = new Object[26][3];
+		for (int i = 0; i < ec.size(); i++) {
+		    List<Object> row = ec.get(i); // Get each row
+
+		    // Perform equivalent `toArray` operation
+		    Object[] copy = new Object[3];
+		    for (int j = 0; j < row.size(); j++) {
+		        // Manually loop and set individually
+		        copy[j] = row.get(j);
+		    }
+
+		    ei[i] = copy;
+		}
+		return ei;
 	}
 	
 	/**
 	 * 
-	 * @param words
+	 * @param text
 	 * @return
-	 * @throws JWNLException
 	 */
-	private static boolean isSentence(String[] words) throws JWNLException {
-		for (String word : words) {
-			if (!isWord(word))
-				return false;
+	private static Object[][] getSortedListOfOccurences(String text) {
+		
+		Object[][] listOfOccurences = getListOfOccurences(text);
+		
+		// Sort the 2 dimensional list into smallest to largest by number of occurences
+		Arrays.sort(listOfOccurences, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				// Get two occurences as integers
+		        Long quantityOne = (Long) o1[1];
+			    Long quantityTwo = (Long) o2[1];
+			    // Compare each number of occurences to each other
+			    return quantityOne.compareTo(quantityTwo);
+			}
+		} );
+		
+		return listOfOccurences;
+	}
+	
+	/**	
+	 * 
+	 * @param text
+	 * @return the differences between each occurence
+	 */
+	private static Object[][] getDifferencesOfOccurences(String text) {
+		Object[][] sortedListOfData = getSortedListOfOccurences(text);
+		
+		for (int i = 1; i < sortedListOfData.length; i++) {
+			// Add the absolute difference as an int to the sortedListOfData array
+			sortedListOfData[i][2] = Math.toIntExact(
+				Math.abs(
+					(Long)sortedListOfData[i][1] - (Long)sortedListOfData[i - 1][1]
+				)
+			); 
 		}
 		
-		return true;
+		return sortedListOfData;
+	}
+	
+	private static ArrayList<Integer> getColAsInts(Object[][] matrix, int colIndex) {
+		ArrayList<Integer> intCol = new ArrayList<Integer>();
+		for (int i = 1; i < matrix.length; i++) {
+			Object[] row = matrix[i];
+			intCol.add((Integer)row[colIndex]);
+		}
+		
+		return intCol;
+	}
+	
+	private static ArrayList<Character> getColAsChars(Object[][] matrix, int colIndex) {
+		ArrayList<Character> charCol = new ArrayList<Character>();
+		for (Object[] row : matrix) {
+			charCol.add((Character)row[colIndex]);
+		}
+		
+		return charCol;
 	}
 	
 	/**
-	 * Returns whether or not a given character is a space or a punctuation mark
-	 * @param c the character being checked
-	 * @return true if a character is either a space or a punctuation
-	 * false if the character is anything else
+	 * 
+	 * @param matrix
+	 * @param colIndex
+	 * @return
 	 */
-	private static boolean isSpaceOrPunctuation(Character c) {
-		for (char item : charsToSkip) {
-			if (c.equals(item)) {
-				return true; // No need to look further.
-			} 
-		}
-		
-		return false;
-	}
-	
-	/**
-	 * @param key the number of letters to shift to the right from the original letter
-	 * @param unshiftedText the ciphertext or the plaintext
-	 * @return the shifted output message
-	 */
-	private static String shiftLetters(final int key, String unshiftedText) {
-		// DONE Implement shiftLetters(final int key, String unshiftedText)
-		
-		List<Character> unshiftedChars = convertStringToListOfCharacters(unshiftedText);
-		
-	    List<Character> shiftedText = unshiftedChars.stream()
-	      .map( c -> {
-	    	  
-	    	  if (isSpaceOrPunctuation(c)) {
-	    		  return c;
-	    	  }
+	private static int maxCol(Object [][] matrix, int colIndex) {
+	    Integer max = Collections.max(getColAsInts(matrix, colIndex));
 
-        	  // Shift the letter by an integer, key
-        	  int index = alphabet.indexOf(c);
-        	  int newPosition = index + key;
-        	  if (newPosition > 25) {
-        		  newPosition -= 26; 
-        	  }
-        	  
-        	  return alphabet.get(newPosition); // Return the new position
-	      }).collect(Collectors.toList());
-	    
-	      return convertListToString(shiftedText);
+	    return max;
 	}
 	
 	/**
 	 * 
 	 * @param ciphertext
-	 * @param key
-	 * @return the plaintext
+	 * @return
 	 */
-	public static String decipherCaesarShift(String ciphertext) throws JWNLException {
-		// DONE Implement decipherCaesarShift (String ciphertext)
+	private static int getHighestDifference(String ciphertext, Object[][] listOfDifferences) {
+		int highestDifference = maxCol(listOfDifferences, 2);
 		
-		for (int i = 1; i <= 26; i++) {
-			final int key = i;
-			String shiftedText = shiftLetters(key, ciphertext);
-		    if (isSentence(shiftedText.split(" "))) {
-		    	return shiftedText;
-		    }
-		}
-		return "This ciphertext has non-English plaintext";
+		return highestDifference;
 	}
 	
-	/** Generates a random integer key between 1 and 26 (inclusive) and shifts all letters in the given plain text by this key
-	 * @return the Caesar-shift-cipher-encrypted cipher text
+	/**
+	 * Gets the number of occurences of the least frequent of the most frequent letters
+	 * @param ciphertext
+	 * @return
 	 */
-	public static String encryptCaesarShift(String plaintext) {
-		String ciphertext = shiftLetters((int)(Math.random() * 25), plaintext);
-		return ciphertext;
+	protected static int getLeastFrequentMostFrequentLetterFrequency(String ciphertext, Object[][] listOfDifferences) {
+		int highestDifference = getHighestDifference(ciphertext, listOfDifferences);
+		for (int i = 1; i < EnglishDeterminer.ALPHABET.size(); i++) {
+			if ((int)listOfDifferences[i][2] == highestDifference) {
+				
+				return Math.toIntExact((long)listOfDifferences[i][1]);
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * 
+	 * @param ciphertext
+	 * @return
+	 */
+	protected static Object[][] getMostFrequentLetters(String ciphertext, Object[][] listOfDifferences) {	
+		
+		int leastFrequentMostFrequentLetterFrequency = getLeastFrequentMostFrequentLetterFrequency(ciphertext, listOfDifferences);
+		Object[][] mostFrequentLetters = Arrays.asList(listOfDifferences).stream().filter(a -> {
+
+			return (long)a[1] >= leastFrequentMostFrequentLetterFrequency;
+		}).toArray(Object[][]::new);
+		
+		return mostFrequentLetters;
+	}
+
+	
+	/**
+	 * Deciphers certain letters based on their bigrams and double letters
+	 * @param ciphertext
+	 * @param listOfDifferences
+	 * @return text with the letters that have been deciphered replaced with lowercase plaintext letters
+	 */
+	private static String findBasedOnBigrams(String ciphertext) throws JWNLException {
+		String ciphertext1 = ""; 
+		List<String> goodWords = Arrays.asList(
+			ciphertext.split(" "))
+				.stream()
+				.filter(
+					word -> {
+						System.out.println(word);
+						return AlphabeticalStatistics.meetsAllConditions(
+								AlphabeticalStatistics.isNLetters(
+										word, 3), 
+								AlphabeticalStatistics.hasDoubleInWord(
+										word)
+						);
+					}
+				)
+				.collect(
+					Collectors.toList()
+				);
+		System.out.println(Converters.convertListToString(goodWords));
+		for (String word : goodWords) {
+			for (Character c : AlphabeticalStatistics.DOUBLE_LETTERS) {
+				char doub = AlphabeticalStatistics.doubleLetterInWord(word);
+				System.out.println(doub + ", " + c);
+				String word1 = word.replace(doub, c);
+				System.out.println(word1);
+				
+				if (EnglishDeterminer.isWord(word1) ) {
+					ciphertext1 = ciphertext.replace(word, word1.toLowerCase());
+				}
+			}
+		}
+		
+		return ciphertext1;
 	}
 	
 	/** 
 	 * @param ciphertext the cipher that is deciphered
 	 * @return the completely deciphered or almost completely deciphered monoalphabetic substitution cipher in plaintext
 	 */
-	public static String decipherMonoalphabetic(String ciphertext) {
+	public static String decipherMonoalphabetic(String ciphertext) throws JWNLException {
 		// TODO Implement decipherMonoalphabetic(String ciphertext) method
-		String plaintext = ciphertext;
-		return plaintext; 
-	}
-	
-	/** 
-	 * Encrypts a message into a monoalphabetic cipher
-	 * @param plaintext
-	 * @return
-	 */
-	public static String encryptMonoalphabetic(String plaintext) {
-		List<Character> plaintextchars = convertStringToListOfCharacters(plaintext);
-		List<Character> cipherAlphabet = generateCipherAlphabet();
-		List<Character> plainAlphabet = alphabet;
-		
-		List<Character> cipherchars = plaintextchars.stream().map(p -> {
-			if (isSpaceOrPunctuation(p)) {
-				return p;
-			}
-			
-			int nthLetter = plainAlphabet.indexOf(p);
-			
-			return cipherAlphabet.get(nthLetter);
-		}).collect(Collectors.toList());	
-		
-		return convertListToString(cipherchars);
-	}
-	
-	/** 
-	 * @param ciphertext
-	 * @return the completely deciphered or almost completely deciphered Vigenere cipher in plaintext
-	 */
-	public static String decipherVigenere(String ciphertext) {
-		// TODO Implement decipherVigenere(String ciphertext) method
-		Pattern p = Pattern.compile(".*(.+).*\1.*");
-		Matcher m = p.matcher(ciphertext);
-		Boolean b = m.matches();
-		System.out.println(b);
-		String plaintext = decipherMonoalphabetic(ciphertext);
-		return plaintext; 
+		Object[][] listOfDifferences = getDifferencesOfOccurences(ciphertext);
+		Object[][] mostFrequentLetters = getMostFrequentLetters(ciphertext, listOfDifferences);
+		String bigramData = findBasedOnBigrams(ciphertext);
+		return bigramData;
 	}
 
-	/**
-	 * @param list the list of characters
-	 * @return the converted string
-	 */
-	private static String convertListToString(List<Character> list)
-	{    
-	    StringBuilder builder = new StringBuilder(list.size());
-	    for(Object ch: list)
-	    {
-	        builder.append(ch);
-	    }
-	    return builder.toString();
-	}
-	
-	/**
-	 * Used for ease when copying lists from the web
-	 * @param value the set of strings divided by spaces as one string
-	 * @return the set of strings as an array list of strings
-	 */
-	private static List<String> convertStringToListOfStrings(String value) {
-		return new ArrayList<String>(Arrays.asList(value.split(" ")));
-	}
-	
-	/** Converts a string to a list of characters
-	 * @param value of the string that needs to be converted
-	 * @return the converted list
-	 */
-	private static List<Character> convertStringToListOfCharacters(String value) {
-		List<Character> cipherchars = new ArrayList<Character>();
-		for (char ch: value.toCharArray()) {
-			cipherchars.add(Character.toLowerCase(ch));
-		}
-		
-		return cipherchars;
-	}
-	
-	/**
-	 * @return
-	 */
-	private static List<Character> generateCipherAlphabet() {
-		List<Character> cipheralphabet = new ArrayList<Character>();
-		for (int i = 0; i < 26; i++) {
-		    cipheralphabet.add(alphabet.get(i));
-		}
-		
-		Collections.shuffle(cipheralphabet);
-		
-		return cipheralphabet;
-	}
 }
