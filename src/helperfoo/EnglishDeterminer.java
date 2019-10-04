@@ -13,7 +13,7 @@ import net.sf.extjwnl.dictionary.Dictionary;
 
 public final class EnglishDeterminer {
 	public static List<Character> ALPHABET = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
-	public static Character[] CHARS_TO_SKIP = { ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}', '-', '—', '’'};
+	public static Character[] CHARS_TO_SKIP = { '\'', ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}', '-', '—', '’'};
 
 	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
 	 * @param pos
@@ -61,6 +61,10 @@ public final class EnglishDeterminer {
 		}
 		
 		return true;
+	}
+	
+	public static String removeSpacesAndPunctuation(String text) {
+		return text.replace(" ", "");
 	}
 	
 	/**
