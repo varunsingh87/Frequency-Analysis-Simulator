@@ -81,7 +81,7 @@ public class CaesarShiftCipher extends Cipher {
 	
 	    	  // Shift the letter by an integer, key
 	    	  int index = EnglishDeterminer.ALPHABET.indexOf(Character.toLowerCase(c));
-	    	  int newPosition = index + key % 26;
+	    	  int newPosition = index + key;
 	    	  if (newPosition > 25) {
 	    		  newPosition -= 26; 
 	    	  }

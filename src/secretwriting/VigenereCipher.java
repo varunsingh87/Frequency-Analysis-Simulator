@@ -19,6 +19,40 @@ public class VigenereCipher extends Cipher {
 		return getText(); 
 	}
 
+	/**
+	 * Save the skipped characters and their indexes to an array list of array lists
+	 * using isSpaceOfPunctuation() and an enhanced for loop,
+	 * taking no parameters
+	 * @return a 2-D dimensional array of the skipped indexes and the skipped elements where
+	 * the index is the first index
+	 * and the element is the second index
+	 */
+	private ArrayList<ArrayList<Object>> saveSkipped() {
+		ArrayList<ArrayList<Object>> skipped = new ArrayList<ArrayList<Object>>();
+		/*
+		 * Loop through the text looking for spaces and punctuation
+		 * Save the character and letter in a 2-D ArrayList
+		 * Save both as strings
+		 * Adds this list as a nested list to skipped array list
+		*/
+		for (int i = 0; i < length(); i++) {
+			char el = getText().charAt(i);
+			if (EnglishDeterminer.isSpaceOrPunctuation(el) || EnglishDeterminer.isInteger(String.valueOf(el))) {
+				int ind = i;
+				char newEl = el;
+				
+				ArrayList<Object> list = new ArrayList<Object>();
+
+				list.add(ind); // Add the index
+				list.add(newEl); // Add the element
+				skipped.add(list); // Add the list
+			}
+		}
+		
+		return skipped;
+		
+	}
+	
 	public String encrypt() {
 		String result = "";
 		try {
@@ -36,13 +70,12 @@ public class VigenereCipher extends Cipher {
 	
 	public String encrypt(String key) {
 		final String textWithoutSpaces = getText().replace(" ", "").replace("3", "").replace("4", "").replace(".", "").replace(",", "").replace("—", "").replace("’", "").replace("-", ""); // Removes spaces for accuracy of encryption
-		StringBuilder mutatableText = new StringBuilder(textWithoutSpaces);
+		StringBuilder mutatableText = new StringBuilder(textWithoutSpaces); // Get String as StringBuilder for mutation
 	
 		System.out.println(key);
 		
-		for (char keyChar : key.toCharArray()) {
-			// index of keyChar in the keyword (key)
-			int indexInKey = key.indexOf(keyChar); 
+		for (int i = 0; i < key.length(); i++) {
+			char keyChar = key.charAt(i);
 			
 			// index of keyChar in the English alphabet
 			int indexInAlphabet = EnglishDeterminer.ALPHABET.indexOf(keyChar); 
@@ -53,10 +86,14 @@ public class VigenereCipher extends Cipher {
 			 * Starting at the index of keyChar in key
 			 * Incrementing by the length of the key
 			 */
-			for (int i = indexInKey; i < textWithoutSpaces.length(); i+=key.length()) {
+			for (int j = i; j < textWithoutSpaces.length(); j+=key.length()) {
 				// Replace the current letter with the letter in the current cipher subset
-				mutatableText.setCharAt(i, cipherSubset.charAt(i));
+				mutatableText.setCharAt(j, cipherSubset.charAt(j));
 			}
+		}
+		
+		for (ArrayList<Object> skipped : saveSkipped()) {
+			mutatableText = mutatableText.insert((int) skipped.get(0), skipped.get(1));
 		}
 		
 		return mutatableText.toString();	
