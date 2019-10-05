@@ -87,7 +87,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 * Inspiration from _The Code Book_ by Simon Singh
 * _The Cryptanalyst_ 
-* etc
+* [Kelalaka](https://crypto.stackexchange.com/users/18298/kelalaka) for help on real-world application of the project
 
 Copyright 2019 Varun Singh
 
