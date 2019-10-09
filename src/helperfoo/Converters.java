@@ -54,4 +54,40 @@ public final class Converters {
         }
         System.out.print("}\n");
 	}
+	
+	public static ArrayList<Integer> getColAsInts(Object[][] matrix, int colIndex) {
+		ArrayList<Integer> intCol = new ArrayList<Integer>();
+		for (int i = 1; i < matrix.length; i++) {
+			Object[] row = matrix[i];
+			intCol.add((Integer)row[colIndex]);
+		}
+		
+		return intCol;
+	}
+	
+	public static ArrayList<Character> getColAsChars(Object[][] matrix, int colIndex) {
+		ArrayList<Character> charCol = new ArrayList<Character>();
+		for (Object[] row : matrix) {
+			charCol.add((Character)row[colIndex]);
+		}
+		
+		return charCol;
+	}
+	
+	public static Object[][] toMultiDimensionalArray(ArrayList<ArrayList<Object>> ec) {
+		Object[][] ei = new Object[26][3];
+		for (int i = 0; i < ec.size(); i++) {
+		    List<Object> row = ec.get(i); // Get each row
+
+		    // Perform equivalent `toArray` operation
+		    Object[] copy = new Object[3];
+		    for (int j = 0; j < row.size(); j++) {
+		        // Manually loop and set individually
+		        copy[j] = row.get(j);
+		    }
+
+		    ei[i] = copy;
+		}
+		return ei;
+	}
 }
