@@ -38,7 +38,6 @@ public class CaesarShiftCipher extends Cipher {
 		    } catch (PatternSyntaxException e) {
 		    	System.out.println(e.getDescription());
 		    } catch (JWNLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

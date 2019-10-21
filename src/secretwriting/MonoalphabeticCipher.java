@@ -82,12 +82,10 @@ public class MonoalphabeticCipher extends Cipher {
 	}
 
 	public String magic() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void printCipherAlphabetAsTable() {
-		// TODO Auto-generated method stub
 
 	}
 	
@@ -219,9 +217,11 @@ public class MonoalphabeticCipher extends Cipher {
 				threeLetterWords.add(new Pair(w, getOccurences(w)));
 		});
 		
-		System.out.println(Arrays.toString(threeLetterWords.toArray()));
+		List<Pair> newThreeLetterWords = threeLetterWords.stream().distinct().collect(Collectors.toList());
 		
-		return threeLetterWords;
+		System.out.println(Arrays.toString(newThreeLetterWords.toArray()));
+		
+		return newThreeLetterWords;
 	}
 
 }

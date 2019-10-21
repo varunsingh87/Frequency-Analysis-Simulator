@@ -1,5 +1,7 @@
 package helperfoo;
 
+import java.util.Objects;
+
 /**
  * An object that contanis a property and a value, or two values
  * The first parameter MUST be a String OR a char. 
@@ -30,4 +32,11 @@ public class Pair {
 	public String toString() {
 		return props + ": " + val;
 	} 
+	
+	public int hashCode() {
+		int hashCode = 1;
+		hashCode = 31 * hashCode + props.hashCode();
+		hashCode = 31 * hashCode + val.hashCode();
+		return Objects.hash(props, val);
+	}
 }

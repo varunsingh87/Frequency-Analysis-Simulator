@@ -38,7 +38,6 @@ public final class EnglishDeterminer {
 			try {
 				return d.lookupIndexWord(c, word) != null;
 			} catch (JWNLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
 			}
