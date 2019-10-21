@@ -47,9 +47,12 @@ public class MonoalphabeticCipher extends Cipher {
 		
 		Pair mostFrequentFinalLetter = getMostFrequentFinalLetter();
 		Pair vowel = getMostSocialLetter();
-		setText(findBasedOnBigrams());
+		Pair threeLetterWord = getMostFrequentTrigraph();
+		
+		setText(replaceBigrams());
 		setText(getText().replace(mostFrequentFinalLetter.props, "s"));
 		setText(getText().replace(vowel.props, "a"));
+		setText(getText().replace(threeLetterWord.props, "the"));
 		
 		return getText();
 	}
@@ -107,6 +110,7 @@ public class MonoalphabeticCipher extends Cipher {
 		}
 		
 		System.out.println(Arrays.toString(finalLetterOccurences.toArray()));
+		
 		return finalLetterOccurences;
 		
 
@@ -177,10 +181,9 @@ public class MonoalphabeticCipher extends Cipher {
 	 * @param listOfDifferences
 	 * @return text with the letters that have been deciphered replaced with lowercase plaintext letters
 	 */
-	protected String findBasedOnBigrams() {
-		String ciphertext1 = ""; 
-		List<String> goodWords = Arrays.asList(
-			getText().split(" "))
+	private List<String> getThreeLettersWithDoubles() {
+		// Get all words that are three letters and have double letters in them 
+		return Arrays.asList(getWords())
 				.stream()
 				.filter(
 					word -> {
@@ -217,7 +220,9 @@ public class MonoalphabeticCipher extends Cipher {
 				threeLetterWords.add(new Pair(w, getOccurences(w)));
 		});
 		
-		return ciphertext1;
+		System.out.println(Arrays.toString(threeLetterWords.toArray()));
+		
+		return threeLetterWords;
 	}
 
 }
