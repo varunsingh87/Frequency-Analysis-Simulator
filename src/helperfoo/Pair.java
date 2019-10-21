@@ -21,22 +21,24 @@ public class Pair {
 		val = value;
 	}
 	
-	public boolean equals(Object o) {
-		if (o.getClass() == Pair.class) {
-			return props == ((Pair) o).props && val == ((Pair) o).val;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
 		}
-		
-		return false;
+		if (!(obj instanceof Pair)) {
+			return false;
+		}
+		Pair other = (Pair) obj;
+		return Objects.equals(props, other.props) && Objects.equals(val, other.val);
 	}
 	
 	public String toString() {
 		return props + ": " + val;
 	} 
 	
+	@Override
 	public int hashCode() {
-		int hashCode = 1;
-		hashCode = 31 * hashCode + props.hashCode();
-		hashCode = 31 * hashCode + val.hashCode();
 		return Objects.hash(props, val);
 	}
 }
