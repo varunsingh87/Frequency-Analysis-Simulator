@@ -196,24 +196,26 @@ public class MonoalphabeticCipher extends Cipher {
 				.collect(
 					Collectors.toList()
 				);
-		System.out.println(Converters.convertListToString(goodWords));
-		for (String word : goodWords) {
-			for (Character c : AlphabeticalStatistics.DOUBLE_LETTERS) {
-				char doub = AlphabeticalStatistics.doubleLetterInWord(word);
-				System.out.println(doub + ", " + c);
-				String word1 = word.replace(doub, c);
-				System.out.println(word1);
-				
-				try {
-					if (EnglishDeterminer.isWord(word1) ) {
-						ciphertext1 = getText().replace(word, word1.toLowerCase());
-					}	
-				} catch (JWNLException e) {
-					e.printStackTrace();
-				}
-				
-			}
-		}
+
+	}
+	
+	protected Pair getMostFrequentTrigraph() {
+		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
+		return Collections.max(getThreeLetterWordOccurences(), cmp);
+	}
+	
+	private List<Pair> getThreeLetterWordOccurences() {
+		// Get all words that are three letters long to try out the most common three letter words
+		List<Pair> threeLetterWords = new ArrayList<Pair>();
+		// Invoke methods upon the text in order to iterate through each word (without returning anything)
+		Arrays.asList(getWords()).stream().forEach(w -> {
+			// If w is a three letter word
+			Pair p = new Pair(w, getOccurences(w));
+			boolean pairExists = threeLetterWords.contains(p);
+			System.out.println(p.toString() + " " + pairExists);
+			if (AlphabeticalStatistics.meetsAllConditions(AlphabeticalStatistics.isNLetters(w, 3)) && !pairExists)
+				threeLetterWords.add(new Pair(w, getOccurences(w)));
+		});
 		
 		return ciphertext1;
 	}
