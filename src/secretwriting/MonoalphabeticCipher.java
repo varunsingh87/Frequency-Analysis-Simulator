@@ -149,6 +149,28 @@ public class MonoalphabeticCipher extends Cipher {
 		return socialLetters;
 	}
 	
+	protected String replaceBigrams() {
+		String ciphertext1 = "";
+		List<String> goodWords = getThreeLettersWithDoubles();
+		for (String word : goodWords) {
+			for (Character c : AlphabeticalStatistics.DOUBLE_LETTERS) {
+				char doub = AlphabeticalStatistics.doubleLetterInWord(word);
+				String word1 = word.replace(doub, c);
+				
+				try {
+					if (EnglishDeterminer.isWord(word1) ) {
+						ciphertext1 = getText().replace(word, word1.toLowerCase());
+					}	
+				} catch (JWNLException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}
+		
+		return ciphertext1;
+	}
+
 	/**
 	 * Deciphers certain letters based on their bigrams and double letters
 	 * @param ciphertext
