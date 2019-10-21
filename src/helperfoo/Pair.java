@@ -19,6 +19,14 @@ public class Pair {
 		val = value;
 	}
 	
+	public boolean equals(Object o) {
+		if (o.getClass() == Pair.class) {
+			return props == ((Pair) o).props && val == ((Pair) o).val;
+		}
+		
+		return false;
+	}
+	
 	public String toString() {
 		return props + ": " + val;
 	} 
