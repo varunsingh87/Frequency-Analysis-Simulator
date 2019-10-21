@@ -185,9 +185,8 @@ public class MonoalphabeticCipher extends Cipher {
 		// Get all words that are three letters and have double letters in them 
 		return Arrays.asList(getWords())
 				.stream()
-				.filter(
+				.filter( 
 					word -> {
-						System.out.println(word);
 						return AlphabeticalStatistics.meetsAllConditions(
 								AlphabeticalStatistics.isNLetters(
 										word, 3), 

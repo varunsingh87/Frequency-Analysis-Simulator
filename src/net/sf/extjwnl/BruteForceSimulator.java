@@ -7,7 +7,6 @@ import helperfoo.EnglishDeterminer;
 class BruteForceSimulator {
 	static Scanner userInput = new Scanner(System.in);
 	public static void main(String[] args) throws JWNLException {
-		// TODO Auto-generated method stub
 		System.out.println("Enter a ciphertext");
 		String ciphertext = userInput.nextLine();
 		for (char l : ciphertext.toCharArray()) {
