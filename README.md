@@ -86,8 +86,11 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Acknowledgments
 
 * Inspiration from _The Code Book_ by Simon Singh
-* _The Cryptanalyst_ 
+* _The Cryptanalyst_ by Helen Fouche Gaines
 * [Kelalaka](https://crypto.stackexchange.com/users/18298/kelalaka) for help on real-world application of the project
+* Princeton University "About WordNet." WordNet. Princeton University. 2010.
+* Stack Overflow, Inc.
+* Gale
 
 Copyright 2019 Varun Singh
 
