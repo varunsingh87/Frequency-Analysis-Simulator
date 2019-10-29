@@ -27,14 +27,14 @@ public abstract class Cipher extends Substitution implements Encipherable, Decip
 	 * @param letter the character that is being counted
 	 * @return the number of occurences of the letter as a long
 	 */
-	protected long getOccurences(char letter) {
+	public long getOccurences(char letter) {
 		long frequencyOfLetter = Converters.convertStringToListOfCharacters(getText()).stream().filter(e -> {
 			return e.equals(letter);
 		}).count();
 		return frequencyOfLetter;
 	}
 	
-	protected long getOccurences(String letters) {
+	public long getOccurences(String letters) {
 		long frequencyOfLetter = Converters.convertStringToListOfStrings(getText()).stream().filter(e -> {
 			return e.contains(letters);
 		}).count();
