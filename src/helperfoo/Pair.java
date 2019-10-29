@@ -41,4 +41,15 @@ public class Pair {
 	public int hashCode() {
 		return Objects.hash(props, val);
 	}
+	
+	public int compareTo(Pair p) {
+		if (this.val == p.val) {
+			return 0;
+		} else if ((long)this.val > (long)p.val) {
+			return 1;
+		} else if ((long)this.val < (long)p.val) {
+			return -1;
+		}
+		return 1;
+	}
 }

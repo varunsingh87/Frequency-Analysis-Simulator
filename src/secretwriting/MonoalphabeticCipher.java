@@ -43,14 +43,18 @@ public class MonoalphabeticCipher extends Cipher {
 		// listOfDifferences);
 		Frequencies f = new Frequencies(this); // Defines a new Frequencies object
 		
+		System.out.println(getText());
+		
 		Pair mostFrequentFinalLetter = f.getMostFrequentFinalLetter();
 		Pair vowel = f.getMostSocialLetter();
 		Pair threeLetterWord = f.getMostFrequentTrigraph();
+		Pair mostFrequentInitialLetter = f.getMostFrequentInitialLetter();
 		
 		setText(f.replaceBigrams());
 		setText(getText().replace(mostFrequentFinalLetter.props, "s"));
 		setText(getText().replace(vowel.props, "a"));
 		setText(getText().replace(threeLetterWord.props, "the"));
+		setText(getText().replace(mostFrequentInitialLetter.props, "t"));
 		
 		return getText();
 	}

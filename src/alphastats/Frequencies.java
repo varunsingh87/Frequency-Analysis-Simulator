@@ -20,6 +20,8 @@ import secretwriting.Cipher;
  */
 public final class Frequencies {
 	public Cipher cipher;
+	
+	// Define constructor
 	public Frequencies(Cipher ci) {
 		cipher = ci;
 	}
@@ -147,7 +149,7 @@ public final class Frequencies {
 			// If w is a three letter word
 			Pair p = new Pair(w, cipher.getOccurences(w));
 			boolean pairExists = threeLetterWords.contains(p);
-			System.out.println(p.toString() + " " + pairExists);
+			
 			if (AlphabeticalStatistics.meetsAllConditions(AlphabeticalStatistics.isNLetters(w, 3)) && !pairExists)
 				threeLetterWords.add(new Pair(w, cipher.getOccurences(w)));
 		});
@@ -157,6 +159,40 @@ public final class Frequencies {
 		System.out.println(Arrays.toString(newThreeLetterWords.toArray()));
 		
 		return newThreeLetterWords;
+	}
+	
+	public Pair getMostFrequentInitialLetter() {
+		return Arrays.stream(getLetterInitialities()).max(new Comparator<Pair>() {
+			public int compare(Pair pair1, Pair pair2) {
+				return pair1.compareTo(pair2);
+			}
+		}).get();
+	}
+	
+	/**
+	 * 'Initialities' as defined in this context - the number of occurences for a given letter as it appears at the beginning of a word
+	 * 
+	 * @return
+	 */
+	private Pair[] getLetterInitialities() {
+		String[] words = cipher.getWords(); // Get cipher as a String[] split into words
+		List<Character> initialLetters = new ArrayList<Character>();
+		for (String word : words) {
+			initialLetters.add(word.charAt(0));
+		}
+	
+		Pair[] initialLetterOccurences = new Pair[26];
+		for (int i = 0; i < 26; i++) { // Give each element in the array a value
+			char letter = EnglishDeterminer.ALPHABET.get(i);
+			Pair pair = new Pair(Character.toUpperCase(letter), initialLetters.stream().filter(l -> l.equals(Character.toUpperCase(letter))).count());
+			initialLetterOccurences[i] = pair;
+		}
+		
+		System.out.println(Arrays.toString(initialLetterOccurences));
+		
+		return initialLetterOccurences;
+		
+	
 	}
 	
 }
