@@ -27,24 +27,27 @@ public final class Frequencies {
 	}
 	
 	public Pair getMostFrequentFinalLetter() {
-		Comparator<Pair> cmp = Comparator.comparing(p -> (long)p.val);
-		return Collections.max(getLetterFinalities(), cmp);
+		return Arrays.stream(getLetterFinalities()).max(new Comparator<Pair>() {
+			public int compare(Pair pair1, Pair pair2) {
+				return pair1.compareToLong(pair2);
+			}
+		}).get();
 	}
 
-	private List<Pair> getLetterFinalities() {
+	private Pair[] getLetterFinalities() {
 		String[] words = cipher.getWords();
 		List<Character> finalLetters = new ArrayList<Character>();
 		for (String word : words) {
 			finalLetters.add(word.charAt(word.length() - 1));
 		}
 	
-		List<Pair> finalLetterOccurences = new ArrayList<Pair>();
+		Pair[] finalLetterOccurences = new Pair[26];
 		for (char letter : EnglishDeterminer.ALPHABET) {
 			Pair pair = new Pair(Character.toUpperCase(letter), finalLetters.stream().filter(l -> l.equals(Character.toUpperCase(letter))).count());
-			finalLetterOccurences.add(pair);
+			finalLetterOccurences[EnglishDeterminer.ALPHABET.indexOf(letter)] = pair;
 		}
 		
-		System.out.println(Arrays.toString(finalLetterOccurences.toArray()));
+		System.out.println(Arrays.toString(finalLetterOccurences));
 		
 		return finalLetterOccurences;
 		
@@ -52,8 +55,11 @@ public final class Frequencies {
 	}
 
 	public Pair getMostSocialLetter() {
-		Comparator<Pair> cmp = Comparator.comparing(p -> (int) p.val);
-		return Collections.max(getLetterSocialities(), cmp);
+		return Arrays.stream(getLetterSocialities()).max(new Comparator<Pair>() {
+			public int compare(Pair pair1, Pair pair2) {
+				return pair1.compareToInt(pair2);
+			}
+		}).get();
 	}
 
 	/**
@@ -66,31 +72,30 @@ public final class Frequencies {
 	 * 
 	 * @return a list of the sociality of each letter as an int
 	 */
-	private List<Pair> getLetterSocialities() {
-		List<Pair> socialLetters = new ArrayList<Pair>(); // Initialize list for letters
+	private Pair[] getLetterSocialities() {
+		Pair[] socialLetters = new Pair[26]; // Initialize list for letters
 		for (char letter : EnglishDeterminer.ALPHABET) {
-			letter = Character.toUpperCase(letter);
+			char letterUp = Character.toUpperCase(letter);
 			int meetings = 0; // The number of letters that it meets up with at least once
 			for (char letter2 : EnglishDeterminer.ALPHABET) {
 				letter2 = Character.toUpperCase(letter2);
 	
 				// Increment meetings if letter 1 meets up with letter 2
-				if (cipher.getOccurences("" + letter + letter2) >= 1) {
+				if (cipher.getOccurences("" + letterUp + letter2) >= 1) {
 					meetings++;
 				}
 			}
 			// Add the letter and its meetings to the social digraphs list
-			socialLetters.add(new Pair(letter, meetings));
+			int i = EnglishDeterminer.ALPHABET.indexOf(letter);
+			socialLetters[i] = new Pair(letter, meetings);
 		}
-		
-		System.out.println(Arrays.toString(socialLetters.toArray()));
 		
 		return socialLetters;
 	}
 
 	public String replaceBigrams() {
 		String ciphertext1 = "";
-		List<String> goodWords = getThreeLettersWithDoubles();
+		String[] goodWords = getThreeLettersWithDoubles();
 		for (String word : goodWords) {
 			for (Character c : AlphabeticalStatistics.DOUBLE_LETTERS) {
 				char doub = AlphabeticalStatistics.doubleLetterInWord(word);
@@ -116,11 +121,9 @@ public final class Frequencies {
 	 * @param listOfDifferences
 	 * @return text with the letters that have been deciphered replaced with lowercase plaintext letters
 	 */
-	private List<String> getThreeLettersWithDoubles() {
+	private String[] getThreeLettersWithDoubles() {
 		// Get all words that are three letters and have double letters in them 
-		return Arrays.asList(cipher.getWords())
-				.stream()
-				.filter( 
+		return Arrays.stream(cipher.getWords()).filter(
 					word -> {
 						return AlphabeticalStatistics.meetsAllConditions(
 								AlphabeticalStatistics.isNLetters(
@@ -129,10 +132,7 @@ public final class Frequencies {
 										word)
 						);
 					}
-				)
-				.collect(
-					Collectors.toList()
-				);
+				).toArray(String[]::new);
 	
 	}
 
@@ -164,7 +164,7 @@ public final class Frequencies {
 	public Pair getMostFrequentInitialLetter() {
 		return Arrays.stream(getLetterInitialities()).max(new Comparator<Pair>() {
 			public int compare(Pair pair1, Pair pair2) {
-				return pair1.compareTo(pair2);
+				return pair1.compareToLong(pair2);
 			}
 		}).get();
 	}

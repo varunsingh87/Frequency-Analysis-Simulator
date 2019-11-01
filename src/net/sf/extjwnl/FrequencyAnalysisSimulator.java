@@ -41,7 +41,8 @@ public class FrequencyAnalysisSimulator {
 	 * @param args
 	 */
 	public static void main(String[] args) throws JWNLException {
-		ACTION action = determineAction();
+		long startTime = System.currentTimeMillis();
+		ACTION action = ACTION.MAGIC;
 		if (action.equals(ACTION.DECRYPT))
 			handleDecrypt();
 		else if (action.equals(ACTION.ENCRYPT))
@@ -49,8 +50,10 @@ public class FrequencyAnalysisSimulator {
 		else if (action.equals(ACTION.MAGIC))
 			System.out.print(new MonoalphabeticCipher("OF MIT 34 BTAKL LOFET MIT K.D.L. MOMAFOE CAL ROLEGXTKTR GF MIT LTAYSGGK LGWMI GY FTCYGWFRSAFR, OM IAL ZTEGDT MIT CGKSR'L DGLM YADGWL LIOHCKTEQ -- A KWLMOFU IWSQ ALLAOSTR ZB IWFRKTRL GY TVHSGKTKL AFR DGXOTDAQTKL, LASXGKL AFR MGWKOLML, LEOTFMOLML AFR YTRTKAS CAMEIRGUL. ASS AUKTT MIAM MIT GFET-UKAFR LIOH OL KAHORSB YASSOFU AHAKM. KTLMOFU GF MIT OEB FGKMI AMSAFMOE LTAZTR DGKT MIAF MCG DOSTL RGCF, WHKOUIM ZWM LHSOM OF MCG, MIT YKAUOST DALL OL LSGCSB LWEEWDZOFU MG KWLM, EGKKGLOXT LASML, DOEKGZTL AFR EGSGFOTL GY RTTH-LTA EKTAMWKTL.\r\n" + 
 					"").decrypt());
-		}
-	
+	    long endTime = System.currentTimeMillis();
+	    System.out.println("\n\nIt took " + (endTime - startTime) + " milliseconds");
+	}
+
 	/**
 	 * @return whether to encrypt or decipher
 	 */

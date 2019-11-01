@@ -23,9 +23,6 @@ public class Pair {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
 		if (!(obj instanceof Pair)) {
 			return false;
 		}
@@ -42,14 +39,25 @@ public class Pair {
 		return Objects.hash(props, val);
 	}
 	
-	public int compareTo(Pair p) {
-		if (this.val == p.val) {
-			return 0;
-		} else if ((long)this.val > (long)p.val) {
+	public int compareToLong(Pair pair2) {
+		Pair pair1 = this;
+		if ((long)pair1.val > (long)pair2.val) {
 			return 1;
-		} else if ((long)this.val < (long)p.val) {
+		} else if ((long)pair1.val < (long)pair2.val) {
 			return -1;
+		} else {
+			return 0;
 		}
-		return 1;
+	}
+	
+	public int compareToInt(Pair pair2) {
+		Pair pair1 = this;
+		if ((int)pair1.val > (int)pair2.val) {
+			return 1;
+		} else if ((int)pair1.val < (int)pair2.val) {
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 }
