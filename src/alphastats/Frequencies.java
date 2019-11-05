@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 import helperfoo.Converters;
 import helperfoo.EnglishDeterminer;
 import helperfoo.Pair;
-import net.sf.extjwnl.JWNLException;
 import secretwriting.Cipher;
 
 /**
@@ -106,15 +105,9 @@ public final class Frequencies {
 			for (Character c : AlphabeticalStatistics.DOUBLE_LETTERS) {
 				char doub = AlphabeticalStatistics.doubleLetterInWord(word);
 				String word1 = word.replace(doub, c);
-				
-				try {
-					if (EnglishDeterminer.isWord(word1) ) {
-						ciphertext1 = cipher.getText().replace(word, word1.toLowerCase());
-					}	
-				} catch (JWNLException e) {
-					e.printStackTrace();
-				}
-				
+				if (EnglishDeterminer.isWord(word1) ) {
+					ciphertext1 = cipher.getText().replace(word, word1.toLowerCase());
+				}	
 			}
 		}
 		

@@ -14,36 +14,43 @@ import net.sf.extjwnl.dictionary.Dictionary;
 public final class EnglishDeterminer {
 	public static List<Character> ALPHABET = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 	public static char[] CHARS_TO_SKIP = { '\'', ' ', '!', '.', '?', ',', ';', '\'', '"', '(', ')', '[', ']', '{', '}', '-', '—', '’'};
-
+	public static char[] VOWELS = { 'A', 'E', 'I', 'O', 'U'};
+	
 	/** Determines if a string is in the extended Java WordNet Library dictionary and has the correct part of speech
 	 * @param pos
 	 * @param word
 	 * @return whether the given string is an English word
 	 * @throws JWNLException
 	 */
-	public static boolean isWord(String word) throws JWNLException {
-		Dictionary d = Dictionary.getDefaultResourceInstance();
-		
-		Collection<POS> POSList = EnumSet.allOf(POS.class);
-		
-		List<String> reflexivePronouns = Converters.convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
-		List<String> outliers = Converters.convertStringToListOfStrings("the this that of these those and you for to with seafloor moviemakers than");
-		List<String> personalPronouns = Converters.convertStringToListOfStrings("she we");
-		List<String> prepositions = Converters.convertStringToListOfStrings("");
-		List<String> conjunctions = Converters.convertStringToListOfStrings("since");
-		List<String> combinedOutliers = Stream.of(reflexivePronouns, outliers, personalPronouns, prepositions, conjunctions)
-	            .flatMap(x -> x.stream())
-	            .collect(Collectors.toList());
-		boolean isWord = POSList.stream().anyMatch(c -> {
-			try {
-				return d.lookupIndexWord(c, word) != null;
-			} catch (JWNLException e) {
-				e.printStackTrace();
-				return false;
-			}
-		});
-		
-		return isWord || combinedOutliers.contains(word);
+	public static boolean isWord(String word) {
+		Dictionary d;
+		try {
+			d = Dictionary.getDefaultResourceInstance();		
+			Collection<POS> POSList = EnumSet.allOf(POS.class);
+			
+			List<String> reflexivePronouns = Converters.convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
+			List<String> outliers = Converters.convertStringToListOfStrings("the this that of these those and you for to with seafloor moviemakers than");
+			List<String> personalPronouns = Converters.convertStringToListOfStrings("she we");
+			List<String> prepositions = Converters.convertStringToListOfStrings("");
+			List<String> conjunctions = Converters.convertStringToListOfStrings("since");
+			List<String> combinedOutliers = Stream.of(reflexivePronouns, outliers, personalPronouns, prepositions, conjunctions)
+		            .flatMap(x -> x.stream())
+		            .collect(Collectors.toList());
+			boolean isWord = POSList.stream().anyMatch(c -> {
+				try {
+					return d.lookupIndexWord(c, word) != null;
+				} catch (JWNLException e) {
+					e.printStackTrace();
+					return false;
+				}
+			});
+			
+			return isWord || combinedOutliers.contains(word);
+		} catch (JWNLException e1) {
+			e1.printStackTrace();
+			return false;
+		}
+
 	}
 	
 	/**

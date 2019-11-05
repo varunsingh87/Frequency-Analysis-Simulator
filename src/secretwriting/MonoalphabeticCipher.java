@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import alphastats.AlphabeticalStatistics;
 import alphastats.Frequencies;
 import helperfoo.Converters;
 import helperfoo.EnglishDeterminer;
@@ -42,6 +43,7 @@ public class MonoalphabeticCipher extends Cipher {
 		// Object[][] mostFrequentLetters = getMostFrequentLetters(getText(),
 		// listOfDifferences);
 		Frequencies f = new Frequencies(this); // Defines a new Frequencies object
+		List<String> solvedLetters = new ArrayList<String>();
 		
 		System.out.println(getText());
 		
@@ -50,11 +52,43 @@ public class MonoalphabeticCipher extends Cipher {
 		Pair threeLetterWord = f.getMostFrequentTrigraph();
 		Pair mostFrequentInitialLetter = f.getMostFrequentInitialLetter();
 		
-		setText(f.replaceBigrams());
+		//setText(f.replaceBigrams());
+		
 		setText(getText().replace(mostFrequentFinalLetter.props, "s"));
+		solvedLetters.add("s");
+
 		setText(getText().replace(vowel.props, "a"));
-		setText(getText().replace(threeLetterWord.props, "the"));
-		setText(getText().replace(mostFrequentInitialLetter.props, "t"));
+		solvedLetters.add("a");
+		
+		String notSolvedTrigram = "   ";
+		for (String trigram : AlphabeticalStatistics.TRIGRAPHS) {
+			if (!solvedLetters.contains(trigram)) {
+				notSolvedTrigram = trigram;
+				System.out.println(trigram);
+				break;
+			}
+		}
+		
+		if (notSolvedTrigram != "   ") {
+			setText(getText().replace(threeLetterWord.props, notSolvedTrigram));
+			for (char letter : notSolvedTrigram.toCharArray()) {
+				solvedLetters.add(Character.toString(letter));
+			}
+		}
+		
+		char notSolvedInitialLetter = ' ';
+		for (char initialLetter : AlphabeticalStatistics.INITIAL_LETTERS) {
+			if (solvedLetters.contains(Character.toString(initialLetter))) {
+				notSolvedInitialLetter = initialLetter;
+			}
+		}
+		
+		if (notSolvedInitialLetter != ' ') {
+			setText(getText().replace(mostFrequentInitialLetter.props, Character.toString(AlphabeticalStatistics.INITIAL_LETTERS[0])));
+			solvedLetters.add(Character.toString(notSolvedInitialLetter));
+		}
+		
+		System.out.println(solvedLetters.toString());
 		
 		return getText();
 	}
