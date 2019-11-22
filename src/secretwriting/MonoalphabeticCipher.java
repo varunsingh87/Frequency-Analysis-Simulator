@@ -49,12 +49,12 @@ public class MonoalphabeticCipher extends Cipher {
 		
 		System.out.println(getText());
 		
-		Pair mostFrequentFinalLetter = f.getMostFrequentFinalLetter();
-		//Pair vowel = f.getMostSocialLetter();
-		char[] threeLetterWord = f.getMostFrequentTrigraph();
-		char[] twoLetterWord = f.getMostFrequentDigraph();
-		Pair mostFrequentInitialLetter = f.getMostFrequentInitialLetter();
-		Object[][] mostFrequentLetters = f.getMostFrequentLetters();
+		Pair mostFrequentFinalLetter = f.getMostFrequentFinalLetter(); // Finalities
+		//Pair vowel = f.getMostSocialLetter(); // Socialities
+		char[] threeLetterWord = f.getMostFrequentTrigraph(); // Trigraphs
+		char[] twoLetterWord = f.getFrequentDigraph(); // Digraphs
+		Pair mostFrequentInitialLetter = f.getMostFrequentInitialLetter(); // Initialities
+		//Object[][] mostFrequentLetters = f.getMostFrequentLetters(); // All
 		
 		//setText(f.replaceBigrams());
 		
@@ -98,14 +98,14 @@ public class MonoalphabeticCipher extends Cipher {
 		
 		if (notSolvedDigraph != "  ") {
 			for (int i = 0; i <= 1; i++) {
+				char solvedLetter = notSolvedDigraph.charAt(i);
+				char replacedLetter = twoLetterWord[i];
+				
 				setText(getText().replace(twoLetterWord[i], notSolvedDigraph.charAt(i)));
+				solvedLetters.add(Character.toString(solvedLetter)); 
+				replacedLetters.add(Character.toString(replacedLetter));
 			}
-			
 			System.out.println("The common digraph " + String.valueOf(twoLetterWord) + " in the ciphertext was replaced with " + notSolvedDigraph);
-			
-			for (char letter : notSolvedDigraph.toCharArray()) {
-				solvedLetters.add(Character.toString(letter)); 
-			}
 		}
 		
 		// Initial letters
@@ -133,17 +133,7 @@ public class MonoalphabeticCipher extends Cipher {
 		}
 		
 		// All letters
-		for (Object[] fl : mostFrequentLetters) {
-			for (char l : AlphabeticalStatistics.ALL_LETTERS) {
-				for (String m : solvedLetters) {
-					if (m.equals(Character.toString(l)) && !solvedLetters.contains(Character.toString(l))) {
-						replaceLetters(fl[0].toString(), Character.toString(l));
-						break;
-					}
-				}	
-			}
-			
-		}
+		
 		
 		// Random
 		//testRandom();

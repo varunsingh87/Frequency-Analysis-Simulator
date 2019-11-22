@@ -164,11 +164,30 @@ public final class Frequencies {
 		return trigraphs;
 	}
 
-	public char[] getMostFrequentDigraph() {
+	public char[] getFrequentDigraph() {
+		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
+		Pair wouldBe = Collections.max(getDigraphOccurences(), cmp);
+		char[] toReturn = new char[2];
+		toReturn[0] = wouldBe.props.charAt(0);
+		toReturn[1] = wouldBe.props.charAt(1);
+		
+		return toReturn;
+	}
+	
+	/** Overload of getMostFrequentDigraph()
+	 * <ol>
+	 * <li>Sorts the list using Collections.sort() and the Comparator class</li>
+	 * <li>Gets the nth index of that array</li>
+	 * <li>Stores each character of the digraph in a char[] which is returned</li>
+	 * </ol>
+	 * @param n an ordinal number from the most frequent digraph
+	 * @return the digraph that has the nth largest amount of occurences
+	 */
+	public char[] getFrequentDigraph(int n) {
 		List<Pair> digraphPairs = getDigraphOccurences();
 		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
 		Collections.sort(digraphPairs, cmp);
-		Pair wouldBe = digraphPairs.get(1);
+		Pair wouldBe = digraphPairs.get(n);
 		char[] toReturn = new char[2];
 		toReturn[0] = wouldBe.props.charAt(0);
 		toReturn[1] = wouldBe.props.charAt(1);
