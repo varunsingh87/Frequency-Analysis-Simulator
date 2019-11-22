@@ -113,6 +113,15 @@ public final class Frequencies {
 		
 		return ciphertext1;
 	}
+	
+	@SuppressWarnings("unused")
+	private void bigramMethod() {
+		
+	}
+
+	public Pair getMostFrequentThreeLetterWordWithDoubles() {
+		return null;
+	}
 
 	/**
 	 * Deciphers certain letters based on their bigrams and double letters
@@ -132,34 +141,51 @@ public final class Frequencies {
 						);
 					}
 				).toArray(String[]::new);
-	
 	}
-
-	public Pair getMostFrequentTrigraph() {
+	
+	public char[] getMostFrequentTrigraph() {
 		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
-		return Collections.max(getThreeLetterWordOccurences(), cmp);
+		Pair wouldBe = Collections.max(getTrigraphOccurences(), cmp);
+		char[] toReturn = new char[3];
+		toReturn[0] = wouldBe.props.charAt(0);
+		toReturn[1] = wouldBe.props.charAt(1);
+		toReturn[2] = wouldBe.props.charAt(2);
+		
+		return toReturn;
 	}
 
-	private List<Pair> getThreeLetterWordOccurences() {
-		// Get all words that are three letters long to try out the most common three letter words
-		List<Pair> threeLetterWords = new ArrayList<Pair>();
-		// Invoke methods upon the text in order to iterate through each word (without returning anything)
-		Arrays.asList(cipher.getWords()).stream().forEach(w -> {
-			// If w is a three letter word
-			Pair p = new Pair(w, getOccurences(w));
-			boolean pairExists = threeLetterWords.contains(p);
-			
-			if (AlphabeticalStatistics.meetsAllConditions(AlphabeticalStatistics.isNLetters(w, 3)) && !pairExists)
-				threeLetterWords.add(new Pair(w, getOccurences(w)));
-		});
+	private List<Pair> getTrigraphOccurences() {
+		List<Pair> trigraphs = new ArrayList<Pair>();
+		for (int i = 0; i < cipher.getWords().length - 2; i++) {
+			String trigraph = cipher.getWords()[i] + "" + cipher.getWords()[i+1] + "" + cipher.getWords()[i + 2];
+			trigraphs.add(new Pair(trigraph, getOccurences(trigraph)));
+		}
 		
-		List<Pair> newThreeLetterWords = threeLetterWords.stream().distinct().collect(Collectors.toList());
-		
-		System.out.println(Arrays.toString(newThreeLetterWords.toArray()));
-		
-		return newThreeLetterWords;
+		return trigraphs;
 	}
-	
+
+	public char[] getMostFrequentDigraph() {
+		List<Pair> digraphPairs = getDigraphOccurences();
+		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
+		Collections.sort(digraphPairs, cmp);
+		Pair wouldBe = digraphPairs.get(1);
+		char[] toReturn = new char[2];
+		toReturn[0] = wouldBe.props.charAt(0);
+		toReturn[1] = wouldBe.props.charAt(1);
+		
+		return toReturn;
+	}
+
+	private List<Pair> getDigraphOccurences() {
+		List<Pair> digraphs = new ArrayList<Pair>();
+		for (int i = 0; i < cipher.getWords().length - 1; i++) {
+			String digraph = cipher.getWords()[i] + "" + cipher.getWords()[i+1];
+			digraphs.add(new Pair(digraph, getOccurences(digraph)));
+		}
+		
+		return digraphs;
+	}
+
 	public Pair getMostFrequentInitialLetter() {
 		return Arrays.stream(getLetterInitialities()).max(new Comparator<Pair>() {
 			public int compare(Pair pair1, Pair pair2) {
@@ -304,7 +330,7 @@ public final class Frequencies {
 	 * @param ciphertext
 	 * @return
 	 */
-	protected static int getHighestDifference(String ciphertext, Object[][] listOfDifferences) {
+	protected static int getHighestDifference(Object[][] listOfDifferences) {
 		int highestDifference = maxCol(listOfDifferences, 2);
 		
 		return highestDifference;
@@ -315,8 +341,8 @@ public final class Frequencies {
 	 * @param ciphertext
 	 * @return
 	 */
-	protected static int getLeastFrequentMostFrequentLetterFrequency(String ciphertext, Object[][] listOfDifferences) {
-		int highestDifference = getHighestDifference(ciphertext, listOfDifferences);
+	protected static int getLeastFrequentMostFrequentLetterFrequency(Object[][] listOfDifferences) {
+		int highestDifference = getHighestDifference(listOfDifferences);
 		for (int i = 1; i < EnglishDeterminer.ALPHABET.size(); i++) {
 			if ((int)listOfDifferences[i][2] == highestDifference) {
 				
@@ -331,14 +357,21 @@ public final class Frequencies {
 	 * @param ciphertext
 	 * @return
 	 */
-	protected static Object[][] getMostFrequentLetters(String ciphertext, Object[][] listOfDifferences) {	
+	public Object[][] getMostFrequentLetters(Object[][] listOfDifferences) {	
 		
-		int leastFrequentMostFrequentLetterFrequency = getLeastFrequentMostFrequentLetterFrequency(ciphertext, listOfDifferences);
+		int leastFrequentMostFrequentLetterFrequency = getLeastFrequentMostFrequentLetterFrequency(listOfDifferences);
 		Object[][] mostFrequentLetters = Arrays.asList(listOfDifferences).stream().filter(a -> {
 
 			return (long)a[1] >= leastFrequentMostFrequentLetterFrequency;
 		}).toArray(Object[][]::new);
 		
+		return mostFrequentLetters;
+	}
+	
+	public Object[][] getMostFrequentLetters() {
+		Object[][] listOfDifferences = getDifferencesOfOccurences();
+		Object[][] mostFrequentLetters = getMostFrequentLetters(listOfDifferences);
+		System.out.println(Arrays.deepToString(mostFrequentLetters));
 		return mostFrequentLetters;
 	}
 	

@@ -16,6 +16,7 @@ public final class AlphabeticalStatistics {
 	public final static String[] TRIGRAPHS = {"the", "and", "tha", "ent", "ion", "tio", "for", "nde", "has", "nce", "edt", "tis", "oft", "sth", "men"};
 	public final static char[] FINAL_LETTERS = {'E', 'S', 'T', 'D', 'N', 'R', 'Y', 'F', 'L', 'O', 'G', 'H', 'A', 'K', 'M', 'P', 'U', 'W'};
 	public final static char[] INITIAL_LETTERS = {'T', 'A', 'O', 'S', 'W', 'H', 'B', 'I', 'C', 'D'};
+	public final static char[] ALL_LETTERS = {'E', 'T', 'A', 'O', 'I', 'N', 'S', 'H', 'R', 'D', 'L', 'U'};
 	
 	// Make private constructor so no instances can be made
 	private AlphabeticalStatistics() {}
@@ -71,8 +72,18 @@ public final class AlphabeticalStatistics {
 		
 	}
 	
+	public static boolean needsOneLetter(String word) {
+		String res = "";
+		for(int i = 0; i < word.length(); i++) {
+		   Character ch = word.charAt(i);
+		     if(!Character.isUpperCase(ch))
+		       res += ch;
+		}
+		return res.split("[A-Z]").length == 2;
+	}
+	
 	public static boolean meetsAllConditions(Boolean... conditions) {
 		return !Arrays.asList(conditions).contains(false);
 	}
-
+	
 }

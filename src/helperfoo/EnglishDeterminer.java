@@ -60,6 +60,9 @@ public final class EnglishDeterminer {
 	 * @throws JWNLException
 	 */
 	public static boolean isSentence(String ...words) throws JWNLException {
+		if (words.length == 0) {
+			return false;
+		}
 		for (String word : words) {
 			System.out.println("isWord or isInteger: " + word + " ? " + (isWord(word) || isInteger(word)));
 			if (!isWord(word) && !isInteger(word))

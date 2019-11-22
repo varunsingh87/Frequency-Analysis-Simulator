@@ -10,9 +10,12 @@ import alphastats.Frequencies;
 import helperfoo.Converters;
 import helperfoo.EnglishDeterminer;
 import helperfoo.Pair;
+import net.sf.extjwnl.JWNLException;
 
 public class MonoalphabeticCipher extends Cipher {
-
+	List<String> solvedLetters = new ArrayList<String>();
+	List<String> replacedLetters = new ArrayList<String>();
+	
 	public MonoalphabeticCipher(String givenText) {
 		super(givenText);
 	}
@@ -43,23 +46,23 @@ public class MonoalphabeticCipher extends Cipher {
 		// Object[][] mostFrequentLetters = getMostFrequentLetters(getText(),
 		// listOfDifferences);
 		Frequencies f = new Frequencies(this); // Defines a new Frequencies object
-		List<String> solvedLetters = new ArrayList<String>();
 		
 		System.out.println(getText());
 		
 		Pair mostFrequentFinalLetter = f.getMostFrequentFinalLetter();
-		Pair vowel = f.getMostSocialLetter();
-		Pair threeLetterWord = f.getMostFrequentTrigraph();
+		//Pair vowel = f.getMostSocialLetter();
+		char[] threeLetterWord = f.getMostFrequentTrigraph();
+		char[] twoLetterWord = f.getMostFrequentDigraph();
 		Pair mostFrequentInitialLetter = f.getMostFrequentInitialLetter();
+		Object[][] mostFrequentLetters = f.getMostFrequentLetters();
 		
 		//setText(f.replaceBigrams());
 		
-		setText(getText().replace(mostFrequentFinalLetter.props, "s"));
-		solvedLetters.add("s");
 
-		setText(getText().replace(vowel.props, "a"));
-		solvedLetters.add("a");
+
+		//replaceLetters(vowel.props.toUpperCase(), "a");
 		
+		// Trigrams
 		String notSolvedTrigram = "   ";
 		for (String trigram : AlphabeticalStatistics.TRIGRAPHS) {
 			if (!solvedLetters.contains(trigram)) {
@@ -69,25 +72,83 @@ public class MonoalphabeticCipher extends Cipher {
 			}
 		}
 		
-		if (notSolvedTrigram != "   ") {
-			setText(getText().replace(threeLetterWord.props, notSolvedTrigram));
-			for (char letter : notSolvedTrigram.toCharArray()) {
-				solvedLetters.add(Character.toString(letter));
+		if (!notSolvedTrigram.equals("   ")) {
+			for (int i = 0; i <= 2; i++) {
+				char solvedLetter = notSolvedTrigram.charAt(i);
+				char replacedLetter = threeLetterWord[i];
+				
+				setText(getText().replace(replacedLetter, solvedLetter));	
+			
+			
+				solvedLetters.add(Character.toString(solvedLetter));
+				replacedLetters.add(Character.toString(replacedLetter));
+			}
+			System.out.println("The common trigraph " + String.valueOf(threeLetterWord) + " in the ciphertext was replaced with " + notSolvedTrigram);
+		}
+		
+		// Digraphs
+		String notSolvedDigraph = "  ";
+		for (String bigram : AlphabeticalStatistics.DIGRAPHS) {
+			if (!solvedLetters.contains(Character.toString(bigram.charAt(0))) && !solvedLetters.contains(Character.toString(bigram.charAt(1)))) {
+				notSolvedDigraph = bigram;
+				System.out.println(bigram);
+				break;
 			}
 		}
 		
+		if (notSolvedDigraph != "  ") {
+			for (int i = 0; i <= 1; i++) {
+				setText(getText().replace(twoLetterWord[i], notSolvedDigraph.charAt(i)));
+			}
+			
+			System.out.println("The common digraph " + String.valueOf(twoLetterWord) + " in the ciphertext was replaced with " + notSolvedDigraph);
+			
+			for (char letter : notSolvedDigraph.toCharArray()) {
+				solvedLetters.add(Character.toString(letter)); 
+			}
+		}
+		
+		// Initial letters
 		char notSolvedInitialLetter = ' ';
 		for (char initialLetter : AlphabeticalStatistics.INITIAL_LETTERS) {
-			if (solvedLetters.contains(Character.toString(initialLetter))) {
-				notSolvedInitialLetter = initialLetter;
+			if (!solvedLetters.contains(Character.toString(initialLetter))) {
+				notSolvedInitialLetter = Character.toLowerCase(initialLetter);
 			}
 		}
 		
 		if (notSolvedInitialLetter != ' ') {
-			setText(getText().replace(mostFrequentInitialLetter.props, Character.toString(AlphabeticalStatistics.INITIAL_LETTERS[0])));
-			solvedLetters.add(Character.toString(notSolvedInitialLetter));
+			replaceLetters(mostFrequentInitialLetter.props, Character.toString(notSolvedInitialLetter));
 		}
 		
+		// Final letters
+		char notSolvedFinalLetter = ' ';
+		for (char finalLetter : AlphabeticalStatistics.FINAL_LETTERS) {
+			if (!solvedLetters.contains(Character.toString(finalLetter))) {
+				notSolvedFinalLetter = Character.toLowerCase(finalLetter);
+			}
+		}
+		
+		if (notSolvedFinalLetter != ' ') {
+			replaceLetters(mostFrequentFinalLetter.props, Character.toString(notSolvedFinalLetter));
+		}
+		
+		// All letters
+		for (Object[] fl : mostFrequentLetters) {
+			for (char l : AlphabeticalStatistics.ALL_LETTERS) {
+				for (String m : solvedLetters) {
+					if (m.equals(Character.toString(l)) && !solvedLetters.contains(Character.toString(l))) {
+						replaceLetters(fl[0].toString(), Character.toString(l));
+						break;
+					}
+				}	
+			}
+			
+		}
+		
+		// Random
+		//testRandom();
+		
+		System.out.println(replacedLetters.toString());
 		System.out.println(solvedLetters.toString());
 		
 		return getText();
@@ -116,6 +177,21 @@ public class MonoalphabeticCipher extends Cipher {
 
 		return Converters.convertListToString(cipherchars);
 	}
+	
+	private void replaceLetters(String toReplace, String replacement) {
+		replaceLetters(toReplace, replacement, replacement, toReplace);
+	}
+	
+	@SuppressWarnings("unused")
+	private void replaceLetters(String toReplace, String replacement, String toAdd) {
+		replaceLetters(toReplace, replacement, toAdd, toReplace);
+	}
+	
+	private void replaceLetters(String toReplace, String replacement, String toAdd, String toAdd2) {
+		setText(getText().replace(toReplace, replacement));
+		solvedLetters.add(toAdd);
+		replacedLetters.add(toAdd2);
+	}
 
 	public String magic() {
 		return null;
@@ -124,5 +200,29 @@ public class MonoalphabeticCipher extends Cipher {
 	public void printCipherAlphabetAsTable() {
 
 	}
-
+	
+	public void testRandom() {
+		char randomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
+		while (solvedLetters.contains(Character.toString(randomLetter))) {
+			randomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
+		}
+		
+		char secondRandomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
+		while (replacedLetters.contains(Character.toString(secondRandomLetter))) {
+			secondRandomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
+		}
+		String potentialText = getText().replace(Character.toUpperCase(secondRandomLetter), randomLetter);
+		try {
+			System.out.println(potentialText);
+			System.out.println(Character.toUpperCase(secondRandomLetter));
+			System.out.println(randomLetter);
+			if(EnglishDeterminer.isSentence(Cipher.getWordsWithOneLowerCase(potentialText))) {
+				replaceLetters(Character.toString(Character.toUpperCase(secondRandomLetter)), Character.toString(randomLetter));
+			}
+		} catch (JWNLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
+	}
 }
