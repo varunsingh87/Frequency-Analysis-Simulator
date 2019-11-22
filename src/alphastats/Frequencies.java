@@ -174,7 +174,7 @@ public final class Frequencies {
 		return toReturn;
 	}
 	
-	/** Overload of getMostFrequentDigraph()
+	/** Overload of getFrequentDigraph()
 	 * <ol>
 	 * <li>Sorts the list using Collections.sort() and the Comparator class</li>
 	 * <li>Gets the nth index of that array</li>
