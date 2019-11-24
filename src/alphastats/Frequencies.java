@@ -155,13 +155,20 @@ public final class Frequencies {
 	}
 
 	private List<Pair> getTrigraphOccurences() {
-		List<Pair> trigraphs = new ArrayList<Pair>();
-		for (int i = 0; i < cipher.getWords().length - 2; i++) {
-			String trigraph = cipher.getWords()[i] + "" + cipher.getWords()[i+1] + "" + cipher.getWords()[i + 2];
-			trigraphs.add(new Pair(trigraph, getOccurences(trigraph)));
-		}
-		
-		return trigraphs;
+		// Get all words that are three letters long to try out the most common three letter words
+		List<Pair> threeLetterWords = new ArrayList<Pair>();
+		// Invoke methods upon the text in order to iterate through each word (without returning anything)
+		Arrays.asList(cipher.getWords()).stream().forEach(w -> {
+			// If w is a three letter word
+			Pair p = new Pair(w, getOccurences(w));
+			boolean pairExists = threeLetterWords.contains(p);
+			
+			if (AlphabeticalStatistics.meetsAllConditions(AlphabeticalStatistics.isNLetters(w, 3)) && !pairExists)
+				threeLetterWords.add(new Pair(w, getOccurences(w)));
+			});
+		List<Pair> newThreeLetterWords = threeLetterWords.stream().distinct().collect(Collectors.toList());
+		System.out.println(Arrays.toString(newThreeLetterWords.toArray()));
+		return newThreeLetterWords;
 	}
 
 	public char[] getFrequentDigraph() {
