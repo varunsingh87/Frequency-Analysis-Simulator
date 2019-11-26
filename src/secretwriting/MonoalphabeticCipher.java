@@ -108,29 +108,11 @@ public class MonoalphabeticCipher extends Cipher {
 			System.out.println("The common digraph " + String.valueOf(twoLetterWord) + " in the ciphertext was replaced with " + notSolvedDigraph);
 		}
 		
-		// Initial letters
-		char notSolvedInitialLetter = ' ';
-		for (char initialLetter : AlphabeticalStatistics.INITIAL_LETTERS) {
-			if (!solvedLetters.contains(Character.toString(initialLetter))) {
-				notSolvedInitialLetter = Character.toLowerCase(initialLetter);
-			}
-		}
-		
-		if (notSolvedInitialLetter != ' ') {
-			replaceLetters(mostFrequentInitialLetter.props, Character.toString(notSolvedInitialLetter));
-		}
-		
 		// Final letters
-		char notSolvedFinalLetter = ' ';
-		for (char finalLetter : AlphabeticalStatistics.FINAL_LETTERS) {
-			if (!solvedLetters.contains(Character.toString(finalLetter))) {
-				notSolvedFinalLetter = Character.toLowerCase(finalLetter);
-			}
-		}
+		solveFrequencyTypes(AlphabeticalStatistics.FINAL_LETTERS, mostFrequentFinalLetter);
 		
-		if (notSolvedFinalLetter != ' ') {
-			replaceLetters(mostFrequentFinalLetter.props, Character.toString(notSolvedFinalLetter));
-		}
+		// Initial letters
+		solveFrequencyTypes(AlphabeticalStatistics.INITIAL_LETTERS, mostFrequentInitialLetter);
 		
 		// All letters
 		
@@ -213,6 +195,28 @@ public class MonoalphabeticCipher extends Cipher {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
+		}
+	}
+	
+	/**
+	 * Runs all needed conditions and loops to replace letters and ultimately use frequency analysis algorithms
+	 * <br>
+	 * A frequency type is the frequency of a property or position of words and letters 
+	 * @param c The array from AlphabeticalStatistics.java from the alphastats package containing the order of frequencies of a type of letter
+	 * @param p The Pair that is replacing another letter in the ciphertext with the highest of the frequency type 
+	 * @example Initial letters - c = AlphabeticalStatistics.INITIAL_LETTERS, p = mostFrequentInitialLetter
+	 * @invokes replaceLetters(String, String)
+	 */
+	private void solveFrequencyTypes(char[] c, Pair p) {
+		char notSolvedTypeLetter = ' ';
+		for (char typeLetter : c) {
+			if (!solvedLetters.contains(Character.toString(typeLetter))) {
+				notSolvedTypeLetter = Character.toLowerCase(typeLetter);
+			}
+		}
+		
+		if (notSolvedTypeLetter != ' ') {
+			replaceLetters(p.props, Character.toString(notSolvedTypeLetter));
 		}
 	}
 }

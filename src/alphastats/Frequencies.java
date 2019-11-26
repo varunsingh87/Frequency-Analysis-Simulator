@@ -167,7 +167,9 @@ public final class Frequencies {
 				threeLetterWords.add(new Pair(w, getOccurences(w)));
 			});
 		List<Pair> newThreeLetterWords = threeLetterWords.stream().distinct().collect(Collectors.toList());
-		System.out.println(Arrays.toString(newThreeLetterWords.toArray()));
+		
+		System.out.println("Trigraphs: " + Arrays.toString(newThreeLetterWords.toArray()));
+		
 		return newThreeLetterWords;
 	}
 
@@ -209,6 +211,8 @@ public final class Frequencies {
 			digraphs.add(new Pair(digraph, getOccurences(digraph)));
 		}
 		
+		System.out.println(Arrays.toString(digraphs.toArray()));
+		
 		return digraphs;
 	}
 
@@ -239,7 +243,7 @@ public final class Frequencies {
 			initialLetterOccurences[i] = pair;
 		}
 		
-		System.out.println(Arrays.toString(initialLetterOccurences));
+		System.out.println("Letter initialities: " + Arrays.toString(initialLetterOccurences));
 		
 		return initialLetterOccurences;
 		
