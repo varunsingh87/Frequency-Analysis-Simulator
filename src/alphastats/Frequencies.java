@@ -34,70 +34,34 @@ public final class Frequencies {
 	}
 	
 	public Pair getMostFrequentFinalLetter() {
-		return Arrays.stream(getLetterFinalities()).max(new Comparator<Pair>() {
+		return Arrays.stream(getPositionLetterData(-3)).max(new Comparator<Pair>() {
 			public int compare(Pair pair1, Pair pair2) {
 				return pair1.compareToLong(pair2);
 			}
 		}).get();
 	}
 
-	private Pair[] getLetterFinalities() {
-		String[] words = cipher.getWords();
-		List<Character> finalLetters = new ArrayList<Character>();
-		for (String word : words) {
-			finalLetters.add(word.charAt(word.length() - 1));
-		}
-	
-		Pair[] finalLetterOccurences = new Pair[26];
-		for (char letter : EnglishDeterminer.ALPHABET) {
-			Pair pair = new Pair(Character.toUpperCase(letter), finalLetters.stream().filter(l -> l.equals(Character.toUpperCase(letter))).count());
-			finalLetterOccurences[EnglishDeterminer.ALPHABET.indexOf(letter)] = pair;
-		}
-		
-		System.out.println("Letter finalities: " + Arrays.toString(finalLetterOccurences));
-		
-		return finalLetterOccurences;
-		
-	
-	}
-
-	/**
-	 * 'Initialities' as defined in this context - the number of occurences for a given letter as it appears at the beginning of a word
-	 * 
-	 * @return
-	 */
-	private Pair[] getLetterInitialities() {
-		String[] words = cipher.getWords(); // Get cipher as a String[] split into words
-		List<Character> initialLetters = new ArrayList<Character>();
-		for (String word : words) {
-			initialLetters.add(word.charAt(0));
-		}
-	
-		Pair[] initialLetterOccurences = new Pair[26];
-		for (int i = 0; i < 26; i++) { // Give each element in the array a value
-			char letter = EnglishDeterminer.ALPHABET.get(i);
-			Pair pair = new Pair(Character.toUpperCase(letter), initialLetters.stream().filter(l -> l.equals(Character.toUpperCase(letter))).count());
-			initialLetterOccurences[i] = pair;
-		}
-		
-		System.out.println("Letter initialities: " + Arrays.toString(initialLetterOccurences));
-		
-		return initialLetterOccurences;
-		
-	
-	}
-
 	private Pair[] getPositionLetterData(int x) {
 		String[] words = cipher.getWords();
 		List<Character> positionLetters = new ArrayList<Character>();
 		for (String word : words) {
-			positionLetters.add(word.charAt(x));
+			if (x == 0) {
+				positionLetters.add(word.charAt(x));
+			} else {
+				positionLetters.add(word.charAt(word.length() - 1));
+			}
 		}
 		
 		Pair[] positionLetterOccurences = new Pair[26];
 		for (int i = 0; i < 26; i++) {
 			char letter = EnglishDeterminer.ALPHABET.get(i);
+			Pair p = new Pair(Character.toUpperCase(letter), positionLetters.stream().filter(l -> l.equals(Character.toUpperCase(letter))).count());
+			positionLetterOccurences[EnglishDeterminer.ALPHABET.indexOf(letter)] = p;
 		}
+		
+		System.out.println("Letter positionities: " + Arrays.toString(positionLetterOccurences));
+		
+		return positionLetterOccurences;
 	}
 
 	public Pair getMostSocialLetter() {
@@ -278,7 +242,7 @@ public final class Frequencies {
 	}
 
 	public Pair getMostFrequentInitialLetter() {
-		return Arrays.stream(getLetterInitialities()).max(new Comparator<Pair>() {
+		return Arrays.stream(getPositionLetterData(0)).max(new Comparator<Pair>() {
 			public int compare(Pair pair1, Pair pair2) {
 				return pair1.compareToLong(pair2);
 			}
