@@ -16,7 +16,9 @@ import secretwriting.Cipher;
 /**
  * Contains methods based on Simon Singh's webpage, The Black Chamber:  
  * {@link https://simonsingh.net/The_Black_Chamber/hintsandtips.html}
- * @structure private method and public method
+ * @structure private method and public method;
+ * Private method gets a collection of some sort;
+ * Public method aggregates private method to get the highest value
  * @purpose applications that involve frequency analysis
  */
 public final class Frequencies {
@@ -52,11 +54,50 @@ public final class Frequencies {
 			finalLetterOccurences[EnglishDeterminer.ALPHABET.indexOf(letter)] = pair;
 		}
 		
-		System.out.println(Arrays.toString(finalLetterOccurences));
+		System.out.println("Letter finalities: " + Arrays.toString(finalLetterOccurences));
 		
 		return finalLetterOccurences;
 		
 	
+	}
+
+	/**
+	 * 'Initialities' as defined in this context - the number of occurences for a given letter as it appears at the beginning of a word
+	 * 
+	 * @return
+	 */
+	private Pair[] getLetterInitialities() {
+		String[] words = cipher.getWords(); // Get cipher as a String[] split into words
+		List<Character> initialLetters = new ArrayList<Character>();
+		for (String word : words) {
+			initialLetters.add(word.charAt(0));
+		}
+	
+		Pair[] initialLetterOccurences = new Pair[26];
+		for (int i = 0; i < 26; i++) { // Give each element in the array a value
+			char letter = EnglishDeterminer.ALPHABET.get(i);
+			Pair pair = new Pair(Character.toUpperCase(letter), initialLetters.stream().filter(l -> l.equals(Character.toUpperCase(letter))).count());
+			initialLetterOccurences[i] = pair;
+		}
+		
+		System.out.println("Letter initialities: " + Arrays.toString(initialLetterOccurences));
+		
+		return initialLetterOccurences;
+		
+	
+	}
+
+	private Pair[] getPositionLetterData(int x) {
+		String[] words = cipher.getWords();
+		List<Character> positionLetters = new ArrayList<Character>();
+		for (String word : words) {
+			positionLetters.add(word.charAt(x));
+		}
+		
+		Pair[] positionLetterOccurences = new Pair[26];
+		for (int i = 0; i < 26; i++) {
+			char letter = EnglishDeterminer.ALPHABET.get(i);
+		}
 	}
 
 	public Pair getMostSocialLetter() {
@@ -92,8 +133,10 @@ public final class Frequencies {
 			}
 			// Add the letter and its meetings to the social digraphs list
 			int i = EnglishDeterminer.ALPHABET.indexOf(letter);
-			socialLetters[i] = new Pair(letter, meetings);
+			socialLetters[i] = new Pair(letterUp, meetings);
 		}
+		
+		System.out.println(Arrays.toString(socialLetters));
 		
 		return socialLetters;
 	}
@@ -220,8 +263,11 @@ public final class Frequencies {
 				String digraph = word.charAt(j) 
 								+ "" 
 								+ word.charAt(j + 1);
-				System.out.println(word + ", " + digraph);
-				digraphs.add(new Pair(digraph, getOccurences(digraph)));
+				Pair n = new Pair(digraph, getOccurences(digraph));
+				boolean pairExists = digraphs.contains(n);
+				
+				if (!pairExists)
+					digraphs.add(n);
 			}
 			
 		}
@@ -239,35 +285,8 @@ public final class Frequencies {
 		}).get();
 	}
 	
-	/**
-	 * 'Initialities' as defined in this context - the number of occurences for a given letter as it appears at the beginning of a word
-	 * 
-	 * @return
-	 */
-	private Pair[] getLetterInitialities() {
-		String[] words = cipher.getWords(); // Get cipher as a String[] split into words
-		List<Character> initialLetters = new ArrayList<Character>();
-		for (String word : words) {
-			initialLetters.add(word.charAt(0));
-		}
-	
-		Pair[] initialLetterOccurences = new Pair[26];
-		for (int i = 0; i < 26; i++) { // Give each element in the array a value
-			char letter = EnglishDeterminer.ALPHABET.get(i);
-			Pair pair = new Pair(Character.toUpperCase(letter), initialLetters.stream().filter(l -> l.equals(Character.toUpperCase(letter))).count());
-			initialLetterOccurences[i] = pair;
-		}
-		
-		System.out.println("Letter initialities: " + Arrays.toString(initialLetterOccurences));
-		
-		return initialLetterOccurences;
-		
-	
-	}
-	
 	/** 
 	 * Get the number of occurences of a given letter in a given text
-	 * @param text the excerpt from which the number of occurences of the letter is counted
 	 * @param letter the character that is being counted
 	 * @return the number of occurences of the letter as a long
 	 */
@@ -278,6 +297,11 @@ public final class Frequencies {
 		return frequencyOfLetter;
 	}
 	
+	/**
+	 * Get the number of occurences of a given n-gram in a given text
+	 * @param letters the set of alphabetical characters that is being counted
+	 * @return the number of occurences of @param letters in the text
+	 */
 	public long getOccurences(String letters) {
 		long frequencyOfLetter = Converters.convertStringToListOfStrings(getText()).stream().filter(e -> {
 			return e.contains(letters);
@@ -358,8 +382,7 @@ public final class Frequencies {
 		return sortedListOfData;
 	}
 	
-	/**
-	 * 
+	/** 
 	 * @param matrix
 	 * @param colIndex
 	 * @return
@@ -419,5 +442,4 @@ public final class Frequencies {
 		System.out.println(Arrays.deepToString(mostFrequentLetters));
 		return mostFrequentLetters;
 	}
-	
 }

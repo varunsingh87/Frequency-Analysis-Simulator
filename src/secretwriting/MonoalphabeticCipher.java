@@ -49,19 +49,28 @@ public class MonoalphabeticCipher extends Cipher {
 		
 		System.out.println(getText());
 		
-		
-		//Pair vowel = f.getMostSocialLetter(); // Socialities
-		//Object[][] mostFrequentLetters = f.getMostFrequentLetters(); // All
 		//setText(f.replaceBigrams());
 		//replaceLetters(vowel.props.toUpperCase(), "a");
 		
-		// Trigrams
-		char[] threeLetterWord = f.getMostFrequentTrigraph();
-		solveFrequencyTypes(AlphabeticalStatistics.TRIGRAPHS, threeLetterWord);
+		// Four Letter Words
+		
+		
+		
+		// Three Letter Words
+		
+		
+		
+		// Two Letter Words
+		
+		
+		
+		// Trigraphs
+		char[] mostFrequentTrigraph = f.getMostFrequentTrigraph();
+		solveFrequencyTypes(AlphabeticalStatistics.TRIGRAPHS, mostFrequentTrigraph);
 		
 		// Digraphs
-		char[] twoLetterWord = f.getFrequentDigraph();
-		solveFrequencyTypes(AlphabeticalStatistics.DIGRAPHS, twoLetterWord);
+		char[] frequentDigraph = f.getFrequentDigraph();
+		solveFrequencyTypes(AlphabeticalStatistics.DIGRAPHS, frequentDigraph);
 		
 		// Final letters
 		Pair mostFrequentFinalLetter = f.getMostFrequentFinalLetter();
@@ -71,8 +80,12 @@ public class MonoalphabeticCipher extends Cipher {
 		Pair mostFrequentInitialLetter = f.getMostFrequentInitialLetter();
 		solveFrequencyTypes(AlphabeticalStatistics.INITIAL_LETTERS, mostFrequentInitialLetter);
 		
-		// All letters
+		// Vowels/Social letters
+		Pair vowel = f.getMostSocialLetter();
+		solveFrequencyTypes(AlphabeticalStatistics.SOCIAL_LETTERS, vowel);
 		
+		// All letters
+		//Object[][] mostFrequentLetters = f.getMostFrequentLetters();
 		
 		// Random
 		//testRandom();
@@ -156,6 +169,7 @@ public class MonoalphabeticCipher extends Cipher {
 	}
 	
 	/**
+	 * Overload for position letters
 	 * Runs all needed conditions and loops to replace letters and ultimately use frequency analysis algorithms
 	 * <br>
 	 * A frequency type is the frequency of a property or position of words and letters 
@@ -174,20 +188,27 @@ public class MonoalphabeticCipher extends Cipher {
 		
 		if (notSolvedTypeLetter != ' ') {
 			replaceLetters(p.props, Character.toString(notSolvedTypeLetter));
+			System.out.println("The common position letter " + p.props + " in the ciphertext was replaced with " + notSolvedTypeLetter);
 		}
 	}
 	
 	/**
-	 * 
+	 * Overload for n-grams
 	 * @param c the constant String[] array from alphastats.AlphabeticalStatistics that contains the order of n-grams by frequency for each number n
 	 * @param d The char[] returned from calling the instance method of Frequencies for the frequency type
 	 */
 	private void solveFrequencyTypes(String[] c, char[] d) {
 		String notSolvedTypePhrase = "";
 		for (String nGram : c) {
-			if (!solvedLetters.contains(nGram)) {
+			boolean contained = false;
+			int f = 0;
+			while (!contained && f < d.length) {
+				if (solvedLetters.contains(Character.toString(d[f])))
+					contained = true;
+				f++;
+			}
+			if (!contained) {
 				notSolvedTypePhrase = nGram;
-				System.out.println(nGram);
 				break;
 			}
 		}
