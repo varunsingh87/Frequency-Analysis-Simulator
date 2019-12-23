@@ -13,6 +13,7 @@
  *       CaesarShift
  *      Code
  *     Transposition
+ *      RailFence
  *   Steganogram
  *    
  * </pre>

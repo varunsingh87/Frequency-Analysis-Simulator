@@ -10,20 +10,19 @@ import java.util.Arrays;
 
 // Make final class so class cannot be extended
 public final class AlphabeticalStatistics {
-	// Define constants of arrays of common groups of letters
-	public final static char[] DOUBLE_LETTERS = {'S', 'E', 'T', 'F', 'L', 'M', 'O'};
 	public final static String[] DIGRAPHS = {"th", "er", "on", "an", "re", "he", "in", "ed", "nd", "ha", "at", "en", "es", "of", "or", "nt", "ea", "ti", "to", "it", "st", "io", "le", "is", "ou", "ar", "as", "de", "rt", "ve"};
 	public final static String[] TRIGRAPHS = {"the", "and", "tha", "ent", "ion", "tio", "for", "nde", "has", "nce", "edt", "tis", "oft", "sth", "men"};
 	public final static String[] TWO_LETTER_WORDS = {"of", "to", "in", "it", "is", "be", "as", "at", "so", "we", "he", "by", "or", "on", "do", "if", "me", "my", "up", "an", "go", "no", "us", "am"};
 	public final static String[] THREE_LETTER_WORDS = {"the", "and", "for", "are", "but", "not", "you", "all", "any", "can", "had", "her", "was", "one", "our", "out", "day", "get", "has", "him", "his", "how", "man", "new", "now", "old", "see", "two", "way", "who", "boy", "did", "its", "let", "put", "say", "she", "too", "use"};
 	public final static String[] FOUR_LETTER_WORDS = {"that", "with", "have", "this", "will", "your", "from", "they", "know", "want", "been", "good", "much", "some", "time"};
+	
+	public final static char[] DOUBLE_LETTERS = {'S', 'E', 'T', 'F', 'L', 'M', 'O'};
 	public final static char[] FINAL_LETTERS = {'E', 'S', 'T', 'D', 'N', 'R', 'Y', 'F', 'L', 'O', 'G', 'H', 'A', 'K', 'M', 'P', 'U', 'W'};
 	public final static char[] INITIAL_LETTERS = {'T', 'A', 'O', 'S', 'W', 'H', 'B', 'I', 'C', 'D'};
 	public final static char[] ALL_LETTERS = {'E', 'T', 'A', 'O', 'I', 'N', 'S', 'H', 'R', 'D', 'L', 'U'};
 	public final static char[] SOCIAL_LETTERS = {'A', 'E', 'I', 'O', 'U'};
 	
-	// Make private constructor so no instances can be made
-	private AlphabeticalStatistics() {}
+	private AlphabeticalStatistics() {} // Make private constructor so no instances can be made
 	
 	/**
 	 * Checks if a word has double letters and returns a boolean indictating this

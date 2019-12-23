@@ -40,10 +40,24 @@ public final class Frequencies {
 			}
 		}).get();
 	}
+	
+	public Pair getMostFrequentInitialLetter() {
+		return Arrays.stream(getPositionLetterData(0)).max(new Comparator<Pair>() {
+			public int compare(Pair pair1, Pair pair2) {
+				return pair1.compareToLong(pair2);
+			}
+		}).get();
+	}
 
+	/**
+	 * 
+	 * @param x the indicator as to whether to get the first letter or the last letter
+	 * @return the Pair[] of all the position letters and their respective occurence counts in the given text
+	 */
 	private Pair[] getPositionLetterData(int x) {
 		String[] words = cipher.getWords();
 		List<Character> positionLetters = new ArrayList<Character>();
+		
 		for (String word : words) {
 			if (x == 0) {
 				positionLetters.add(word.charAt(x));
@@ -62,6 +76,74 @@ public final class Frequencies {
 		System.out.println("Letter positionities: " + Arrays.toString(positionLetterOccurences));
 		
 		return positionLetterOccurences;
+	}
+	
+	/**
+	 * 
+	 * @param x the number of letters in the n gram that is used for some calculations
+	 * @return the List<Pair> of all the NGrams and their respective occurence counts in the given text
+	 */
+	private List<Pair> getNGramOccurences(int x) {
+		List<Pair> ngraphs = new ArrayList<Pair>();
+		Arrays.stream(cipher.getWords()).forEach(w -> {
+			for (int j = 0; j < w.length() - (x - 1); j++) {
+				String ngraph = "";
+				for (int i = 0; i < x; i++) {
+					ngraph += w.charAt(j + i);
+				}
+				
+				Pair p = new Pair(ngraph, getOccurences(w));
+				
+				if (!ngraphs.contains(p)) {
+					ngraphs.add(p);
+				}
+			}
+		});
+		
+		System.out.println("N-graphs: " + Arrays.toString(ngraphs.toArray()));
+		return ngraphs;
+	}
+
+	public char[] getFrequentDigraph() {
+		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
+		Pair wouldBe = Collections.max(getNGramOccurences(2), cmp);
+		char[] toReturn = new char[2];
+		toReturn[0] = wouldBe.props.charAt(0);
+		toReturn[1] = wouldBe.props.charAt(1);
+		
+		return toReturn;
+	}
+
+	/** Overload of getFrequentDigraph()
+	 * <ol>
+	 * <li>Sorts the list using Collections.sort() and the Comparator class</li>
+	 * <li>Gets the nth index of that array</li>
+	 * <li>Stores each character of the digraph in a char[] which is returned</li>
+	 * </ol>
+	 * @param n an ordinal number from the most frequent digraph
+	 * @return the digraph that has the nth largest amount of occurences
+	 */
+	public char[] getFrequentDigraph(int n) {
+		List<Pair> digraphPairs = getNGramOccurences(2);
+		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
+		Collections.sort(digraphPairs, cmp);
+		Pair wouldBe = digraphPairs.get(n);
+		char[] toReturn = new char[2];
+		toReturn[0] = wouldBe.props.charAt(0);
+		toReturn[1] = wouldBe.props.charAt(1);
+		
+		return toReturn;
+	}
+
+	public char[] getMostFrequentTrigraph() {
+		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
+		Pair wouldBe = Collections.max(getNGramOccurences(3), cmp);
+		char[] toReturn = new char[3];
+		toReturn[0] = wouldBe.props.charAt(0);
+		toReturn[1] = wouldBe.props.charAt(1);
+		toReturn[2] = wouldBe.props.charAt(2);
+		
+		return toReturn;
 	}
 
 	public Pair getMostSocialLetter() {
@@ -150,105 +232,6 @@ public final class Frequencies {
 				).toArray(String[]::new);
 	}
 	
-	public char[] getMostFrequentTrigraph() {
-		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
-		Pair wouldBe = Collections.max(getTrigraphOccurences(), cmp);
-		char[] toReturn = new char[3];
-		toReturn[0] = wouldBe.props.charAt(0);
-		toReturn[1] = wouldBe.props.charAt(1);
-		toReturn[2] = wouldBe.props.charAt(2);
-		
-		return toReturn;
-	}
-
-	private List<Pair> getTrigraphOccurences() {
-		// Get all words that are three letters long to try out the most common three letter words
-		List<Pair> threeLetterWords = new ArrayList<Pair>();
-		// Invoke methods upon the text in order to iterate through each word (without returning anything)
-		Arrays.stream(cipher.getWords()).forEach(w -> {
-			// If w is a three letter word
-			Pair p = new Pair(w, getOccurences(w));
-			boolean pairExists = threeLetterWords.contains(p);
-			
-			if (!pairExists) {
-				if (AlphabeticalStatistics.meetsAllConditions(AlphabeticalStatistics.isNLetters(w, 3)))
-					threeLetterWords.add(new Pair(w, getOccurences(w)));
-				int x = 0;
-				while (x < w.length() - 2) {
-					
-					x++;
-				}
-			}
-			
-		});	
-		
-		List<Pair> newThreeLetterWords = threeLetterWords.stream().distinct().collect(Collectors.toList());
-		
-		System.out.println("Trigraphs: " + Arrays.toString(newThreeLetterWords.toArray()));
-		
-		return newThreeLetterWords;
-	}
-
-	public char[] getFrequentDigraph() {
-		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
-		Pair wouldBe = Collections.max(getDigraphOccurences(), cmp);
-		char[] toReturn = new char[2];
-		toReturn[0] = wouldBe.props.charAt(0);
-		toReturn[1] = wouldBe.props.charAt(1);
-		
-		return toReturn;
-	}
-	
-	/** Overload of getFrequentDigraph()
-	 * <ol>
-	 * <li>Sorts the list using Collections.sort() and the Comparator class</li>
-	 * <li>Gets the nth index of that array</li>
-	 * <li>Stores each character of the digraph in a char[] which is returned</li>
-	 * </ol>
-	 * @param n an ordinal number from the most frequent digraph
-	 * @return the digraph that has the nth largest amount of occurences
-	 */
-	public char[] getFrequentDigraph(int n) {
-		List<Pair> digraphPairs = getDigraphOccurences();
-		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
-		Collections.sort(digraphPairs, cmp);
-		Pair wouldBe = digraphPairs.get(n);
-		char[] toReturn = new char[2];
-		toReturn[0] = wouldBe.props.charAt(0);
-		toReturn[1] = wouldBe.props.charAt(1);
-		
-		return toReturn;
-	}
-
-	private List<Pair> getDigraphOccurences() {
-		List<Pair> digraphs = new ArrayList<Pair>();
-		for (String word : cipher.getWords()) {
-			for (int j = 0; j < word.length() - 1; j++) {
-				String digraph = word.charAt(j) 
-								+ "" 
-								+ word.charAt(j + 1);
-				Pair n = new Pair(digraph, getOccurences(digraph));
-				boolean pairExists = digraphs.contains(n);
-				
-				if (!pairExists)
-					digraphs.add(n);
-			}
-			
-		}
-		
-		System.out.println(Arrays.toString(digraphs.toArray()));
-		
-		return digraphs;
-	}
-
-	public Pair getMostFrequentInitialLetter() {
-		return Arrays.stream(getPositionLetterData(0)).max(new Comparator<Pair>() {
-			public int compare(Pair pair1, Pair pair2) {
-				return pair1.compareToLong(pair2);
-			}
-		}).get();
-	}
-	
 	/** 
 	 * Get the number of occurences of a given letter in a given text
 	 * @param letter the character that is being counted
@@ -273,6 +256,29 @@ public final class Frequencies {
 		return frequencyOfLetter;
 	}
 	
+	/**
+	 * 
+	 * @param ciphertext
+	 * @return
+	 */
+	public Object[][] getMostFrequentLetters(Object[][] listOfDifferences) {	
+		
+		int leastFrequentMostFrequentLetterFrequency = getLeastFrequentMostFrequentLetterFrequency(listOfDifferences);
+		Object[][] mostFrequentLetters = Arrays.asList(listOfDifferences).stream().filter(a -> {
+	
+			return (long)a[1] >= leastFrequentMostFrequentLetterFrequency;
+		}).toArray(Object[][]::new);
+		
+		return mostFrequentLetters;
+	}
+
+	public Object[][] getMostFrequentLetters() {
+		Object[][] listOfDifferences = getDifferencesOfOccurences();
+		Object[][] mostFrequentLetters = getMostFrequentLetters(listOfDifferences);
+		System.out.println(Arrays.deepToString(mostFrequentLetters));
+		return mostFrequentLetters;
+	}
+
 	/**
 	 * @param text
 	 * @return
@@ -382,28 +388,5 @@ public final class Frequencies {
 			}
 		}
 		return 0;
-	}
-	
-	/**
-	 * 
-	 * @param ciphertext
-	 * @return
-	 */
-	public Object[][] getMostFrequentLetters(Object[][] listOfDifferences) {	
-		
-		int leastFrequentMostFrequentLetterFrequency = getLeastFrequentMostFrequentLetterFrequency(listOfDifferences);
-		Object[][] mostFrequentLetters = Arrays.asList(listOfDifferences).stream().filter(a -> {
-
-			return (long)a[1] >= leastFrequentMostFrequentLetterFrequency;
-		}).toArray(Object[][]::new);
-		
-		return mostFrequentLetters;
-	}
-	
-	public Object[][] getMostFrequentLetters() {
-		Object[][] listOfDifferences = getDifferencesOfOccurences();
-		Object[][] mostFrequentLetters = getMostFrequentLetters(listOfDifferences);
-		System.out.println(Arrays.deepToString(mostFrequentLetters));
-		return mostFrequentLetters;
 	}
 }
