@@ -81,7 +81,7 @@ public final class Frequencies {
 					ngraph += w.charAt(j + i);
 				}
 				
-				Pair p = new Pair(ngraph, new FrequencyHelpers(cipher.getText()).getOccurences(w));
+				Pair p = new Pair(ngraph, new FrequencyHelpers(cipher.getText()).getOccurences(ngraph));
 				
 				if (!ngraphs.contains(p)) {
 					ngraphs.add(p);
@@ -131,6 +131,10 @@ public final class Frequencies {
 		
 		return toReturn;
 	}
+	
+	public Pair[] getFourLetterWordOccurencs() {
+		return null;
+	}
 
 	/**
 	 * Returns the "sociality" of each letter in an ArrayList of Pair
@@ -141,7 +145,7 @@ public final class Frequencies {
 	 * </p>
 	 * 
 	 * @return a list of the sociality of each letter as an int
-	 */
+	*/
 	private Pair[] getLetterSocialities() {
 		Pair[] socialLetters = new Pair[26]; // Initialize list for letters
 		for (char letter : EnglishDeterminer.ALPHABET) {
