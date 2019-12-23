@@ -65,19 +65,19 @@ public class MonoalphabeticCipher extends Cipher {
 		
 		
 		// Trigraphs
-		char[] mostFrequentTrigraph = f.getMostFrequentTrigraph();
+		char[] mostFrequentTrigraph = f.getMostFrequentNGraph(3);
 		solveFrequencyTypes(AlphabeticalStatistics.TRIGRAPHS, mostFrequentTrigraph);
 		
 		// Digraphs
-		char[] frequentDigraph = f.getFrequentDigraph();
+		char[] frequentDigraph = f.getMostFrequentNGraph(2);
 		solveFrequencyTypes(AlphabeticalStatistics.DIGRAPHS, frequentDigraph);
 		
 		// Final letters
-		Pair mostFrequentFinalLetter = f.getMostFrequentFinalLetter();
+		Pair mostFrequentFinalLetter = f.getMostFrequentPositionLetter(-3);
 		solveFrequencyTypes(AlphabeticalStatistics.FINAL_LETTERS, mostFrequentFinalLetter);
 		
 		// Initial letters
-		Pair mostFrequentInitialLetter = f.getMostFrequentInitialLetter();
+		Pair mostFrequentInitialLetter = f.getMostFrequentPositionLetter(0);
 		solveFrequencyTypes(AlphabeticalStatistics.INITIAL_LETTERS, mostFrequentInitialLetter);
 		
 		// Vowels/Social letters
