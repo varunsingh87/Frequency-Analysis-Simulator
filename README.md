@@ -17,7 +17,7 @@ Give examples
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+1. Download and install Eclipse IDE. 
 
 Say what the step will be
 
@@ -35,14 +35,20 @@ End with an example of getting some data out of the system or using it for a lit
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+To run a unit test, use the keyboard shortcut `Ctrl + F11` in the Eclipse IDe or click the green circumscribed triangle button in the menu. The result is in the console. 
 
-### Break down into end to end tests
+### Unit Tests
 
-Explain what these tests test and why
+#### secretwriting Package OOP Classes
+
+1. Put the files of the secretwriting package (secretwriting directory) in a new Java project. 
+2. In a new class file named SecretWritingTest, insert the following code into the main method
 
 ```
-Give an example
+Cipher mc = new MonoalphabeticCipher("Green eggs and ham");
+System.out.println(mc.getText());
+//System.out.println(mc.encrypt()); // Run this line, and it should given an error
+System.out.println((MonoalphabeticCipher) mc.encrypt()); // Downcasts
 ```
 
 ### And coding style tests
