@@ -132,8 +132,20 @@ public final class Frequencies {
 		return toReturn;
 	}
 	
-	public Pair[] getFourLetterWordOccurencs() {
-		return null;
+	private List<Pair> getNLetterWordOccurences(int n) {
+		List<Pair> fourLetterWords = new ArrayList<Pair>();
+		Arrays.stream(cipher.getWords()).forEach(w -> {
+			if (AlphabeticalStatistics.meetsAllConditions(AlphabeticalStatistics.isNLetters(w, n))) {
+				fourLetterWords.add(new Pair(w, new FrequencyHelpers(getText()).getOccurences(w)));
+			}
+		});
+		
+		System.out.println(Arrays.toString(fourLetterWords.toArray()));
+		return fourLetterWords;
+	}
+	
+	public String getMostFrequentNLetterWord(int n) {
+		return Collections.max(getNLetterWordOccurences(n), Comparator.comparing(p -> (long) p.val)).props;
 	}
 
 	/**

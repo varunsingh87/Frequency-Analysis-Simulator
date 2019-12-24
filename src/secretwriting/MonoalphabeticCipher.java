@@ -49,41 +49,22 @@ public class MonoalphabeticCipher extends Cipher {
 		
 		System.out.println(getText());
 		
-		//setText(f.replaceBigrams());
-		//replaceLetters(vowel.props.toUpperCase(), "a");
-		
-		// Four Letter Words
-		
-		
-		
-		// Three Letter Words
-		
-		
-		
-		// Two Letter Words
-		
-		
-		
 		// Trigraphs
-		char[] mostFrequentTrigraph = f.getMostFrequentNGraph(3);
-		solveFrequencyTypes(AlphabeticalStatistics.TRIGRAPHS, mostFrequentTrigraph);
-		
+		solveFrequencyTypes(AlphabeticalStatistics.TRIGRAPHS, f.getMostFrequentNGraph(3));
 		// Digraphs
-		char[] frequentDigraph = f.getMostFrequentNGraph(2);
-		solveFrequencyTypes(AlphabeticalStatistics.DIGRAPHS, frequentDigraph);
-		
+		solveFrequencyTypes(AlphabeticalStatistics.DIGRAPHS, f.getMostFrequentNGraph(2));
+		// Four Letter Words
+		solveFrequencyTypes(AlphabeticalStatistics.FOUR_LETTER_WORDS, f.getMostFrequentNLetterWord(4));
 		// Final letters
-		Pair mostFrequentFinalLetter = f.getMostFrequentPositionLetter(-3);
-		solveFrequencyTypes(AlphabeticalStatistics.FINAL_LETTERS, mostFrequentFinalLetter);
-		
+		solveFrequencyTypes(AlphabeticalStatistics.FINAL_LETTERS, f.getMostFrequentPositionLetter(-3));
 		// Initial letters
-		Pair mostFrequentInitialLetter = f.getMostFrequentPositionLetter(0);
-		solveFrequencyTypes(AlphabeticalStatistics.INITIAL_LETTERS, mostFrequentInitialLetter);
-		
+		solveFrequencyTypes(AlphabeticalStatistics.INITIAL_LETTERS, f.getMostFrequentPositionLetter(0));
+		// Three Letter Words
+		solveFrequencyTypes(AlphabeticalStatistics.THREE_LETTER_WORDS, f.getMostFrequentNLetterWord(3));		
+		// Two Letter Words
+		solveFrequencyTypes(AlphabeticalStatistics.TWO_LETTER_WORDS, f.getMostFrequentNLetterWord(2));
 		// Vowels/Social letters
-		Pair vowel = f.getMostSocialLetter();
-		solveFrequencyTypes(AlphabeticalStatistics.SOCIAL_LETTERS, vowel);
-		
+		solveFrequencyTypes(AlphabeticalStatistics.SOCIAL_LETTERS, f.getMostSocialLetter());		
 		// All letters
 		//Object[][] mostFrequentLetters = f.getMostFrequentLetters();
 		
@@ -194,8 +175,8 @@ public class MonoalphabeticCipher extends Cipher {
 	
 	/**
 	 * Overload for n-grams
-	 * @param c the constant String[] array from alphastats.AlphabeticalStatistics that contains the order of n-grams by frequency for each number n
-	 * @param d The char[] returned from calling the instance method of Frequencies for the frequency type
+	 * @param c array contains the order of n-grams by frequency for each number n
+	 * @param d array of the most common of a frequency type
 	 */
 	private void solveFrequencyTypes(String[] c, char[] d) {
 		String notSolvedTypePhrase = "";
@@ -221,6 +202,38 @@ public class MonoalphabeticCipher extends Cipher {
 				replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter));
 			}
 			System.out.println("The common n-graph " + String.valueOf(d) + " in the ciphertext was replaced with " + notSolvedTypePhrase);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param c the array of the most frequent n-letter words
+	 * @param s The String of the most common n-letter word in the text
+	 */
+	private void solveFrequencyTypes(String[] c, String s) {
+		String notSolvedTypeWord = "";
+		for (String nLetterWord : c) {
+			boolean contained = false;
+			int f = 0;
+			while (!contained && f < s.length()) { // Loops through s
+				if (solvedLetters.contains(Character.toString(s.charAt(f))))
+					contained = true;
+				f++;
+			}
+			if (!contained) {
+				notSolvedTypeWord = nLetterWord;
+				break;
+			}
+		}
+		
+		if (!notSolvedTypeWord.equals("")) {
+			for (int i = 0; i <= s.length() - 1; i++) {
+				char solvedLetter = notSolvedTypeWord.charAt(i);
+				char replacedLetter = s.charAt(i);
+				
+				replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter));
+			}
+			System.out.println("The common n-letter word " + String.valueOf(s) + " in the ciphertext was replaced with " + notSolvedTypeWord);
 		}
 	}
 }
