@@ -102,29 +102,57 @@ public class MonoalphabeticCipher extends Cipher {
 		return Converters.convertListToString(cipherchars);
 	}
 	
+	/**
+	 * 
+	 * @param toReplace
+	 * @param replacement
+	 */
 	private void replaceLetters(String toReplace, String replacement) {
 		replaceLetters(toReplace, replacement, replacement, toReplace);
 	}
 	
+	/**
+	 * 
+	 * @param toReplace
+	 * @param replacement
+	 * @param toAdd
+	 */
 	@SuppressWarnings("unused")
 	private void replaceLetters(String toReplace, String replacement, String toAdd) {
 		replaceLetters(toReplace, replacement, toAdd, toReplace);
 	}
 	
+	/**
+	 * 
+	 * @param toReplace
+	 * @param replacement
+	 * @param toAdd
+	 * @param toAdd2
+	 */
 	private void replaceLetters(String toReplace, String replacement, String toAdd, String toAdd2) {
 		setText(getText().replace(toReplace, replacement));
 		solvedLetters.add(toAdd);
 		replacedLetters.add(toAdd2);
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public String magic() {
 		return null;
 	}
-
+	
+	/**
+	 * 
+	 */
 	public void printCipherAlphabetAsTable() {
 
 	}
 	
+	/**
+	 * 
+	 */
 	public void testRandom() {
 		char randomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
 	
