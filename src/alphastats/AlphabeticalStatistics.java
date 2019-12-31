@@ -12,11 +12,12 @@ import java.util.Arrays;
 public final class AlphabeticalStatistics {
 	public final static String[] DIGRAPHS = {"th", "er", "on", "an", "re", "he", "in", "ed", "nd", "ha", "at", "en", "es", "of", "or", "nt", "ea", "ti", "to", "it", "st", "io", "le", "is", "ou", "ar", "as", "de", "rt", "ve"};
 	public final static String[] TRIGRAPHS = {"the", "and", "tha", "ent", "ion", "tio", "for", "nde", "has", "nce", "edt", "tis", "oft", "sth", "men"};
+	public final static String[] ONE_LETTER_WORDS = {"a", "i"};
 	public final static String[] TWO_LETTER_WORDS = {"of", "to", "in", "it", "is", "be", "as", "at", "so", "we", "he", "by", "or", "on", "do", "if", "me", "my", "up", "an", "go", "no", "us", "am"};
 	public final static String[] THREE_LETTER_WORDS = {"the", "and", "for", "are", "but", "not", "you", "all", "any", "can", "had", "her", "was", "one", "our", "out", "day", "get", "has", "him", "his", "how", "man", "new", "now", "old", "see", "two", "way", "who", "boy", "did", "its", "let", "put", "say", "she", "too", "use"};
 	public final static String[] FOUR_LETTER_WORDS = {"that", "with", "have", "this", "will", "your", "from", "they", "know", "want", "been", "good", "much", "some", "time"};
 	
-	public final static String[] DOUBLE_LETTERS = {"SS", "EE", "TT", "FF", "LL", "MM", "OO"};
+	public final static String[] DOUBLE_LETTERS = {"ss", "ee", "tt", "ff", "ll", "mm", "oo"};
 	
 	public final static char[] FINAL_LETTERS = {'E', 'S', 'T', 'D', 'N', 'R', 'Y', 'F', 'L', 'O', 'G', 'H', 'A', 'K', 'M', 'P', 'U', 'W'};
 	public final static char[] INITIAL_LETTERS = {'T', 'A', 'O', 'S', 'W', 'H', 'B', 'I', 'C', 'D'};
@@ -64,15 +65,12 @@ public final class AlphabeticalStatistics {
 	}
 	
 	public static String doubleLetterInWord(String word) {
-		for (String letter : DOUBLE_LETTERS) {
-			if (hasDoubleInWord(word)) {
-				
-				return letter;
+		for (int i = 0; i < word.length() - 1; i++) {
+			if (word.charAt(i) == word.charAt(i + 1)) {
+				return "" + word.charAt(i) + word.charAt(i);
 			}
 		}
-		
 		return "-";
-		
 	}
 	
 	public static boolean needsOneLetter(String word) {

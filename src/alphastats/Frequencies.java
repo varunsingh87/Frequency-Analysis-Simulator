@@ -115,6 +115,7 @@ public final class Frequencies {
 	 * <li>Gets the nth index of that array</li>
 	 * <li>Stores each character of the digraph in a char[] which is returned</li>
 	 * </ol>
+	 * @param x the number of letters in the n graph
 	 * @param n an ordinal number from the most frequent digraph
 	 * @return the digraph that has the nth largest amount of occurences
 	 */
@@ -250,5 +251,26 @@ public final class Frequencies {
 		Object[][] mostFrequentLetters = getMostFrequentLetters(listOfDifferences);
 		System.out.println(Arrays.deepToString(mostFrequentLetters));
 		return mostFrequentLetters;
+	}
+	
+	private List<Pair> getDoubles() {
+		List<Pair> doubles = new ArrayList<Pair>();
+		Arrays.stream(cipher.getWords()).filter(w -> {
+			return AlphabeticalStatistics.hasDoubleInWord(w);
+		}).forEach(w -> {
+			String dword = AlphabeticalStatistics.doubleLetterInWord(w);
+			Pair p = new Pair(dword, new FrequencyHelpers(cipher.getText()).getOccurences(dword));
+				
+			if (!doubles.contains(p)) {
+				doubles.add(p);
+			}
+		});
+		
+		System.out.println("doubles: " + Arrays.toString(doubles.toArray()));
+		return doubles;
+	}
+	
+	public String getMostFrequentDoubles() {
+		return Collections.max(getDoubles(), Comparator.comparing(p -> (long) p.val)).props;
 	}
 }

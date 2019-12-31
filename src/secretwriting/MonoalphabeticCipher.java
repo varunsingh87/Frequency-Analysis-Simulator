@@ -48,11 +48,14 @@ public class MonoalphabeticCipher extends Cipher {
 		Frequencies f = new Frequencies(this); // Defines a new Frequencies object
 		
 		System.out.println(getText());
-		
 		// Trigraphs
 		solveFrequencyTypes(AlphabeticalStatistics.TRIGRAPHS, f.getMostFrequentNGraph(3));
 		// Digraphs
 		solveFrequencyTypes(AlphabeticalStatistics.DIGRAPHS, f.getMostFrequentNGraph(2));
+		// Random
+		testRandom();
+		// Double Letters
+		solveFrequencyTypes(AlphabeticalStatistics.DOUBLE_LETTERS, f.getMostFrequentDoubles());
 		// Four Letter Words
 		solveFrequencyTypes(AlphabeticalStatistics.FOUR_LETTER_WORDS, f.getMostFrequentNLetterWord(4));
 		// Final letters
@@ -63,15 +66,11 @@ public class MonoalphabeticCipher extends Cipher {
 		solveFrequencyTypes(AlphabeticalStatistics.THREE_LETTER_WORDS, f.getMostFrequentNLetterWord(3));		
 		// Two Letter Words
 		solveFrequencyTypes(AlphabeticalStatistics.TWO_LETTER_WORDS, f.getMostFrequentNLetterWord(2));
+		// One Letter Words
+		solveFrequencyTypes(AlphabeticalStatistics.ONE_LETTER_WORDS, f.getMostFrequentNLetterWord(1));
 		// Vowels/Social letters
 		solveFrequencyTypes(AlphabeticalStatistics.SOCIAL_LETTERS, f.getMostSocialLetter());		
-		// Double Letters
-		solveFrequencyTypes(AlphabeticalStatistics.DOUBLE_LETTERS, f.getMostFrequentDouble());
 		// All letters
-		//Object[][] mostFrequentLetters = f.getMostFrequentLetters();
-		
-		// Random
-		testRandom();
 		
 		System.out.println(replacedLetters.toString());
 		System.out.println(solvedLetters.toString());
@@ -97,7 +96,7 @@ public class MonoalphabeticCipher extends Cipher {
 
 			int nthLetter = plainAlphabet.indexOf(Character.toLowerCase(p));
 
-			return cipherAlphabet.get(nthLetter);
+			return Character.toUpperCase(cipherAlphabet.get(nthLetter));
 		}).collect(Collectors.toList());
 
 		return Converters.convertListToString(cipherchars);
@@ -127,33 +126,28 @@ public class MonoalphabeticCipher extends Cipher {
 	}
 	
 	public void testRandom() {
-		for (int i = 0; i < 1; i++) {
-			char randomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
+		char randomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
+	
+		while (solvedLetters.contains(Character.toString(randomLetter))) {
+			randomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
+		}
 		
-			while (solvedLetters.contains(Character.toString(randomLetter))) {
-				randomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
+		char secondRandomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
+		while (replacedLetters.contains(Character.toString(secondRandomLetter))) {
+			secondRandomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
+		}
+		String potentialText = getText().replace(Character.toUpperCase(secondRandomLetter), randomLetter);
+		try {
+			System.out.println(potentialText);
+			System.out.println(Character.toUpperCase(secondRandomLetter));
+			System.out.println(randomLetter);
+			if(EnglishDeterminer.isSentence(Cipher.getWordsWithOneLowerCase(potentialText))) {
+				replaceLetters(Character.toString(Character.toUpperCase(secondRandomLetter)), Character.toString(randomLetter));
 			}
-			
-			char secondRandomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
-			while (replacedLetters.contains(Character.toString(secondRandomLetter))) {
-				secondRandomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
-			}
-			String potentialText = getText().replace(Character.toUpperCase(secondRandomLetter), randomLetter);
-			try {
-				System.out.println(potentialText);
-				System.out.println(Character.toUpperCase(secondRandomLetter));
-				System.out.println(randomLetter);
-				if(EnglishDeterminer.isSentence(Cipher.getWordsWithOneLowerCase(potentialText))) {
-					replaceLetters(Character.toString(Character.toUpperCase(secondRandomLetter)), Character.toString(randomLetter));
-					solvedLetters.add(Character.toString(Character.toUpperCase(secondRandomLetter)));
-					replacedLetters.add(Character.toString(Character.toUpperCase(randomLetter)));
-					break;
-				}
-			} catch (JWNLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return;
-			}
+		} catch (JWNLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
 		}
 	}
 	
@@ -241,7 +235,7 @@ public class MonoalphabeticCipher extends Cipher {
 				
 				replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter));
 			}
-			System.out.println("The common n-letter word " + String.valueOf(s) + " in the ciphertext was replaced with " + notSolvedTypeWord);
+			System.out.println("The common frequency type " + s + " in the ciphertext was replaced with " + notSolvedTypeWord);
 		}
 	}
 }

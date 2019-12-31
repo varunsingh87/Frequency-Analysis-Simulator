@@ -42,7 +42,7 @@ public class FrequencyAnalysisSimulator {
 	 */
 	public static void main(String[] args) throws JWNLException {		
 		long startTime = System.currentTimeMillis();
-		ACTION action = ACTION.MAGIC;
+		ACTION action = determineAction();
 		if (action.equals(ACTION.DECRYPT))
 			handleDecrypt();
 		else if (action.equals(ACTION.ENCRYPT))
