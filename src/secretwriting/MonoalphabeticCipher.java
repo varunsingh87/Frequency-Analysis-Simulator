@@ -65,11 +65,13 @@ public class MonoalphabeticCipher extends Cipher {
 		solveFrequencyTypes(AlphabeticalStatistics.TWO_LETTER_WORDS, f.getMostFrequentNLetterWord(2));
 		// Vowels/Social letters
 		solveFrequencyTypes(AlphabeticalStatistics.SOCIAL_LETTERS, f.getMostSocialLetter());		
+		// Double Letters
+		solveFrequencyTypes(AlphabeticalStatistics.DOUBLE_LETTERS, f.getMostFrequentDouble());
 		// All letters
 		//Object[][] mostFrequentLetters = f.getMostFrequentLetters();
 		
 		// Random
-		//testRandom();
+		testRandom();
 		
 		System.out.println(replacedLetters.toString());
 		System.out.println(solvedLetters.toString());
@@ -125,27 +127,33 @@ public class MonoalphabeticCipher extends Cipher {
 	}
 	
 	public void testRandom() {
-		char randomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
-		while (solvedLetters.contains(Character.toString(randomLetter))) {
-			randomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
-		}
+		for (int i = 0; i < 1; i++) {
+			char randomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
 		
-		char secondRandomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
-		while (replacedLetters.contains(Character.toString(secondRandomLetter))) {
-			secondRandomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
-		}
-		String potentialText = getText().replace(Character.toUpperCase(secondRandomLetter), randomLetter);
-		try {
-			System.out.println(potentialText);
-			System.out.println(Character.toUpperCase(secondRandomLetter));
-			System.out.println(randomLetter);
-			if(EnglishDeterminer.isSentence(Cipher.getWordsWithOneLowerCase(potentialText))) {
-				replaceLetters(Character.toString(Character.toUpperCase(secondRandomLetter)), Character.toString(randomLetter));
+			while (solvedLetters.contains(Character.toString(randomLetter))) {
+				randomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
 			}
-		} catch (JWNLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
+			
+			char secondRandomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
+			while (replacedLetters.contains(Character.toString(secondRandomLetter))) {
+				secondRandomLetter = EnglishDeterminer.ALPHABET.get((int) (Math.round(Math.random() * 25)));
+			}
+			String potentialText = getText().replace(Character.toUpperCase(secondRandomLetter), randomLetter);
+			try {
+				System.out.println(potentialText);
+				System.out.println(Character.toUpperCase(secondRandomLetter));
+				System.out.println(randomLetter);
+				if(EnglishDeterminer.isSentence(Cipher.getWordsWithOneLowerCase(potentialText))) {
+					replaceLetters(Character.toString(Character.toUpperCase(secondRandomLetter)), Character.toString(randomLetter));
+					solvedLetters.add(Character.toString(Character.toUpperCase(secondRandomLetter)));
+					replacedLetters.add(Character.toString(Character.toUpperCase(randomLetter)));
+					break;
+				}
+			} catch (JWNLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return;
+			}
 		}
 	}
 	
@@ -189,7 +197,7 @@ public class MonoalphabeticCipher extends Cipher {
 				f++;
 			}
 			if (!contained) {
-				notSolvedTypePhrase = nGram;
+				notSolvedTypePhrase = nGram;			
 				break;
 			}
 		}
