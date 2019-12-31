@@ -16,7 +16,8 @@ public final class AlphabeticalStatistics {
 	public final static String[] THREE_LETTER_WORDS = {"the", "and", "for", "are", "but", "not", "you", "all", "any", "can", "had", "her", "was", "one", "our", "out", "day", "get", "has", "him", "his", "how", "man", "new", "now", "old", "see", "two", "way", "who", "boy", "did", "its", "let", "put", "say", "she", "too", "use"};
 	public final static String[] FOUR_LETTER_WORDS = {"that", "with", "have", "this", "will", "your", "from", "they", "know", "want", "been", "good", "much", "some", "time"};
 	
-	public final static char[] DOUBLE_LETTERS = {'S', 'E', 'T', 'F', 'L', 'M', 'O'};
+	public final static String[] DOUBLE_LETTERS = {"SS", "EE", "TT", "FF", "LL", "MM", "OO"};
+	
 	public final static char[] FINAL_LETTERS = {'E', 'S', 'T', 'D', 'N', 'R', 'Y', 'F', 'L', 'O', 'G', 'H', 'A', 'K', 'M', 'P', 'U', 'W'};
 	public final static char[] INITIAL_LETTERS = {'T', 'A', 'O', 'S', 'W', 'H', 'B', 'I', 'C', 'D'};
 	public final static char[] ALL_LETTERS = {'E', 'T', 'A', 'O', 'I', 'N', 'S', 'H', 'R', 'D', 'L', 'U'};
@@ -38,8 +39,7 @@ public final class AlphabeticalStatistics {
 		 try {
 		 
 			 // Check if the letter can be a bigram
-		     if(new String(DOUBLE_LETTERS).contains(String.valueOf(letter)) || !plaintext)
-		     {
+		     if(Arrays.stream(DOUBLE_LETTERS).anyMatch(String.valueOf(letter)::equals) || !plaintext) {
 		    	 // If so, check if the text has the given letter as a bigram
 		    	 return text.indexOf("" + letter + letter) != -1;
   		     }
@@ -63,15 +63,15 @@ public final class AlphabeticalStatistics {
 		return word.matches(".*([A-Z])\\1.*");
 	}
 	
-	public static char doubleLetterInWord(String word) {
-		for (char letter : DOUBLE_LETTERS) {
-			if (word.contains("" + letter + letter)) {
+	public static String doubleLetterInWord(String word) {
+		for (String letter : DOUBLE_LETTERS) {
+			if (hasDoubleInWord(word)) {
 				
 				return letter;
 			}
 		}
 		
-		return '-';
+		return "-";
 		
 	}
 	
@@ -86,7 +86,7 @@ public final class AlphabeticalStatistics {
 	}
 	
 	public static boolean meetsAllConditions(Boolean... conditions) {
-		return !Arrays.asList(conditions).contains(false);
+		return Arrays.stream(conditions).allMatch(c -> true);
 	}
 	
 }
