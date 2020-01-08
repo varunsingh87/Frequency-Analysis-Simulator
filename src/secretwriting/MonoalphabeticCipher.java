@@ -104,8 +104,8 @@ public class MonoalphabeticCipher extends Cipher {
 	 * @param toReplace
 	 * @param replacement
 	 */
-	private void replaceLetters(String toReplace, String replacement) {
-		replaceLetters(toReplace, replacement, replacement, toReplace);
+	private boolean replaceLetters(String toReplace, String replacement) {
+		return replaceLetters(toReplace, replacement, replacement, toReplace);
 	}
 	
 	/**
@@ -126,22 +126,21 @@ public class MonoalphabeticCipher extends Cipher {
 	 * @param toAdd
 	 * @param toAdd2
 	 */
-	private void replaceLetters(String toReplace, String replacement, String toAdd, String toAdd2) {
+	private boolean replaceLetters(String toReplace, String replacement, String toAdd, String toAdd2) {
 		for (int i = 0; i < replacedLetters.size(); i++) {
 			if (toAdd2.contains(replacedLetters.get(i))) {
-				return;
+				return false;
 			}
 		}
 		for (int i = 0; i < solvedLetters.size(); i++) {
 			if(toAdd.contains(solvedLetters.get(i))) {
-				return;
+				return false;
 			}
 		}
-		if (!replacedLetters.contains(toAdd2)) { // Replace if none of the letters have already been solved/replaced
-			setText(getText().replace(toReplace, replacement));
-			solvedLetters.add(toAdd);
-			replacedLetters.add(toAdd2);
-		}
+		setText(getText().replace(toReplace, replacement));
+		solvedLetters.add(toAdd);
+		replacedLetters.add(toAdd2);
+		return true;
 	}
 	
 	/**
@@ -167,10 +166,13 @@ public class MonoalphabeticCipher extends Cipher {
 			System.out.println(w);
 			char oldChar = w.charAt(getIndexOfFirstLowerCase(w));
 			for (int i = 0; i < EnglishDeterminer.ALPHABET.size(); i++) {
-				if (EnglishDeterminer.isWord(w.replace(oldChar, EnglishDeterminer.ALPHABET.get(i)))) {
-					replaceLetters(Character.toString(oldChar), EnglishDeterminer.ALPHABET.get(i).toString());
-					System.out.println(oldChar + " was replaced with " + EnglishDeterminer.ALPHABET.get(i));
-					break;
+				Character letterOfAlphabet = EnglishDeterminer.ALPHABET.get(i);
+				String loaAsString = letterOfAlphabet.toString();
+				if (EnglishDeterminer.isWord(w.replace(oldChar, letterOfAlphabet))) {
+					if (replaceLetters(Character.toString(oldChar), loaAsString)) {
+						System.out.println(oldChar + " was replaced with " + loaAsString);
+						break;
+					}					
 				}
 			}
 		});

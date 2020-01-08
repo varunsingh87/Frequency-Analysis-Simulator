@@ -42,6 +42,7 @@ public class FrequencyAnalysisSimulator {
 	 * @param args
 	 */
 	public static void main(String[] args) throws JWNLException {
+		System.out.println(EnglishDeterminer.isWord("aas"));
 		long startTime = System.currentTimeMillis();
 		ACTION action = determineAction();
 		if (action.equals(ACTION.DECRYPT))

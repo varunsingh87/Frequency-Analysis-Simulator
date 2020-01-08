@@ -76,14 +76,17 @@ public final class AlphabeticalStatistics {
 		return "-";
 	}
 	
+	/**
+	 * Check if a word needs one letter before it is fully deciphered to plaintext
+	 * @param word
+	 * @return whether word has one upper case
+	 */
 	public static boolean needsOneLetter(String word) {
-		String res = "";
-		for(int i = 0; i < word.length(); i++) {
-		   Character ch = word.charAt(i);
-		     if(!Character.isUpperCase(ch))
-		       res += ch;
+		int count = 0;
+		for (int i = 0; i < word.length(); i++) {
+			count = Character.isUpperCase(word.charAt(i)) ? count + 1 : count;
 		}
-		return res.split("[A-Z]").length == 2;
+		return count == 1;
 	}
 	
 	public static boolean meetsAllConditions(Boolean... conditions) {
