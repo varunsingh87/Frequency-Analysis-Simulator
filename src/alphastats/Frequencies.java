@@ -136,8 +136,9 @@ public final class Frequencies {
 	private List<Pair> getNLetterWordOccurences(int n) {
 		List<Pair> fourLetterWords = new ArrayList<Pair>();
 		Arrays.stream(cipher.getWords()).forEach(w -> {
-			if (AlphabeticalStatistics.meetsAllConditions(AlphabeticalStatistics.isNLetters(w, n))) {
-				fourLetterWords.add(new Pair(w, new FrequencyHelpers(getText()).getOccurences(w)));
+			if (AlphabeticalStatistics.isNLetters(w, n)) {
+				String withRemovals = EnglishDeterminer.removeSpacesAndPunctuation(w);
+				fourLetterWords.add(new Pair(withRemovals, new FrequencyHelpers(getText()).getOccurences(withRemovals)));
 			}
 		});
 		
@@ -189,47 +190,7 @@ public final class Frequencies {
 			}
 		}).get();
 	}
-
-	public String replaceBigrams() {
-		String ciphertext1 = "";
-		String[] goodWords = getThreeLettersWithDoubles();
-		for (String word : goodWords) {
-			for (Character c : AlphabeticalStatistics.DOUBLE_LETTERS) {
-				char doub = AlphabeticalStatistics.doubleLetterInWord(word);
-				String word1 = word.replace(doub, c);
-				if (EnglishDeterminer.isWord(word1) ) {
-					ciphertext1 = cipher.getText().replace(word, word1.toLowerCase());
-				}	
-			}
-		}
-		
-		return ciphertext1;
-	}
-
-	/**
-	 * Deciphers certain letters based on their bigrams and double letters
-	 * @param ciphertext
-	 * @param listOfDifferences
-	 * @return text with the letters that have been deciphered replaced with lowercase plaintext letters
-	 */
-	private String[] getThreeLettersWithDoubles() {
-		// Get all words that are three letters and have double letters in them 
-		return Arrays.stream(cipher.getWords()).filter(
-					word -> {
-						return AlphabeticalStatistics.meetsAllConditions(
-								AlphabeticalStatistics.isNLetters(
-										word, 3), 
-								AlphabeticalStatistics.hasDoubleInWord(
-										word)
-						);
-					}
-				).toArray(String[]::new);
-	}
-
-	public Pair getMostFrequentThreeLetterWordWithDoubles() {
-		return null;
-	}
-
+	
 	/**
 	 * 
 	 * @param ciphertext
