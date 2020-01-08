@@ -10,6 +10,7 @@ package net.sf.extjwnl; // Uses the extjwnl package to determine if strings are 
 
 import java.util.Scanner;
 
+import helperfoo.EnglishDeterminer;
 // Import secretwriting needed classes
 import secretwriting.CaesarShiftCipher;
 import secretwriting.MonoalphabeticCipher;
@@ -40,7 +41,7 @@ public class FrequencyAnalysisSimulator {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) throws JWNLException {		
+	public static void main(String[] args) throws JWNLException {
 		long startTime = System.currentTimeMillis();
 		ACTION action = determineAction();
 		if (action.equals(ACTION.DECRYPT))

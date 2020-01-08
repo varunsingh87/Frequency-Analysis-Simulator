@@ -2,6 +2,8 @@ package alphastats;
 
 import java.util.Arrays;
 
+import helperfoo.EnglishDeterminer;
+
 /**
  * "Static" class for alphabetical statistics: 
  * @author Varun Singh
@@ -57,6 +59,7 @@ public final class AlphabeticalStatistics {
 	}
 	
 	public static boolean isNLetters(String word, int n) {
+		word = EnglishDeterminer.removeSpacesAndPunctuation(word);
 		return word.length() == n;
 	}
 	
