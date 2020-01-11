@@ -47,26 +47,44 @@ public class MonoalphabeticCipher extends Cipher {
 		
 		// One Letter Words
 		solveFrequencyTypes(AlphabeticalStatistics.ONE_LETTER_WORDS, f.getMostFrequentNLetterWord(1));
+		// Random
+		testRandom();
 		// Trigraphs
 		solveFrequencyTypes(AlphabeticalStatistics.TRIGRAPHS, f.getMostFrequentNGraph(3));
+		// Random
+		testRandom();
 		// Four Letter Words
 		solveFrequencyTypes(AlphabeticalStatistics.FOUR_LETTER_WORDS, f.getMostFrequentNLetterWord(4));
+		// Random
+		testRandom();
 		// Digraphs
 		solveFrequencyTypes(AlphabeticalStatistics.DIGRAPHS, f.getMostFrequentNGraph(2));
+		// Random
+		testRandom();
 		// Double Letters
 		solveFrequencyTypes(AlphabeticalStatistics.DOUBLE_LETTERS, f.getMostFrequentDoubles());
 		// Random
 		testRandom();
 		// Final letters
 		solveFrequencyTypes(AlphabeticalStatistics.FINAL_LETTERS, f.getMostFrequentPositionLetter(-3));
+		// Random
+		testRandom();
 		// Initial letters
 		solveFrequencyTypes(AlphabeticalStatistics.INITIAL_LETTERS, f.getMostFrequentPositionLetter(0));
+		// Random
+		testRandom();
 		// Three Letter Words
 		solveFrequencyTypes(AlphabeticalStatistics.THREE_LETTER_WORDS, f.getMostFrequentNLetterWord(3));		
+		// Random
+		testRandom();		
 		// Two Letter Words
 		solveFrequencyTypes(AlphabeticalStatistics.TWO_LETTER_WORDS, f.getMostFrequentNLetterWord(2));
+		// Random
+		testRandom();
 		// Vowels/Social letters
 		solveFrequencyTypes(AlphabeticalStatistics.SOCIAL_LETTERS, f.getMostSocialLetter());		
+		// Random
+		testRandom();
 		// All letters
 		
 		System.out.println(replacedLetters.toString());
@@ -159,13 +177,17 @@ public class MonoalphabeticCipher extends Cipher {
 	}
 	
 	/**
-	 * 
+	 * Find the words that require one (uppercase) letter to be solved
+	 * Loop through the alphabet backwards until replacing the uppercase letter with the current alphabet creates an English word in the WordNet library
+	 * Validate replacing the old char with the new one
+	 * If valid, replace the letter and print the replacement
+	 * End the for loop and move on to the next word, if there is one
 	 */
 	public void testRandom() {
 		Arrays.stream(this.getWords()).filter(w -> AlphabeticalStatistics.needsOneLetter(w)).forEach(w -> {
 			System.out.println(w);
 			char oldChar = w.charAt(getIndexOfFirstLowerCase(w));
-			for (int i = 0; i < EnglishDeterminer.ALPHABET.size(); i++) {
+			for (int i = 25; i >= 0; i--) {
 				Character letterOfAlphabet = EnglishDeterminer.ALPHABET.get(i);
 				String loaAsString = letterOfAlphabet.toString();
 				if (EnglishDeterminer.isWord(w.replace(oldChar, letterOfAlphabet))) {
