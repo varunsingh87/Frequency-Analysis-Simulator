@@ -102,19 +102,8 @@ public class MonoalphabeticCipher extends Cipher {
 	 * @param toReplace
 	 * @param replacement
 	 */
-	private boolean replaceLetters(String toReplace, String replacement) {
+	protected boolean replaceLetters(String toReplace, String replacement) {
 		return replaceLetters(toReplace, replacement, replacement, toReplace);
-	}
-	
-	/**
-	 * 
-	 * @param toReplace
-	 * @param replacement
-	 * @param toAdd
-	 */
-	@SuppressWarnings("unused")
-	private void replaceLetters(String toReplace, String replacement, String toAdd) {
-		replaceLetters(toReplace, replacement, toAdd, toReplace);
 	}
 	
 	/**
@@ -124,7 +113,7 @@ public class MonoalphabeticCipher extends Cipher {
 	 * @param toAdd
 	 * @param toAdd2
 	 */
-	private boolean replaceLetters(String toReplace, String replacement, String toAdd, String toAdd2) {
+	protected boolean replaceLetters(String toReplace, String replacement, String toAdd, String toAdd2) {
 		// Make sure 
 		for (int i = 0; i < replacedLetters.size(); i++) {
 			if (toAdd2.contains(replacedLetters.get(i))) {
@@ -138,9 +127,12 @@ public class MonoalphabeticCipher extends Cipher {
 		}
 		
 		setText(getText().replace(toReplace, replacement));
-		if (!
-				Arrays.stream(getWords())
-				.anyMatch(w -> {
+		return isCorrect(toReplace, replacement, toAdd, toAdd2);
+	}
+	
+	private boolean isCorrect(String toReplace, String replacement, String toAdd, String toAdd2) {
+		if (Arrays.stream(getWords())
+				.noneMatch(w -> {
 					return AlphabeticalStatistics.needsNoLetters(w) && !EnglishDeterminer.isWord(w);
 				})
 				) {
@@ -183,11 +175,9 @@ public class MonoalphabeticCipher extends Cipher {
 			for (int i = 25; i >= 0; i--) {
 				Character letterOfAlphabet = EnglishDeterminer.ALPHABET.get(i);
 				String loaAsString = letterOfAlphabet.toString();
-				if (EnglishDeterminer.isWord(w.replace(oldChar, letterOfAlphabet))) {
-					if (replaceLetters(Character.toString(oldChar), loaAsString)) {
-						System.out.println(oldChar + " was replaced with " + loaAsString);
-						break;
-					}					
+				if (replaceLetters(Character.toString(oldChar), loaAsString)) {
+					System.out.println(oldChar + " was replaced with " + loaAsString);
+					break;
 				}
 			}
 		});
@@ -203,6 +193,28 @@ public class MonoalphabeticCipher extends Cipher {
 		return index;
 	}
 	
+	/**
+	 * Overload for n-grams
+	 * @param c array of the order of n-grams by frequency for each number n from AlphabeticalStatistics
+	 * @param d array of the most common of a frequency type
+	 */
+	private void solveFrequencyTypes(String[] c, char[] d) {
+		for (String nGram : c) {		
+			boolean b = false;
+			for (int i = 0; i < d.length; i++) {
+				char solvedLetter = nGram.charAt(i);
+				char replacedLetter = d[i];
+				if (replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter))) {
+					System.out.println("The common n-graph " + String.valueOf(d) + " in the ciphertext was replaced with " + nGram);
+					b = true;
+				}
+			}
+			if (b) {
+				return;
+			}
+		}
+	}
+	
 	/**  
 	 * Overload for position letters
 	 * Runs all needed conditions and loops to replace letters and ultimately use frequency analysis algorithms
@@ -214,45 +226,18 @@ public class MonoalphabeticCipher extends Cipher {
 	 * @invokes replaceLetters(String, String)
 	 */
 	private void solveFrequencyTypes(char[] c, Pair p) {
-		char notSolvedTypeLetter = ' ';
-		for (char typeLetter : c) {
-			notSolvedTypeLetter = Character.toLowerCase(typeLetter);
-			break;
-		}
-		
-		if (notSolvedTypeLetter != ' ') {
-			replaceLetters(p.props, Character.toString(notSolvedTypeLetter));
-			System.out.println("The common position letter " + p.props + " in the ciphertext was replaced with " + notSolvedTypeLetter);
-		}
-	}
-	
-	/**
-	 * Overload for n-grams
-	 * @param c array of the order of n-grams by frequency for each number n from AlphabeticalStatistics
-	 * @param d array of the most common of a frequency type
-	 */
-	private void solveFrequencyTypes(String[] c, char[] d) {
-		String notSolvedTypePhrase = "";
-		for (String nGram : c) {
-			notSolvedTypePhrase = nGram;			
-			boolean b = false;
-			for (int i = 0; i <= d.length - 1; i++) {
-				char solvedLetter = notSolvedTypePhrase.charAt(i);
-				char replacedLetter = d[i];
-				if (replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter))) {
-					System.out.println("The common n-graph " + String.valueOf(d) + " in the ciphertext was replaced with " + notSolvedTypePhrase);
-					b = true;
-				}
-			}
-			if (b) {
+		char replacedLetter = p.props.charAt(0);
+		for (char solvedLetter : c) {
+			if (replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter))) {
+				System.out.println("The common n-graph " + replacedLetter + " in the ciphertext was " + solvedLetter);
 				return;
 			}
 		}
 	}
-	
+
 	/**
 	 * 
-	 * @param c the array of the most frequent n-letter words
+	 * @param c the array of the most frequent n-letter words from AlphabeticalStatistics
 	 * @param s The String of the most common n-letter word in the text; being replaced
 	 */
 	private void solveFrequencyTypes(String[] c, String s) {

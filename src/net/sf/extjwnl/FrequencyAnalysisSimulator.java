@@ -10,7 +10,6 @@ package net.sf.extjwnl; // Uses the extjwnl package to determine if strings are 
 
 import java.util.Scanner;
 
-import helperfoo.EnglishDeterminer;
 // Import secretwriting needed classes
 import secretwriting.CaesarShiftCipher;
 import secretwriting.MonoalphabeticCipher;

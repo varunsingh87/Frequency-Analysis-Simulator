@@ -22,10 +22,10 @@ public final class AlphabeticalStatistics {
 	
 	public final static String[] DOUBLE_LETTERS = {"ss", "ee", "tt", "ff", "ll", "mm", "oo"};
 	
-	public final static char[] FINAL_LETTERS = {'E', 'S', 'T', 'D', 'N', 'R', 'Y', 'F', 'L', 'O', 'G', 'H', 'A', 'K', 'M', 'P', 'U', 'W'};
-	public final static char[] INITIAL_LETTERS = {'T', 'A', 'O', 'S', 'W', 'H', 'B', 'I', 'C', 'D'};
-	public final static char[] ALL_LETTERS = {'E', 'T', 'A', 'O', 'I', 'N', 'S', 'H', 'R', 'D', 'L', 'U'};
-	public final static char[] SOCIAL_LETTERS = {'A', 'E', 'I', 'O', 'U'};
+	public final static char[] FINAL_LETTERS = {'e', 's', 't', 'd', 'n', 'r', 'y', 'f', 'l', 'o', 'g', 'h', 'a', 'k', 'M', 'P', 'U', 'W'};
+	public final static char[] INITIAL_LETTERS = {'t', 'a', 'o', 's', 'w', 'h', 'b', 'i', 'c', 'd'};
+	public final static char[] ALL_LETTERS = {'e', 't', 'a', 'o', 'i', 'n', 's', 'h', 'r', 'd', 'l', 'u'};
+	public final static char[] SOCIAL_LETTERS = {'a', 'e', 'i', 'o', 'u'};
 	
 	private AlphabeticalStatistics() {} // Make private constructor so no instances can be made
 	
