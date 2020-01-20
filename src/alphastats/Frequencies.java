@@ -98,15 +98,10 @@ public final class Frequencies {
 	 * @param x
 	 * @return
 	 */
-	public char[] getMostFrequentNGraph(int x) {
+	public String getMostFrequentNGraph(int x) {
 		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
 		Pair wouldBe = Collections.max(getNGramOccurences(x), cmp);
-		char[] toReturn = new char[x];
-		for (int i = 0; i < x; i++) {
-			toReturn[i] = wouldBe.props.charAt(i);
-		}
-		
-		return toReturn;
+		return wouldBe.props;
 	}
 	
 	/** Overload of getMostFrequentNGraph()
