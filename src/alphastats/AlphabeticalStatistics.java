@@ -22,7 +22,7 @@ public final class AlphabeticalStatistics {
 	
 	public final static String[] DOUBLE_LETTERS = {"ss", "ee", "tt", "ff", "ll", "mm", "oo"};
 	
-	public final static char[] FINAL_LETTERS = {'e', 's', 't', 'd', 'n', 'r', 'y', 'f', 'l', 'o', 'g', 'h', 'a', 'k', 'M', 'P', 'U', 'W'};
+	public final static char[] FINAL_LETTERS = {'e', 's', 't', 'd', 'n', 'r', 'y', 'f', 'l', 'o', 'g', 'h', 'a', 'k', 'm', 'p', 'u', 'w'};
 	public final static char[] INITIAL_LETTERS = {'t', 'a', 'o', 's', 'w', 'h', 'b', 'i', 'c', 'd'};
 	public final static char[] ALL_LETTERS = {'e', 't', 'a', 'o', 'i', 'n', 's', 'h', 'r', 'd', 'l', 'u'};
 	public final static char[] SOCIAL_LETTERS = {'a', 'e', 'i', 'o', 'u'};

@@ -114,17 +114,8 @@ public class MonoalphabeticCipher extends Cipher {
 	 * @param toAdd2
 	 */
 	protected boolean replaceLetters(String toReplace, String replacement, String toAdd, String toAdd2) {
-		// Make sure 
-		for (int i = 0; i < replacedLetters.size(); i++) {
-			if (toAdd2.contains(replacedLetters.get(i))) {
-				return false;
-			}
-		}
-		for (int i = 0; i < solvedLetters.size(); i++) {
-			if(toAdd.contains(solvedLetters.get(i))) {
-				return false;
-			}
-		}
+		if (replacedLetters.contains(toAdd2) || solvedLetters.contains(toAdd)) 
+			return false;
 		
 		setText(getText().replace(toReplace, replacement));
 		return isCorrect(toReplace, replacement, toAdd, toAdd2);
@@ -199,14 +190,17 @@ public class MonoalphabeticCipher extends Cipher {
 	 * @param d array of the most common of a frequency type
 	 */
 	private void solveFrequencyTypes(String[] c, char[] d) {
-		for (String nGram : c) {		
+		for (String nGram : c) {
+			boolean b = false;
 			for (int i = 0; i < d.length; i++) {
 				char solvedLetter = nGram.charAt(i);
 				char replacedLetter = d[i];
-				if (replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter))) {
-					System.out.println("The common n-graph " + String.valueOf(d) + " in the ciphertext was replaced with " + nGram);
-					return;
-				}
+				if (replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter))) 	
+					b = true;
+			}
+			if (b) {
+				System.out.println("The common n-graph " + String.valueOf(d) + " in the ciphertext was replaced with " + nGram);
+				return;
 			}
 		}
 	}
@@ -238,15 +232,18 @@ public class MonoalphabeticCipher extends Cipher {
 	 */
 	private void solveFrequencyTypes(String[] c, String s) {
 		for (String nLetterWord : c) { // Loop through the constant array
+			boolean b = false;
 			for (int i = 0; i < s.length(); i++) {
 				char solvedLetter = nLetterWord.charAt(i);
 				char replacedLetter = s.charAt(i);
-				System.out.println(replacedLetter);
-				if(replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter))) {
-					System.out.println(s + " was replaced with " + nLetterWord);
-					return;
-				}
+				if(replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter))) 
+					b = true;
 			}
+			if (b) {
+				System.out.println(s + " was replaced with " + nLetterWord);
+				return;
+			}
+			break;
 		}		
 	}
 }
