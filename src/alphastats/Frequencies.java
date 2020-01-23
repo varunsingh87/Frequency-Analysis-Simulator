@@ -59,33 +59,26 @@ public final class Frequencies {
 		return positionLetterOccurences;
 	}
 	
-	public Pair getMostFrequentPositionLetter(int x) {
+	public String getMostFrequentPositionLetter(int x) {
 		return Arrays.stream(getPositionLetterData(x)).max(new Comparator<Pair>() {
 			public int compare(Pair pair1, Pair pair2) {
 				return pair1.compareToLong(pair2);
 			}
-		}).get();
+		}).get().props;
 	}
 
 	/**
 	 * 
 	 * @param x the number of letters in the n gram that is used for some calculations
-	 * @return the List<Pair> of all the NGrams and their respective occurence counts in the given text
+	 * @return the List<Pair> of all the NGrams and their respective occurrence counts in the given text
 	 */
 	private List<Pair> getNGramOccurences(int x) {
 		List<Pair> ngraphs = new ArrayList<Pair>();
-		Arrays.stream(cipher.getWords()).forEach(w -> {
+		Arrays.stream(cipher.getWords()).distinct().forEach(w -> {
 			for (int j = 0; j < w.length() - (x - 1); j++) {
-				String ngraph = "";
-				for (int i = 0; i < x; i++) {
-					ngraph += w.charAt(j + i);
-				}
-				
-				Pair p = new Pair(ngraph, new FrequencyHelpers(cipher.getText()).getOccurences(ngraph));
-				
-				if (!ngraphs.contains(p)) {
-					ngraphs.add(p);
-				}
+				String ngram = w.substring(j, j + x);
+				Pair p = new Pair(ngram, new FrequencyHelpers(cipher.getText()).getOccurences(ngram));
+				ngraphs.add(p);
 			}
 		});
 		
@@ -128,21 +121,15 @@ public final class Frequencies {
 		return toReturn;
 	}
 	
-	private List<Pair> getNLetterWordOccurences(int n) {
-		List<Pair> fourLetterWords = new ArrayList<Pair>();
-		Arrays.stream(cipher.getWords()).forEach(w -> {
+	public String getMostFrequentNLetterWord(int n) {
+		return Arrays.stream(cipher.getWords()).map(w -> {
 			if (AlphabeticalStatistics.isNLetters(w, n)) {
 				String withRemovals = EnglishDeterminer.removeSpacesAndPunctuation(w);
-				fourLetterWords.add(new Pair(withRemovals, new FrequencyHelpers(getText()).getOccurences(withRemovals)));
+				return new Pair(withRemovals, new FrequencyHelpers(getText()).getOccurences(withRemovals));
 			}
-		});
-		
-		System.out.println(Arrays.toString(fourLetterWords.toArray()));
-		return fourLetterWords;
-	}
-	
-	public String getMostFrequentNLetterWord(int n) {
-		return Collections.max(getNLetterWordOccurences(n), Comparator.comparing(p -> (long) p.val)).props;
+			
+			return new Pair("", (long)0);
+		}).max(Comparator.comparing(p -> (long) p.val)).get().props;
 	}
 
 	/**
@@ -178,12 +165,12 @@ public final class Frequencies {
 		return socialLetters;
 	}
 
-	public Pair getMostSocialLetter() {
+	public String getMostSocialLetter() {
 		return Arrays.stream(getLetterSocialities()).max(new Comparator<Pair>() {
 			public int compare(Pair pair1, Pair pair2) {
 				return pair1.compareToInt(pair2);
 			}
-		}).get();
+		}).get().props;
 	}
 	
 	/**

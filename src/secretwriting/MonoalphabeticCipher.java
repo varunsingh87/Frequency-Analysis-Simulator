@@ -10,7 +10,6 @@ import alphastats.AlphabeticalStatistics;
 import alphastats.Frequencies;
 import helperfoo.Converters;
 import helperfoo.EnglishDeterminer;
-import helperfoo.Pair;
 
 public class MonoalphabeticCipher extends Cipher {
 	List<String> solvedLetters = new ArrayList<String>();
@@ -65,7 +64,6 @@ public class MonoalphabeticCipher extends Cipher {
 		solveFrequencyTypes(AlphabeticalStatistics.TWO_LETTER_WORDS, f.getMostFrequentNLetterWord(2));
 		// Vowels/Social letters
 		solveFrequencyTypes(AlphabeticalStatistics.SOCIAL_LETTERS, f.getMostSocialLetter());		
-		// All letters
 		
 		System.out.println(replacedLetters.toString());
 		System.out.println(solvedLetters.toString());
@@ -194,8 +192,8 @@ public class MonoalphabeticCipher extends Cipher {
 	 * @example Initial letters - c = AlphabeticalStatistics.INITIAL_LETTERS, p = mostFrequentInitialLetter
 	 * @invokes replaceLetters(String, String)
 	 */
-	private void solveFrequencyTypes(char[] c, Pair p) {
-		char replacedLetter = p.props.charAt(0);
+	private void solveFrequencyTypes(char[] c, String s) {
+		char replacedLetter = s.charAt(0);
 		for (char solvedLetter : c) {
 			if (replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter))) {
 				System.out.println("The common n-graph " + replacedLetter + " in the ciphertext was " + solvedLetter);
