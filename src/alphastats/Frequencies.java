@@ -33,7 +33,7 @@ public final class Frequencies {
 	/**
 	 * 
 	 * @param x the indicator as to whether to get the first letter or the last letter
-	 * @return the Pair[] of all the position letters and their respective occurence counts in the given text
+	 * @return the Pair[] of all the position letters and their respective occurrence counts in the given text
 	 */
 	private Pair[] getPositionLetterData(int x) {
 		String[] words = cipher.getWords();
@@ -49,9 +49,8 @@ public final class Frequencies {
 		
 		Pair[] positionLetterOccurences = new Pair[26];
 		for (int i = 0; i < 26; i++) {
-			char letter = EnglishDeterminer.ALPHABET.get(i);
-			Pair p = new Pair(Character.toUpperCase(letter), positionLetters.stream().filter(l -> l.equals(Character.toUpperCase(letter))).count());
-			positionLetterOccurences[EnglishDeterminer.ALPHABET.indexOf(letter)] = p;
+			char letter = Character.toUpperCase(EnglishDeterminer.ALPHABET.get(i));
+			positionLetterOccurences[i] = new Pair(letter, positionLetters.stream().filter(l -> l.equals(letter)).count());
 		}
 		
 		System.out.println("Letter positionities: " + Arrays.toString(positionLetterOccurences));
@@ -196,24 +195,12 @@ public final class Frequencies {
 		return mostFrequentLetters;
 	}
 	
-	private List<Pair> getDoubles() {
-		List<Pair> doubles = new ArrayList<Pair>();
-		Arrays.stream(cipher.getWords()).filter(w -> {
-			return AlphabeticalStatistics.hasDoubleInWord(w);
-		}).forEach(w -> {
-			String dword = AlphabeticalStatistics.doubleLetterInWord(w);
-			Pair p = new Pair(dword, new FrequencyHelpers(cipher.getText()).getOccurences(dword));
-				
-			if (!doubles.contains(p)) {
-				doubles.add(p);
-			}
-		});
-		
-		System.out.println("doubles: " + Arrays.toString(doubles.toArray()));
-		return doubles;
-	}
-	
 	public String getMostFrequentDoubles() {
-		return Collections.max(getDoubles(), Comparator.comparing(p -> (long) p.val)).props;
+		return Arrays.stream(cipher.getWords()).filter(w -> {
+			return AlphabeticalStatistics.hasDoubleInWord(w);
+		}).distinct().map(w -> {
+			String dword = AlphabeticalStatistics.doubleLetterInWord(w);
+			return new Pair(dword, new FrequencyHelpers(cipher.getText()).getOccurences(dword));
+		}).max(Comparator.comparing(p -> (long) p.val)).get().props;
 	}
 }

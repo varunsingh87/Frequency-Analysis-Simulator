@@ -59,6 +59,12 @@ public final class AlphabeticalStatistics {
 		
 	}
 	
+	/**
+	 * Determines if a given word is given amount of letters long
+	 * @param word String, value whose length is being evaluated
+	 * @param n int, word length
+	 * @return a boolean that compares the length of the word and n
+	 */
 	public static boolean isNLetters(String word, int n) {
 		word = EnglishDeterminer.removeSpacesAndPunctuation(word);
 		return word.length() == n;
