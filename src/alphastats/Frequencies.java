@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import helperfoo.EnglishDeterminer;
 import helperfoo.Pair;
@@ -52,9 +53,6 @@ public final class Frequencies {
 			char letter = Character.toUpperCase(EnglishDeterminer.ALPHABET.get(i));
 			positionLetterOccurences[i] = new Pair(letter, positionLetters.stream().filter(l -> l.equals(letter)).count());
 		}
-		
-		System.out.println("Letter positionities: " + Arrays.toString(positionLetterOccurences));
-		
 		return positionLetterOccurences;
 	}
 	
@@ -80,8 +78,6 @@ public final class Frequencies {
 				ngraphs.add(p);
 			}
 		});
-		
-		System.out.println("N-graphs: " + Arrays.toString(ngraphs.toArray()));
 		return ngraphs;
 	}
 	
@@ -130,13 +126,24 @@ public final class Frequencies {
 			return new Pair("", (long)0);
 		}).max(Comparator.comparing(p -> (long) p.val)).get().props;
 	}
+	
+	public String getSecondMostFrequentNLetterWord(int n) {
+		return Arrays.stream(cipher.getWords()).map(w -> {
+			if (AlphabeticalStatistics.isNLetters(w, n)) {
+				String withRemovals = EnglishDeterminer.removeSpacesAndPunctuation(w);
+				return new Pair(withRemovals, new FrequencyHelpers(getText()).getOccurences(withRemovals));
+			}
+			
+			return new Pair("", (long)0);
+		}).sorted(Comparator.comparing(p -> (long) p.val)).collect(Collectors.toList()).get(1).props;
+	}
 
 	/**
 	 * Returns the "sociality" of each letter in an ArrayList of Pair
 	 * <p>
 	 * Sociality is defined as how many times other letters are located next to a
-	 * certain letter at least once. If the sociality is high, it is extremeloy
-	 * likely that the
+	 * certain letter at least once. If the sociality is high, it is extremely
+	 * likely that the letter is a vowel
 	 * </p>
 	 * 
 	 * @return a list of the sociality of each letter as an int
@@ -158,8 +165,6 @@ public final class Frequencies {
 			int i = EnglishDeterminer.ALPHABET.indexOf(letter);
 			socialLetters[i] = new Pair(letterUp, meetings);
 		}
-		
-		System.out.println(Arrays.toString(socialLetters));
 		
 		return socialLetters;
 	}
@@ -191,7 +196,6 @@ public final class Frequencies {
 	public Object[][] getMostFrequentLetters() {
 		Object[][] listOfDifferences = new FrequencyHelpers(cipher.getText()).getDifferencesOfOccurences();
 		Object[][] mostFrequentLetters = getMostFrequentLetters(listOfDifferences);
-		System.out.println(Arrays.deepToString(mostFrequentLetters));
 		return mostFrequentLetters;
 	}
 	
