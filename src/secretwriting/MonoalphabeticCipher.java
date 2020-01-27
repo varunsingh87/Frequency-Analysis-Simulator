@@ -62,8 +62,9 @@ public class MonoalphabeticCipher extends Cipher {
 		solveFrequencyTypes(AlphabeticalStatistics.THREE_LETTER_WORDS, f.getMostFrequentNLetterWord(3));			
 		// Two Letter Words
 		solveFrequencyTypes(AlphabeticalStatistics.TWO_LETTER_WORDS, f.getMostFrequentNLetterWord(2));
+		solveFrequencyTypes(AlphabeticalStatistics.TWO_LETTER_WORDS, f.getSecondMostFrequentNLetterWord(2));
 		// Vowels/Social letters
-		solveFrequencyTypes(AlphabeticalStatistics.SOCIAL_LETTERS, f.getMostSocialLetter());		
+		solveFrequencyTypes(AlphabeticalStatistics.SOCIAL_LETTERS, f.getMostSocialLetter());	
 		
 		System.out.println(replacedLetters.toString());
 		System.out.println(solvedLetters.toString());
@@ -114,25 +115,22 @@ public class MonoalphabeticCipher extends Cipher {
 	protected boolean replaceLetters(String toReplace, String replacement, String toAdd, String toAdd2) {
 		if (replacedLetters.contains(toAdd2) || solvedLetters.contains(toAdd)) 
 			return false;
-		
-		setText(getText().replace(toReplace, replacement));
 		return isCorrect(toReplace, replacement, toAdd, toAdd2);
 	}
 	
 	private boolean isCorrect(String toReplace, String replacement, String toAdd, String toAdd2) {
-		if (Arrays.stream(getWords())
+		String newText = getText().replace(toReplace,  replacement);
+		if (Arrays.stream(newText.split(" "))
 				.noneMatch(w -> {
 					return AlphabeticalStatistics.needsNoLetters(w) && !EnglishDeterminer.isWord(w);
 				})
 				) {
-
+			setText(newText);
 			solvedLetters.add(toAdd);
 			replacedLetters.add(toAdd2);
 			return true;
-		} else {
-			setText(getText().replace(replacement, toReplace));
-			return false;
 		}
+		return false;
 	}
 	
 	/**
@@ -196,7 +194,6 @@ public class MonoalphabeticCipher extends Cipher {
 		char replacedLetter = s.charAt(0);
 		for (char solvedLetter : c) {
 			if (replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter))) {
-				System.out.println("The common n-graph " + replacedLetter + " in the ciphertext was " + solvedLetter);
 				return;
 			}
 		}
