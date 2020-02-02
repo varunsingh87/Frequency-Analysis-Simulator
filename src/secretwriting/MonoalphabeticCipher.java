@@ -10,6 +10,7 @@ import alphastats.AlphabeticalStatistics;
 import alphastats.Frequencies;
 import helperfoo.Converters;
 import helperfoo.EnglishDeterminer;
+import net.sf.extjwnl.JWNLException;
 
 public class MonoalphabeticCipher extends Cipher {
 	List<String> solvedLetters = new ArrayList<String>();
@@ -43,6 +44,15 @@ public class MonoalphabeticCipher extends Cipher {
 	public String decrypt() {
 		Frequencies f = new Frequencies(this); // Defines a new Frequencies object
 		System.out.println(getText());	
+		try {
+			if (EnglishDeterminer.isSentence(this.getWords())) {
+				return getText();
+			}
+		} catch (JWNLException j) {
+			j.printStackTrace();
+			return "An API error occured. ";
+		}
+		
 		
 		// One Letter Words
 		solveFrequencyTypes(AlphabeticalStatistics.ONE_LETTER_WORDS, f.getMostFrequentNLetterWord(1));
@@ -65,6 +75,9 @@ public class MonoalphabeticCipher extends Cipher {
 		solveFrequencyTypes(AlphabeticalStatistics.TWO_LETTER_WORDS, f.getSecondMostFrequentNLetterWord(2));
 		// Vowels/Social letters
 		solveFrequencyTypes(AlphabeticalStatistics.SOCIAL_LETTERS, f.getMostSocialLetter());	
+		solveFrequencyTypes(AlphabeticalStatistics.SOCIAL_LETTERS, f.getSecondMostSocialLetter());
+		// "Random"
+		testRandom();
 		
 		System.out.println(replacedLetters.toString());
 		System.out.println(solvedLetters.toString());
@@ -121,8 +134,11 @@ public class MonoalphabeticCipher extends Cipher {
 	private boolean isCorrect(String toReplace, String replacement, String toAdd, String toAdd2) {
 		String newText = getText().replace(toReplace,  replacement);
 		if (Arrays.stream(newText.split(" "))
+				.filter(w -> {
+					return w.contains(replacement) && AlphabeticalStatistics.needsNoLetters(w);
+				})
 				.noneMatch(w -> {
-					return AlphabeticalStatistics.needsNoLetters(w) && !EnglishDeterminer.isWord(w);
+					return !EnglishDeterminer.isWord(w);
 				})
 				) {
 			setText(newText);
@@ -156,18 +172,22 @@ public class MonoalphabeticCipher extends Cipher {
 	 * End the for loop and move on to the next word, if there is one
 	 */
 	public void testRandom() {
-		Arrays.stream(this.getWords()).filter(w -> AlphabeticalStatistics.needsOneLetter(w)).distinct().forEach(w -> {
-			System.out.println(w);
-			char oldChar = w.charAt(getIndexOfFirstLowerCase(w));
-			for (int i = 25; i >= 0; i--) {
-				Character letterOfAlphabet = EnglishDeterminer.ALPHABET.get(i);
-				String loaAsString = letterOfAlphabet.toString();
-				if (replaceLetters(Character.toString(oldChar), loaAsString)) {
-					System.out.println(oldChar + " was replaced with " + loaAsString);
-					break;
+		for (int i = 0; i < this.getWords().length; i++) {
+			String w = this.getWords()[i];
+			if (AlphabeticalStatistics.needsOneLetter(w)) {
+				char oldChar = w.charAt(getIndexOfFirstLowerCase(w));
+				if (!solvedLetters.contains(Character.toString(oldChar))) {
+					for (int j = 25; j >= 0; j--) {
+						Character letterOfAlphabet = EnglishDeterminer.ALPHABET.get(j);
+						String loaAsString = letterOfAlphabet.toString();
+						if (replaceLetters(Character.toString(oldChar), loaAsString)) {
+							System.out.println(oldChar + " was replaced with " + loaAsString);
+							break;
+						}
+					}
 				}
 			}
-		});
+		}
 	}
 	
 	private int getIndexOfFirstLowerCase(String w) {

@@ -170,11 +170,11 @@ public final class Frequencies {
 	}
 
 	public String getMostSocialLetter() {
-		return Arrays.stream(getLetterSocialities()).max(new Comparator<Pair>() {
-			public int compare(Pair pair1, Pair pair2) {
-				return pair1.compareToInt(pair2);
-			}
-		}).get().props;
+		return Arrays.stream(getLetterSocialities()).max(Comparator.comparing(p -> (int)p.val)).get().props;
+	}
+	
+	public String getSecondMostSocialLetter() {
+		return Arrays.stream(getLetterSocialities()).sorted(Comparator.comparing(p -> (int)p.val)).collect(Collectors.toList()).get(25).props;
 	}
 	
 	/**

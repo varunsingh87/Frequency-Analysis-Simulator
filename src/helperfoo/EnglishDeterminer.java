@@ -29,23 +29,25 @@ public final class EnglishDeterminer {
 			Collection<POS> POSList = EnumSet.allOf(POS.class);
 			
 			List<String> reflexivePronouns = Converters.convertStringToListOfStrings("myself yourself herself himself itself ourselves yourselves themselves");
-			List<String> outliers = Converters.convertStringToListOfStrings("the this that of these those and you for to with seafloor moviemakers than");
-			List<String> personalPronouns = Converters.convertStringToListOfStrings("she we");
-			List<String> prepositions = Converters.convertStringToListOfStrings("");
-			List<String> conjunctions = Converters.convertStringToListOfStrings("since");
-			List<String> combinedOutliers = Stream.of(reflexivePronouns, outliers, personalPronouns, prepositions, conjunctions)
+			List<String> possessiveAdjectives = Converters.convertStringToListOfStrings("their");
+			List<String> outliers = Converters.convertStringToListOfStrings("the this that these those seafloor moviemakers");
+			List<String> personalPronouns = Converters.convertStringToListOfStrings("she we you they");
+			List<String> prepositions = Converters.convertStringToListOfStrings("from to of for with");
+			List<String> conjunctions = Converters.convertStringToListOfStrings("since and than");
+			List<String> interrogatives = Converters.convertStringToListOfStrings("which");
+			List<String> contractions = Converters.convertStringToListOfStrings("haven't");
+			List<String> combinedOutliers = Stream.of(reflexivePronouns, possessiveAdjectives, outliers, personalPronouns, prepositions, conjunctions, interrogatives, contractions)
 		            .flatMap(x -> x.stream())
 		            .collect(Collectors.toList());
 			boolean isWord = POSList.stream().anyMatch(c -> {
 				try {
-					return d.lookupIndexWord(c, word) != null;
+					return d.lookupIndexWord(c, removeSpacesAndPunctuation(word.toLowerCase())) != null;
 				} catch (JWNLException e) {
 					e.printStackTrace();
 					return false;
 				}
 			});
-			
-			return isWord || combinedOutliers.contains(word);
+			return isWord || combinedOutliers.contains(word.toLowerCase());
 		} catch (JWNLException e1) {
 			e1.printStackTrace();
 			return false;
