@@ -1,6 +1,8 @@
 package alphastats;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import helperfoo.EnglishDeterminer;
@@ -94,6 +96,15 @@ public final class AlphabeticalStatistics {
 			count = Character.isUpperCase(word.charAt(i)) ? count + 1 : count;
 		}
 		return count == 1;
+	}
+	
+	public static List<Integer> getLowers(String word) {
+		List<Integer> n = new ArrayList<Integer>();
+		for (int i = 0; i < word.length(); i++) {
+			if (Character.isLowerCase(word.charAt(i)))
+				n.add(i);
+		}
+		return n;
 	}
 	
 	public static boolean needsNoLetters(String word) {

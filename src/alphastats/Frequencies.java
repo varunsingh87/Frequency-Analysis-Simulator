@@ -100,20 +100,14 @@ public final class Frequencies {
 	 * </ol>
 	 * @param x the number of letters in the n graph
 	 * @param n an ordinal number from the most frequent digraph
-	 * @return the digraph that has the nth largest amount of occurences
+	 * @return the digraph that has the nth largest amount of occurences (String)
 	 */
-	public char[] getMostFrequentNGraph(int x, int n) {
+	public String getNMostFrequentNGraph(int x, int n) {
 		Comparator<Pair> cmp = Comparator.comparing(p -> (long) p.val);
 		List<Pair> ngraphPairs = getNGramOccurences(x);
 		
 		Collections.sort(ngraphPairs, cmp);
-		Pair wouldBe = ngraphPairs.get(n);
-		char[] toReturn = new char[x];
-		for (int i = 0; i < x; i++) {
-			toReturn[i] = wouldBe.props.charAt(i);
-		}
-		
-		return toReturn;
+		return ngraphPairs.get(n).props;
 	}
 	
 	public String getMostFrequentNLetterWord(int n) {
@@ -127,7 +121,7 @@ public final class Frequencies {
 		}).max(Comparator.comparing(p -> (long) p.val)).get().props;
 	}
 	
-	public String getSecondMostFrequentNLetterWord(int n) {
+	public String getNMostFrequentNLetterWord(int n, int o) {
 		return Arrays.stream(cipher.getWords()).map(w -> {
 			if (AlphabeticalStatistics.isNLetters(w, n)) {
 				String withRemovals = EnglishDeterminer.removeSpacesAndPunctuation(w);
@@ -135,7 +129,7 @@ public final class Frequencies {
 			}
 			
 			return new Pair("", (long)0);
-		}).sorted(Comparator.comparing(p -> (long) p.val)).collect(Collectors.toList()).get(1).props;
+		}).sorted(Comparator.comparing(p -> (long) p.val)).collect(Collectors.toList()).get(o - 1).props;
 	}
 
 	/**
@@ -173,8 +167,8 @@ public final class Frequencies {
 		return Arrays.stream(getLetterSocialities()).max(Comparator.comparing(p -> (int)p.val)).get().props;
 	}
 	
-	public String getSecondMostSocialLetter() {
-		return Arrays.stream(getLetterSocialities()).sorted(Comparator.comparing(p -> (int)p.val)).collect(Collectors.toList()).get(25).props;
+	public String getNMostSocialLetter(int n) {
+		return Arrays.stream(getLetterSocialities()).sorted(Comparator.comparing(p -> (int)p.val)).collect(Collectors.toList()).get(27 - n).props;
 	}
 	
 	/**
