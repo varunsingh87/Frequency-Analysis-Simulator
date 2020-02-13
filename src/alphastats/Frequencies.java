@@ -63,6 +63,10 @@ public final class Frequencies {
 			}
 		}).get().props;
 	}
+	
+	public String getNMostFrequentPositionLetter(int x, int y) {
+		return Arrays.stream(getPositionLetterData(x)).sorted(Comparator.comparing(p -> (long) p.val)).collect(Collectors.toList()).get(y - 1).props;
+	}
 
 	/**
 	 * 
@@ -74,6 +78,8 @@ public final class Frequencies {
 		Arrays.stream(cipher.getWords()).distinct().forEach(w -> {
 			for (int j = 0; j < w.length() - (x - 1); j++) {
 				String ngram = w.substring(j, j + x);
+				if (ngram.contains("."))
+					continue;
 				Pair p = new Pair(ngram, new FrequencyHelpers(cipher.getText()).getOccurences(ngram));
 				ngraphs.add(p);
 			}
@@ -168,7 +174,7 @@ public final class Frequencies {
 	}
 	
 	public String getNMostSocialLetter(int n) {
-		return Arrays.stream(getLetterSocialities()).sorted(Comparator.comparing(p -> (int)p.val)).collect(Collectors.toList()).get(27 - n).props;
+		return Arrays.stream(getLetterSocialities()).sorted(Comparator.comparing(p -> (int)p.val)).collect(Collectors.toList()).get(n - 1).props;
 	}
 	
 	/**
@@ -191,6 +197,18 @@ public final class Frequencies {
 		Object[][] listOfDifferences = new FrequencyHelpers(cipher.getText()).getDifferencesOfOccurences();
 		Object[][] mostFrequentLetters = getMostFrequentLetters(listOfDifferences);
 		return mostFrequentLetters;
+	}
+	
+	public String getNMostFrequentDoubles(int n) {
+		List<Pair> c = Arrays.stream(cipher.getWords()).filter(w -> {
+			return AlphabeticalStatistics.hasDoubleInWord(w);
+		}).distinct().map(w -> {
+			String dword = AlphabeticalStatistics.doubleLetterInWord(w);
+			return new Pair(dword, new FrequencyHelpers(cipher.getText()).getOccurences(dword));
+		}).sorted(Comparator.comparing(p -> (long) p.val)).collect(Collectors.toList());
+		if (c.size() <= n)
+			return "";
+		return c.get(n).props;
 	}
 	
 	public String getMostFrequentDoubles() {

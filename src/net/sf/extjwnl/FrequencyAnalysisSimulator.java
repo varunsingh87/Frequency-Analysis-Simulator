@@ -57,12 +57,12 @@ public class FrequencyAnalysisSimulator {
 		//	System.out.println(c4.decrypt());
 		//	System.out.println(c.length());
 		//	System.out.println(c.decrypt());
-		//	System.out.println(c2.length());
-		//	System.out.println(c2.decrypt());
+			System.out.println(c2.length());
+			System.out.println(c2.decrypt());
 		//	System.out.println(c3.length());
 		//	System.out.println(c3.decrypt());
-			System.out.println(c5.length());
-			System.out.println(c5.decrypt());
+		//	System.out.println(c5.length());
+		//	System.out.println(c5.decrypt());
 		}
 	    long endTime = System.currentTimeMillis();
 	    System.out.println("\n\nIt took " + (endTime - startTime) + " milliseconds");

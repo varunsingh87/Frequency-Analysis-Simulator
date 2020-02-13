@@ -26,7 +26,7 @@ public final class AlphabeticalStatistics {
 	
 	public final static char[] FINAL_LETTERS = {'e', 's', 't', 'd', 'n', 'r', 'y', 'f', 'l', 'o', 'g', 'h', 'a', 'k', 'm', 'p', 'u', 'w'};
 	public final static char[] INITIAL_LETTERS = {'t', 'a', 'o', 's', 'w', 'h', 'b', 'i', 'c', 'd'};
-	public final static char[] ALL_LETTERS = {'e', 't', 'a', 'o', 'i', 'n', 's', 'h', 'r', 'd', 'l', 'u'};
+	public final static	Character[] ALL_LETTERS = {'e', 't', 'a', 'o', 'i', 'n', 's', 'h', 'r', 'd', 'l', 'c', 'u', 'm', 'w', 'f', 'g', 'y', 'p', 'b', 'v', 'k', 'j', 'x', 'q', 'b'};
 	public final static char[] SOCIAL_LETTERS = {'a', 'e', 'i', 'o', 'u'};
 	
 	private AlphabeticalStatistics() {} // Make private constructor so no instances can be made
