@@ -218,16 +218,16 @@ public class MonoalphabeticCipher extends Cipher {
 	 * End the for loop and move on to the next word, if there is one
 	 */
 	public void testRandom() {
-		Collection modifiableCollection = new ArrayList<Character>(Arrays.asList(AlphabeticalStatistics.ALL_LETTERS));
+		Collection<Character> modifiableCollection = new ArrayList<Character>(Arrays.asList(AlphabeticalStatistics.ALL_LETTERS));
 		for (int i = 0; i < this.getWords().length; i++) {
 			String w = this.getWords()[i];
 			if (AlphabeticalStatistics.needsOneLetter(w)) {
 				char oldChar = w.charAt(getIndexOfFirstLowerCase(w));
 				if (!solvedLetters.contains(Character.toString(oldChar))) {
-					for (Character letterOfAlphabet : AlphabeticalStatistics.ALL_LETTERS) {
+					for (Character letterOfAlphabet : modifiableCollection) {
 						String loaAsString = letterOfAlphabet.toString();
 						if (replaceLetters(Character.toString(oldChar), loaAsString)) {
-							modifiableList.remove(letterOfAlphabet);
+							modifiableCollection.remove(letterOfAlphabet);
 							System.out.println(oldChar + " was replaced with " + loaAsString);
 							break;
 						}
