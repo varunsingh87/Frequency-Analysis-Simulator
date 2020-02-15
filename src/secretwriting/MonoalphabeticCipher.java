@@ -2,7 +2,6 @@ package secretwriting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,8 +13,8 @@ import helperfoo.EnglishDeterminer;
 import net.sf.extjwnl.JWNLException;
 
 public class MonoalphabeticCipher extends Cipher {
-	List<String> solvedLetters = new ArrayList<String>();
-	List<String> replacedLetters = new ArrayList<String>();
+	List<Character> solvedLetters = new ArrayList<Character>();
+	List<Character> replacedLetters = new ArrayList<Character>();
 	
 	public MonoalphabeticCipher(String givenText) {
 		super(givenText);
@@ -160,7 +159,7 @@ public class MonoalphabeticCipher extends Cipher {
 	 * @param toReplace
 	 * @param replacement
 	 */
-	protected boolean replaceLetters(String toReplace, String replacement) {
+	protected boolean replaceLetters(char toReplace, char replacement) {
 		return replaceLetters(toReplace, replacement, replacement, toReplace);
 	}
 	
@@ -171,17 +170,17 @@ public class MonoalphabeticCipher extends Cipher {
 	 * @param toAdd
 	 * @param toAdd2
 	 */
-	protected boolean replaceLetters(String toReplace, String replacement, String toAdd, String toAdd2) {
+	protected boolean replaceLetters(char toReplace, char replacement, char toAdd, char toAdd2) {
 		if (replacedLetters.contains(toAdd2) || solvedLetters.contains(toAdd)) 
 			return false;
 		return isCorrect(toReplace, replacement, toAdd, toAdd2);
 	}
 	
-	private boolean isCorrect(String toReplace, String replacement, String toAdd, String toAdd2) {
+	private boolean isCorrect(char toReplace, char replacement, char toAdd, char toAdd2) {
 		String newText = getText().replace(toReplace,  replacement);
 		if (Arrays.stream(newText.split(" "))
 				.filter(w -> {
-					return w.contains(replacement) && AlphabeticalStatistics.needsNoLetters(w);
+					return w.contains(Character.toString(replacement)) && AlphabeticalStatistics.needsNoLetters(w);
 				})
 				.noneMatch(w -> {
 					return !EnglishDeterminer.isWord(w);
@@ -218,17 +217,17 @@ public class MonoalphabeticCipher extends Cipher {
 	 * End the for loop and move on to the next word, if there is one
 	 */
 	public void testRandom() {
-		Collection<Character> modifiableCollection = new ArrayList<Character>(Arrays.asList(AlphabeticalStatistics.ALL_LETTERS));
+		List<Character> modifiableCollection = new ArrayList<Character>(Arrays.asList(AlphabeticalStatistics.ALL_LETTERS));
 		for (int i = 0; i < this.getWords().length; i++) {
 			String w = this.getWords()[i];
 			if (AlphabeticalStatistics.needsOneLetter(w)) {
 				char oldChar = w.charAt(getIndexOfFirstLowerCase(w));
-				if (!solvedLetters.contains(Character.toString(oldChar))) {
-					for (Character letterOfAlphabet : modifiableCollection) {
-						String loaAsString = letterOfAlphabet.toString();
-						if (replaceLetters(Character.toString(oldChar), loaAsString)) {
+				if (!solvedLetters.contains(oldChar)) {
+					for (int j = 0; j < modifiableCollection.size(); j++) {
+						Character letterOfAlphabet = modifiableCollection.get(j);
+						if (replaceLetters(oldChar, letterOfAlphabet)) {
 							modifiableCollection.remove(letterOfAlphabet);
-							System.out.println(oldChar + " was replaced with " + loaAsString);
+							System.out.println(oldChar + " was replaced with " + letterOfAlphabet.toString());
 							break;
 						}
 					}
@@ -263,7 +262,7 @@ public class MonoalphabeticCipher extends Cipher {
 		}
 		char replacedLetter = s.charAt(0);
 		for (char solvedLetter : c) {
-			if (replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter))) {
+			if (replaceLetters(replacedLetter, solvedLetter)) {
 				System.out.println(Character.toString(replacedLetter) + " was replaced with " + Character.toString(solvedLetter));
 				return;
 			}
@@ -281,7 +280,7 @@ public class MonoalphabeticCipher extends Cipher {
 		}
 		for (String nLetterWord : c) { // Loop through the constant array
 			for (char v : nLetterWord.toCharArray()) {
-				if (solvedLetters.contains(Character.toString(v))) {
+				if (solvedLetters.contains(v)) {
 					break;
 				}
 			}
@@ -296,7 +295,7 @@ public class MonoalphabeticCipher extends Cipher {
 			do {
 				char solvedLetter = nLetterWord.charAt(i);
 				char replacedLetter = s.charAt(i);
-				if (replaceLetters(Character.toString(replacedLetter), Character.toString(solvedLetter)))
+				if (replaceLetters(replacedLetter, solvedLetter))
 					b = true;
 				i++;
 			} while (b && i < s.length());
