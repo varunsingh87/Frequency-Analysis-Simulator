@@ -104,11 +104,18 @@ public final class EnglishDeterminer {
 	 */
 	public static boolean isInteger( String input ) {
 	    try {
-	        Integer.parseInt( input );
+	        Integer.parseInt( EnglishDeterminer.removeSpacesAndPunctuation(input) );
 	        return true;
 	    }
 	    catch(NumberFormatException e ) {
 	        return false;
 	    }
+	}
+	
+	public static boolean isInteger( char input) {
+		if (Character.getNumericValue(input) >= 0) {
+			return true;
+		}
+		return false;
 	}
 }
