@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,8 +79,21 @@ public final class Frequencies {
 		Arrays.stream(cipher.getWords()).distinct().forEach(w -> {
 			for (int j = 0; j < w.length() - (x - 1); j++) {
 				String ngram = w.substring(j, j + x);
-				if (ngram.contains("."))
+				HashSet<Character> tmp = new HashSet<Character>();
+				for (char ch : ngram.toCharArray()) {
+				    tmp.add(ch);
+				}
+				boolean b = false;
+				for (char ch : EnglishDeterminer.CHARS_TO_SKIP) {
+				    if (tmp.contains(ch)) {
+				    	b=true;
+				    	break;
+				    }
+				}
+				if (b) {
 					continue;
+				}
+					
 				Pair p = new Pair(ngram, new FrequencyHelpers(cipher.getText()).getOccurences(ngram));
 				ngraphs.add(p);
 			}

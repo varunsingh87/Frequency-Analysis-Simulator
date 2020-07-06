@@ -56,10 +56,13 @@ public class MonoalphabeticCipher extends Cipher {
 		}
 		
 		int m = 4;
-		// One Letter Words
-		System.out.println("---------  ONE LETTER WORDS  --------------");
-		solveFrequencyTypes(AlphabeticalStatistics.ONE_LETTER_WORDS, f.getMostFrequentNLetterWord(1));
-		solveFrequencyTypes(AlphabeticalStatistics.ONE_LETTER_WORDS, f.getNMostFrequentNLetterWord(1, 2));
+		
+		// Two Letter Words
+		System.out.println("---------  TWO LETTER WORDS ---------------");
+		solveFrequencyTypes(AlphabeticalStatistics.TWO_LETTER_WORDS, f.getMostFrequentNLetterWord(2));
+		for (int i = 2; i < m; i++) {
+			solveFrequencyTypes(AlphabeticalStatistics.TWO_LETTER_WORDS, f.getNMostFrequentNLetterWord(2, i));
+		}
 		
 		// Three Letter Words
 		System.out.println("---------  THREE LETTER WORDS -------------");
@@ -74,12 +77,7 @@ public class MonoalphabeticCipher extends Cipher {
 			solveFrequencyTypes(AlphabeticalStatistics.FOUR_LETTER_WORDS, f.getNMostFrequentNLetterWord(4, i));
 		}
 		
-		// Two Letter Words
-		System.out.println("---------  TWO LETTER WORDS ---------------");
-		solveFrequencyTypes(AlphabeticalStatistics.TWO_LETTER_WORDS, f.getMostFrequentNLetterWord(2));
-		for (int i = 2; i < m; i++) {
-			solveFrequencyTypes(AlphabeticalStatistics.TWO_LETTER_WORDS, f.getNMostFrequentNLetterWord(2, i));
-		}
+		
 		
 		// Trigraphs
 		System.out.println("---------  TRIGRAPHS         --------------");
@@ -123,8 +121,8 @@ public class MonoalphabeticCipher extends Cipher {
 		System.out.println("---------  GUESS AND CHECK --------------");
 		testRandom();
 		
-		System.out.println(replacedLetters.toString());
-		System.out.println(solvedLetters.toString());
+		System.out.println(replacedLetters);
+		System.out.println(solvedLetters);
 		
 		return getText();
 	}
