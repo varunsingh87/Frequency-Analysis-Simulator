@@ -1,5 +1,6 @@
 # Frequency Analysis Simulator
-**Start Date**: July 22, 2019
+**Start Date for Part 1: Monoalphabetic Ciphers**: July 22, 2019
+**Start Date for Part 2: Vigenere Ciphers**: September 26, 2022
 
 Frequency Analysis Simulator is a Java program that simulates frequency analysis in which the user inputs cipher text into the console and the System outputs as close to the corresponding plain text as possible. If the type of cipher has been identified, the process may be sped up after the user inputs the type of cipher (monoalphabetic or Vigenere) on prompt. Furthermore, Frequency Analysis Simulator can decipher the caesar shift cipher, a cipher that does not involve the use of frequency analysis for decipherment. As another added bonus, the application is able to encrypt messages.
 
@@ -70,20 +71,9 @@ Add additional notes about how to deploy this on a live system
 * [WordNet](https://wordnet.princeton.edu/) - API for predefined list of words used
 * [extJWNL](http://extjwnl.sourceforge.net/) - Java library imported; extension of JWNL
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/KnowledgeableKangaroo/Frequency-Analysis-Simulator/tags). 
-
 ## Authors
 
-* **Billie Thompson** - *README template* - [PurpleBooth](https://github.com/PurpleBooth)
-* **Varun Singh** - *Owner and Programmer* - [KnowledgeableKangaroo](https://github.com/KnowledgeableKangaroo)
-
-See also the list of [contributors](https://github.com/KnowledgeableKangaroo/Frequency-Analysis-Simulator/contributors) who participated in this project.
+* **Varun Singh** - *Owner and Programmer* - [varunsingh87](https://github.com/varunsingh87)
 
 ## License
 
@@ -98,7 +88,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * Stack Overflow, Inc.
 * Gale
 
-Copyright 2019 Varun Singh
+Copyright 2022 Varun Singh
 
 <script src = "../script.js"></script>
 
