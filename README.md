@@ -42,7 +42,7 @@ Frequency Analysis Simulator is a Java program that simulates frequency analysis
 
 ## License
 
-This project is licensed under the GNU General Public License - see the [LICENSE.md](LICENSE.md) file for details
+Copyright &copy; 2022 Varun Singh
 
 ## Acknowledgments
 
@@ -52,5 +52,3 @@ This project is licensed under the GNU General Public License - see the [LICENSE
 * Princeton University "About WordNet." WordNet. Princeton University. 2010.
 * Stack Overflow, Inc.
 * Gale
-
-Copyright 2022 Varun Singh
