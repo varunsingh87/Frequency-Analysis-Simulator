@@ -21,11 +21,15 @@ Frequency Analysis Simulator is a Java program that simulates frequency analysis
 ## Getting Started
 
 1. Clone this repo (for help see the [GitHub documentation](https://help.github.com/articles/cloning-a-repository/)).
-2. Run Main.java in the main package of the presentation folder  
+2. Run Main.java in the main package of the presentation folder with the following command:
+
+```
+mvn compile exec:java -Dexec.mainClass="frequencyanalysissimulator.presentation.main.Main"
+``` 
+
+or for short, use `mvn`
 
 ## Process
-* [Notebook/Markdown/Slide Deck Title](link)
-* [Notebook/Markdown/Slide DeckTitle](link)
 * [Blog Post for Part 1](https://dev.to/varuns924/how-i-wrote-a-background-noise-remover-from-start-to-finish-3h9m)
 
 
