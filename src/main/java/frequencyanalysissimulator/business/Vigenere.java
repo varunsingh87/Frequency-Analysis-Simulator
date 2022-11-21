@@ -9,29 +9,52 @@ public class Vigenere {
         ciphertext = cipher;
     }
 
+    /**
+     * Decrypts an individual Caesar cipher using Chi Square analysis
+     * to find which number of shifts matches the standard English frequency
+     * distribution the most
+     * 
+     * @time O(n)
+     * 
+     * @param coset The nth coset in the Vigenere cipher
+     * @return The letter that represents the number of rotations for the Caesar
+     *         cipher and part of the key for the Vigenere cipher
+     */
     public char decryptCosetByChiSquare(byte coset) {
-        double[] frequencies = new double[26];
-
+        double[] ciphertextLetterFrequencies = new double[26];
+        // Populate ciphertext letter frequencies by adding one for every occurrence of
+        // letter O(n)
         for (char letter : ciphertext.toCharArray()) {
-            frequencies[Character.toLowerCase(letter) - 'a']++;
+
+            int asNum = letter - 65;
+            // Ignore anything other than letters (such as spaces)
+            if (asNum > 0 && asNum <= 25) {
+                ciphertextLetterFrequencies[asNum] += 1.0 / ciphertext.length();
+            }
         }
 
-        double[] chiSquareValues = new double[25];
-        for (int j = 0; j < 25; j++) {
+        // O(26 * 26) = O(c)
+        double[] chiSquareValues = new double[26];
+        for (int shift = 0; shift < 26; shift++) {
             double chiSquareValue = 0;
             for (int i = 0; i < 26; i++) {
                 double standardFrequency = FrequencyAnalysis.standardEnglishFrequencies[i];
-                chiSquareValue += Math.pow(frequencies[i] - standardFrequency, 2) / standardFrequency;
+                double shiftedCiphertextFrequency = ciphertextLetterFrequencies[(i + shift) % 26];
+                chiSquareValue += Math.pow(shiftedCiphertextFrequency - standardFrequency, 2)
+                        / standardFrequency;
             }
-            chiSquareValues[j] = chiSquareValue;
+            chiSquareValues[shift] = chiSquareValue;
+            System.out.println(
+                    String.format("Chi-Square Value for %s is %f", (char) (shift + (int) 'A'), chiSquareValue));
         }
 
+        // O(26) = O(c)
         double smallestChiSquareValue = Double.MAX_VALUE;
         char letter = 'A';
         for (int i = 0; i < chiSquareValues.length; i++) {
             if (chiSquareValues[i] < smallestChiSquareValue) {
                 smallestChiSquareValue = chiSquareValues[i];
-                letter = (char) (i + (int) 'A');
+                letter = (char) (i + (int) 'A'); // Convert number to letter
             }
         }
 

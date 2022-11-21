@@ -1,18 +1,33 @@
 package frequencyanalysissimulator.business;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 public class VigenereTest {
 
 	@Test
-	public void test() {
-		Vigenere cipher = new Vigenere(3,
-				"YKBXG WLKHF TGLVH NGMKR FXGEX GWFXR HNKXT KLBVH FXMHU NKRVT XLTKG HMMHI KTBLX ABFMA XXOBE MATMF XGWHE BOXLT YMXKM AXFMA XZHHW BLHYM BGMXK KXWPB MAMAX BKUHG XLLHE XMBMU XPBMA VTXLT KMAXG HUEXU KNMNL ATMAM HEWRH NVTXL TKPTL TFUBM BHNLB YBMPX KXLHB MPTLT ZKBXO HNLYT NEMTG WZKBX OHNLE RATMA VTXLT KTGLP XKWBM AXKXN GWXKE XTOXH YUKNM NLTGW MAXKX LMYHK UKNMN LBLTG AHGHN KTUEX FTGLH TKXMA XRTEE TEEAH GHNKT UEXFX GVHFX BMHLI XTDBG VTXLT KLYNG XKTE");
+	public void testChiSquare() {
+		Vigenere cipher = new Vigenere(4, "WWBQCUOBSW");
 		char output = cipher.decryptCosetByChiSquare((byte) 1);
 		System.out.println(output);
-		assertEquals('T', cipher.decryptCosetByChiSquare((byte) 1));
+		assertEquals('O', output);
+	}
+
+	@Test
+	public void testChiSquare1() {
+		Vigenere cipher = new Vigenere(4, "NIBFOPDVWTZ");
+		char output = cipher.decryptCosetByChiSquare((byte) 1);
+		System.out.println(output);
+		assertEquals('B', output);
+	}
+
+	@Test
+	public void testChiSquare3() {
+		Vigenere cipher = new Vigenere(4, "AERFJGJGPR");
+		char output = cipher.decryptCosetByChiSquare((byte) 1);
+		System.out.println(output);
+		assertEquals('Y', output);
 	}
 
 }
