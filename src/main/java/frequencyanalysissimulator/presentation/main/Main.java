@@ -1,14 +1,34 @@
 package frequencyanalysissimulator.presentation.main;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import frequencyanalysissimulator.business.Vigenere;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 
 public class Main {
 
 	private JFrame frame;
+
+	private int pWidth;
+	private int pHeight;
 
 	/**
 	 * Launch the application.
@@ -31,9 +51,10 @@ public class Main {
 	 */
 	public Main() {
 		initialize();
-		frame.setLayout(new BorderLayout());
 
 		JPanel form = new JPanel();
+		form.setMaximumSize(new Dimension(700, pHeight));
+		form.setBorder(new EmptyBorder(10, 10, 10, 10));
 		BoxLayout bl = new BoxLayout(form, BoxLayout.PAGE_AXIS);
 		form.setLayout(bl);
 		form.add(new JLabel("Action"));
@@ -56,7 +77,7 @@ public class Main {
 
 		JRadioButton caesar = new JRadioButton("Caesar cipher");
 		caesar.setToolTipText(
-				"A substitution cipher in which each letter is shifted to a fixed number of letters in the alphabet to the right");
+				"A substitution cipher in which each letter is shifted to a fixed number of	letters in the alphabet to the right");
 		JRadioButton monosub = new JRadioButton("Monoalphabetic Substitution Cipher");
 		monosub.setToolTipText(
 				"A cipher in which each letter maps to another letter in the alphabet for the entire cipher");
@@ -74,25 +95,39 @@ public class Main {
 		cipherTypesFormElement.add(monosub);
 		cipherTypesFormElement.add(vigenere);
 
+		JTextArea textInput = new JTextArea(10, 10);
+		JScrollPane scrollInput = new JScrollPane(textInput, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		textInput.setLineWrap(true);
+		textInput.setBorder(new EmptyBorder(10, 10, 10, 10));
+		textInput.setFont(new Font("Segoe Script", Font.BOLD, 20));
+		textInput.setForeground(Color.BLUE);
+		textInput.setToolTipText("Ciphertext or plaintext");
+		form.add(scrollInput);
+
 		form.add(new JLabel("Cipher"));
 		form.add(cipherTypesFormElement);
 
 		frame.getContentPane().add(form, BorderLayout.WEST);
 
 		ImageIcon summary = new ImageIcon("assets/encrypt.png");
-		Image summaryImg = summary.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+		Image summaryImg = summary.getImage().getScaledInstance(20, 20,
+				java.awt.Image.SCALE_SMOOTH);
 		JLabel jp = new JLabel(new ImageIcon(summaryImg));
 		frame.getContentPane().add(new JLabel("Summary"), BorderLayout.EAST);
 		frame.getContentPane().add(jp, BorderLayout.EAST);
 
+		JPanel executeContainer = new JPanel(new FlowLayout());
 		JButton execute = new JButton("Begin operation");
-		frame.getContentPane().add(execute, BorderLayout.SOUTH);
+		executeContainer.add(execute);
+		frame.add(executeContainer, BorderLayout.SOUTH);
+
+		frame.add(new JLabel("Varun Singh's Frequency Analysis Simulator", JLabel.CENTER), BorderLayout.NORTH);
+
 		execute.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Vigenere cipherSolver = new Vigenere(6,
-						"YKBXG WLKHF TGLVH NGMKR FXGEX GWFXR HNKXT KLBVH FXMHU NKRVT XLTKG HMMHI KTBLX ABFMA XXOBE MATMF XGWHE BOXLT YMXKM AXFMA XZHHW BLHYM BGMXK KXWPB MAMAX BKUHG XLLHE XMBMU XPBMA VTXLT KMAXG HUEXU KNMNL ATMAM HEWRH NVTXL TKPTL TFUBM BHNLB YBMPX KXLHB MPTLT ZKBXO HNLYT NEMTG WZKBX OHNLE RATMA VTXLT KTGLP XKWBM AXKXN GWXKE XTOXH YUKNM NLTGW MAXKX LMYHK UKNMN LBLTG AHGHN KTUEX FTGLH TKXMA XRTEE TEEAH GHNKT UEXFX GVHFX BMHLI XTDBG VTXLT KLYNG XKTE");
-				cipherSolver.decryptCosetByChiSquare((byte) 1);
+
 			}
 		});
 	}
@@ -101,8 +136,15 @@ public class Main {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		Font fasDefaultFont = new Font("Verdana", Font.BOLD, 24);
+		UIManager.getLookAndFeelDefaults().put("Button.font", fasDefaultFont);
+		UIManager.getLookAndFeelDefaults().put("RadioButton.font", new Font("Verdana", Font.BOLD, 16));
+		UIManager.getLookAndFeelDefaults().put("Label.font", fasDefaultFont);
 		frame = new JFrame();
-		frame.setBounds(100, 100, 600, 500);
+		pHeight = 500;
+		pWidth = 600;
+		frame.setBounds(100, 100, pWidth, pHeight);
+		frame.setMinimumSize(new Dimension(500, 600));
 		frame.setIconImage(new ImageIcon("assets/icon.png").getImage());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
