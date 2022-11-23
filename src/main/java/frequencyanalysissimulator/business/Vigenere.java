@@ -8,7 +8,8 @@ public class Vigenere implements Cipher {
 
     public Vigenere(int len, String cipher) {
         keylength = len;
-        ciphertext = String.join("", cipher.split(" ")); // Remove spaces
+        // Remove spaces and carriage returns
+        ciphertext = String.join("", cipher.split("[ \r\t\n]")).toUpperCase();
     }
 
     private String[] distributeCiphertextIntoCosets() {

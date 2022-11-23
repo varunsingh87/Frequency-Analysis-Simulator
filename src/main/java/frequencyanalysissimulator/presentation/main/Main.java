@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,9 +18,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+
+import frequencyanalysissimulator.business.Vigenere;
 
 public class Main {
 
@@ -29,6 +33,11 @@ public class Main {
 
 	private int pWidth;
 	private int pHeight;
+
+	private JLabel outputBox;
+	private JTextArea inputBox;
+	private JSpinner keyLength;
+	private JLabel inputSize;
 
 	/**
 	 * Launch the application.
@@ -52,12 +61,75 @@ public class Main {
 	public Main() {
 		initialize();
 
-		JPanel form = new JPanel();
-		form.setMaximumSize(new Dimension(700, pHeight));
-		form.setBorder(new EmptyBorder(10, 10, 10, 10));
-		BoxLayout bl = new BoxLayout(form, BoxLayout.PAGE_AXIS);
-		form.setLayout(bl);
-		form.add(new JLabel("Action"));
+		frame.add(new JLabel("Varun Singh's Frequency Analysis Simulator", JLabel.CENTER), BorderLayout.NORTH);
+		frame.add(generateInputContainer(), BorderLayout.WEST);
+
+		JPanel executeContainer = new JPanel(new FlowLayout());
+		JButton execute = new JButton("Begin operation");
+		executeContainer.add(execute);
+		frame.add(executeContainer, BorderLayout.SOUTH);
+		frame.add(output(), BorderLayout.CENTER);
+
+		execute.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Vigenere cipherSolver = new Vigenere((int) keyLength.getValue(), inputBox.getText());
+				outputBox.setText((String) cipherSolver.getKey());
+				inputSize.setText("Input Length: " + inputBox.getText().length());
+			}
+		});
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		Font fasDefaultFont = new Font("Verdana", Font.BOLD, 24);
+		Font fasNormalFont = new Font("Verdana", Font.BOLD, 16);
+		UIManager.getLookAndFeelDefaults().put("Button.font", fasDefaultFont);
+		UIManager.getLookAndFeelDefaults().put("RadioButton.font", fasNormalFont);
+		UIManager.getLookAndFeelDefaults().put("Label.font", fasDefaultFont);
+		UIManager.getLookAndFeelDefaults().put("Spinner.font", fasNormalFont);
+
+		outputBox = new JLabel("Awaiting output...");
+
+		frame = new JFrame();
+		pHeight = 500;
+		pWidth = 600;
+		frame.setBounds(100, 100, pWidth, pHeight);
+		frame.setMinimumSize(new Dimension(pWidth, pHeight));
+		frame.setIconImage(new ImageIcon("assets/icon.png").getImage());
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new BorderLayout(10, 10));
+	}
+
+	private JPanel output() {
+		JPanel output = new JPanel();
+		BoxLayout layout = new BoxLayout(output, BoxLayout.PAGE_AXIS);
+		output.setLayout(layout);
+		output.setBorder(new EtchedBorder());
+
+		outputBox.setText("Key:" + keyLength.getValue());
+
+		output.add(outputBox);
+
+		inputSize = new JLabel("Input Length: " + inputBox.getText().length());
+		output.add(inputSize);
+		return output;
+	}
+
+	private JPanel generateInputContainer() {
+		JPanel inputContainer = new JPanel();
+		inputContainer.setMaximumSize(new Dimension(700, pHeight));
+		BoxLayout layout = new BoxLayout(inputContainer, BoxLayout.PAGE_AXIS);
+		inputContainer.setLayout(layout);
+		inputContainer.setBorder(new EmptyBorder(10, 10, 10, 10));
+		inputContainer.add(new JLabel("Action", JLabel.CENTER));
+
+		keyLength = new JSpinner(new SpinnerNumberModel(3, 2, Short.MAX_VALUE, 1));
+		keyLength.setMaximumSize(new Dimension(45, 20));
+		keyLength.setAlignmentX(JSpinner.CENTER_ALIGNMENT);
+		inputContainer.add(keyLength);
 
 		ButtonGroup actionsGroup = new ButtonGroup();
 
@@ -73,7 +145,7 @@ public class Main {
 		actionsFormElement.add(encrypt);
 		actionsFormElement.add(decrypt);
 
-		form.add(actionsFormElement);
+		inputContainer.add(actionsFormElement);
 
 		JRadioButton caesar = new JRadioButton("Caesar cipher");
 		caesar.setToolTipText(
@@ -95,58 +167,19 @@ public class Main {
 		cipherTypesFormElement.add(monosub);
 		cipherTypesFormElement.add(vigenere);
 
-		JTextArea textInput = new JTextArea(10, 10);
-		JScrollPane scrollInput = new JScrollPane(textInput, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		inputBox = new JTextArea(10, 10);
+		JScrollPane scrollInput = new JScrollPane(inputBox, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		textInput.setLineWrap(true);
-		textInput.setBorder(new EmptyBorder(10, 10, 10, 10));
-		textInput.setFont(new Font("Segoe Script", Font.BOLD, 20));
-		textInput.setForeground(Color.BLUE);
-		textInput.setToolTipText("Ciphertext or plaintext");
-		form.add(scrollInput);
+		inputBox.setLineWrap(true);
+		inputBox.setBorder(new EmptyBorder(10, 10, 10, 10));
+		inputBox.setFont(new Font("Segoe Script", Font.BOLD, 20));
+		inputBox.setForeground(Color.BLUE);
+		inputBox.setToolTipText("Ciphertext or plaintext");
+		inputContainer.add(scrollInput);
 
-		form.add(new JLabel("Cipher"));
-		form.add(cipherTypesFormElement);
+		inputContainer.add(new JLabel("Cipher"));
+		inputContainer.add(cipherTypesFormElement);
 
-		frame.getContentPane().add(form, BorderLayout.WEST);
-
-		ImageIcon summary = new ImageIcon("assets/encrypt.png");
-		Image summaryImg = summary.getImage().getScaledInstance(20, 20,
-				java.awt.Image.SCALE_SMOOTH);
-		JLabel jp = new JLabel(new ImageIcon(summaryImg));
-		frame.getContentPane().add(new JLabel("Summary"), BorderLayout.EAST);
-		frame.getContentPane().add(jp, BorderLayout.EAST);
-
-		JPanel executeContainer = new JPanel(new FlowLayout());
-		JButton execute = new JButton("Begin operation");
-		executeContainer.add(execute);
-		frame.add(executeContainer, BorderLayout.SOUTH);
-
-		frame.add(new JLabel("Varun Singh's Frequency Analysis Simulator", JLabel.CENTER), BorderLayout.NORTH);
-
-		execute.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
+		return inputContainer;
 	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		Font fasDefaultFont = new Font("Verdana", Font.BOLD, 24);
-		UIManager.getLookAndFeelDefaults().put("Button.font", fasDefaultFont);
-		UIManager.getLookAndFeelDefaults().put("RadioButton.font", new Font("Verdana", Font.BOLD, 16));
-		UIManager.getLookAndFeelDefaults().put("Label.font", fasDefaultFont);
-		frame = new JFrame();
-		pHeight = 500;
-		pWidth = 600;
-		frame.setBounds(100, 100, pWidth, pHeight);
-		frame.setMinimumSize(new Dimension(500, 600));
-		frame.setIconImage(new ImageIcon("assets/icon.png").getImage());
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
 }
