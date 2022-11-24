@@ -1,40 +1,58 @@
 package frequencyanalysissimulator.business;
 
-public class Vigenere {
-    private String ciphertext;
+import java.util.Arrays;
+
+public class Vigenere implements Cipher {
+    private String inputText;
     private int keylength;
 
     public Vigenere(int len, String cipher) {
         keylength = len;
-        ciphertext = cipher;
+        // Remove spaces and carriage returns
+        inputText = String.join("", cipher.split("[ \r\t\n]")).toUpperCase();
     }
 
-    public char decryptCosetByChiSquare(byte coset) {
-        double[] frequencies = new double[26];
+    private String[] distributeCiphertextIntoCosets() {
+        String[] cosets = new String[keylength];
+        Arrays.fill(cosets, "");
+        for (int i = 0; i < inputText.length(); i++) {
+            cosets[i % keylength] += inputText.charAt(i);
+        }
+        return cosets;
+    }
 
-        for (char letter : ciphertext.toCharArray()) {
-            frequencies[Character.toLowerCase(letter) - 'a']++;
+    public String getKey() {
+        String key = "";
+        String[] cosets = this.distributeCiphertextIntoCosets();
+
+        for (int i = 0; i < keylength; i++) {
+            Caesar coset = new Caesar(cosets[i]);
+            key += coset.getKeyByChiSquare();
         }
 
-        double[] chiSquareValues = new double[25];
-        for (int j = 0; j < 25; j++) {
-            double chiSquareValue = 0;
-            for (int i = 0; i < 26; i++) {
-                double standardFrequency = FrequencyAnalysis.standardEnglishFrequencies[i];
-                chiSquareValue += Math.pow(frequencies[i] - standardFrequency, 2) / standardFrequency;
-            }
-            chiSquareValues[j] = chiSquareValue;
+        return key;
+    }
+
+    @Override
+    public String decrypt() {
+        String plaintext = "";
+        String[] cosets = this.distributeCiphertextIntoCosets();
+
+        for (int i = 0; i < keylength; i++) {
+            Caesar coset = new Caesar(cosets[i]);
+            cosets[i] = coset.decrypt();
         }
 
-        double smallestChiSquareValue = Double.MAX_VALUE;
-        char letter = 'A';
-        for (int i = 0; i < chiSquareValues.length; i++) {
-            if (chiSquareValues[i] < smallestChiSquareValue) {
-                smallestChiSquareValue = chiSquareValues[i];
-                letter = (char) (i + (int) 'A');
-            }
+        for (int i = 0; i < inputText.length(); i++) {
+            plaintext += cosets[i % keylength].charAt((int) Math.ceil(i / keylength));
         }
 
-        return letter;
+        return plaintext;
+    }
+
+    @Override
+    public String encrypt(String key) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
