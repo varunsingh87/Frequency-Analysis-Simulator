@@ -13,6 +13,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,6 +26,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
+import frequencyanalysissimulator.business.Caesar;
 import frequencyanalysissimulator.business.Vigenere;
 
 public class Main {
@@ -34,7 +36,7 @@ public class Main {
 	private int pWidth;
 	private int pHeight;
 
-	private JLabel outputBox;
+	private JTextArea outputBox;
 	private JTextArea inputBox;
 	private JSpinner keyLength;
 	private JLabel inputSize;
@@ -74,7 +76,7 @@ public class Main {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Vigenere cipherSolver = new Vigenere((int) keyLength.getValue(), inputBox.getText());
-				outputBox.setText((String) cipherSolver.getKey());
+				outputBox.setText(cipherSolver.decrypt());
 				inputSize.setText("Input Length: " + inputBox.getText().length());
 			}
 		});
@@ -90,8 +92,10 @@ public class Main {
 		UIManager.getLookAndFeelDefaults().put("RadioButton.font", fasNormalFont);
 		UIManager.getLookAndFeelDefaults().put("Label.font", fasDefaultFont);
 		UIManager.getLookAndFeelDefaults().put("Spinner.font", fasNormalFont);
+		UIManager.getLookAndFeelDefaults().put("TextArea.font", fasNormalFont);
 
-		outputBox = new JLabel("Awaiting output...");
+		outputBox = new JTextArea("Awaiting output...");
+		outputBox.setEditable(false);
 
 		frame = new JFrame();
 		pHeight = 500;
@@ -101,20 +105,25 @@ public class Main {
 		frame.setIconImage(new ImageIcon("assets/icon.png").getImage());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout(10, 10));
+		frame.getRootPane().setBorder(new EmptyBorder(10, 10, 10, 10));
 	}
 
-	private JPanel output() {
+	private JComponent output() {
 		JPanel output = new JPanel();
+		output.setMaximumSize(new Dimension(700, pHeight));
 		BoxLayout layout = new BoxLayout(output, BoxLayout.PAGE_AXIS);
 		output.setLayout(layout);
-		output.setBorder(new EtchedBorder());
-
-		outputBox.setText("Key:" + keyLength.getValue());
-
-		output.add(outputBox);
-
+		output.setBorder(new EtchedBorder(EtchedBorder.RAISED));
 		inputSize = new JLabel("Input Length: " + inputBox.getText().length());
 		output.add(inputSize);
+
+		outputBox.setLineWrap(true);
+
+		JScrollPane scrollOutputText = new JScrollPane(outputBox, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+		output.add(scrollOutputText);
+
 		return output;
 	}
 

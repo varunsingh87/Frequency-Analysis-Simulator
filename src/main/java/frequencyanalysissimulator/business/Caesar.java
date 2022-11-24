@@ -1,10 +1,12 @@
 package frequencyanalysissimulator.business;
 
-public class Caesar {
-    private String ciphertext;
+public class Caesar implements Cipher {
+    private String inputText;
+    private int[] ciphertextAsNumbers;
 
     public Caesar(String t) {
-        ciphertext = t;
+        inputText = String.join("", t.split("[ \r\t\n]")).toUpperCase();
+        ciphertextAsNumbers = new int[t.length()];
     }
 
     /**
@@ -14,7 +16,7 @@ public class Caesar {
      * 
      * @time O(n) - Increases linearly with the length of the ciphertext
      * 
-     * @param ciphertext The Caesar cipher text to get the letter rotation of
+     * @param inputText The Caesar cipher text to get the letter rotation of
      * @return The letter that represents the number of rotations for the Caesar
      *         cipher and part of the key for the Vigenere cipher
      */
@@ -22,12 +24,13 @@ public class Caesar {
         double[] ciphertextLetterFrequencies = new double[26];
         // Populate ciphertext letter frequencies by adding one for every occurrence of
         // letter O(n)
-        for (char letter : ciphertext.toCharArray()) {
-
+        for (int i = 0; i < inputText.length(); i++) {
+            char letter = inputText.charAt(i);
             int asNum = letter - 65;
+            ciphertextAsNumbers[i] = asNum;
             // Ignore anything other than letters (such as spaces)
             if (asNum > 0 && asNum <= 25) {
-                ciphertextLetterFrequencies[asNum] += 1.0 / ciphertext.length();
+                ciphertextLetterFrequencies[asNum] += 1.0 / inputText.length();
             }
         }
 
@@ -57,5 +60,25 @@ public class Caesar {
         }
 
         return letter;
+    }
+
+    @Override
+    public String decrypt() {
+        char keyLet = getKeyByChiSquare();
+        int keyLetAsNum = 26 - (keyLet - 64);
+        String key = String.valueOf((char) (keyLetAsNum + 65));
+        return this.encrypt(key);
+    }
+
+    @Override
+    public String encrypt(String key) {
+        String ciphertext = "";
+
+        for (int letter : ciphertextAsNumbers) {
+            int shifted = ((letter + key.charAt(0) - 64)) % 26;
+            ciphertext += (char) (shifted + (int) 'A');
+        }
+
+        return ciphertext;
     }
 }

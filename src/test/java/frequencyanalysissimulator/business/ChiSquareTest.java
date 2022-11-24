@@ -10,7 +10,6 @@ public class ChiSquareTest {
 	public void testChiSquare() {
 		Caesar cipher = new Caesar("WWBQCUOBSW");
 		char output = cipher.getKeyByChiSquare();
-		System.out.println(output);
 		assertEquals('O', output);
 	}
 
