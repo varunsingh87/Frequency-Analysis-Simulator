@@ -112,4 +112,26 @@ public class VigenereTest {
 
         assertEquals(expectedPlaintext, cipher.decrypt());
     }
+
+    @Test
+    public void testEncrypt() {
+        Vigenere plain = new Vigenere("""
+                Friends, Romans, countrymen, lend me your ears;
+                I come to bury Caesar, not to praise him.
+                The evil that men do lives after them;
+                The good is oft interred with their bones;
+                So let it be with Caesar. The noble Brutus
+                Hath told you Caesar was ambitious:
+                If it were so, it was a grievous fault,
+                And grievously hath Caesar answer'd it.
+                Here, under leave of Brutus and the rest--
+                For Brutus is an honourable man;
+                So are they all, all honourable men--
+                Come I to speak in Caesar's funeral""");
+        String actualCiphertext = plain.encrypt("CRYPTII");
+
+        String expectedCiphertext = "HIGTGLATFKPGAKQLLIKGUGEJTGLUGPMJKMITJGRHUMVFZJKGKCVQPKVWVKMEKIQUVFXFBPGVTXEBPCKKTGLWNZTTLINVVPIAMUVYCVHWLKJMUMQVVVPGXLEKKFIAMQTSMCXAAQCCIBBJGNGIAKIGJYGMPMPFZAXJZWKSHAIBJKMAWGWWTYTLIZYRQPFJQVZMJLQNKKUTKMAQZRLTAIIIGTOWCUWYJEBIPUEGBMDQLQARPIVYAPXAITRLHPMZFZRWXZMWEBTKTMCMCDYJZWKSHTVLVYCGXABHFPQKCBWJGHTVPQEMJKIJNVKPGAWCICIAMGCCJPETPQEMJKIJNVKTGKWOVGIHAXGRIXGKIGJYGLNCPVPPE";
+
+        assertEquals(expectedCiphertext, actualCiphertext);
+    }
 }

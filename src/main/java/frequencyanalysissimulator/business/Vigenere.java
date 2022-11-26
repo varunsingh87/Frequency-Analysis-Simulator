@@ -9,7 +9,11 @@ public class Vigenere implements Cipher {
     public Vigenere(int len, String cipher) {
         keylength = len;
         // Remove spaces and carriage returns
-        inputText = cipher.replaceAll("[\s\n]", "").toUpperCase();
+        inputText = cipher.replaceAll("[^A-Za-z]", "").toUpperCase();
+    }
+
+    public Vigenere(String plain) {
+        inputText = plain.replaceAll("[^A-Za-z]", "").toUpperCase();
     }
 
     private String[] distributeCiphertextIntoCosets() {
@@ -44,7 +48,7 @@ public class Vigenere implements Cipher {
         }
 
         for (int i = 0; i < inputText.length(); i++) {
-            plaintext += cosets[i % keylength].charAt((int) Math.ceil(i / keylength));
+            plaintext += cosets[i % keylength].charAt(Math.ceilDiv(i, keylength));
         }
 
         return plaintext;
@@ -52,7 +56,13 @@ public class Vigenere implements Cipher {
 
     @Override
     public String encrypt(String key) {
-        // TODO Auto-generated method stub
-        return null;
+        String ciphertext = "";
+
+        for (int i = 0; i < inputText.length(); i++) {
+            int shifted = (inputText.charAt(i) - 65 + key.charAt(i % key.length()) - 65) % 26;
+            ciphertext += (char) (shifted + 'A');
+        }
+
+        return ciphertext;
     }
 }
