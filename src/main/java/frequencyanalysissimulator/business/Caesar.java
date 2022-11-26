@@ -65,18 +65,45 @@ public class Caesar implements Cipher {
     @Override
     public String decrypt() {
         char keyLet = getKeyByChiSquare();
-        int keyLetAsNum = 26 - (keyLet - 64);
-        String key = String.valueOf((char) (keyLetAsNum + 65));
-        return this.encrypt(key);
+        int keyLetAsNum = 27 - (keyLet - 64);
+        return this.encrypt(keyLetAsNum);
     }
 
+    /**
+     * Encrypts a text with the key where A = key with Casar Shift
+     * 
+     * @apiNote A = 0, so encrypt('A') = encrypt(1 - 1) = encrypt(0)
+     * 
+     * @param key Precondition: A-Z, one letter long
+     *            Postcondition: Encrypted Caesar ciphertext
+     * @see frequencyanalysissimulator.business.Cipher#encrypt(java.lang.String)
+     */
     @Override
     public String encrypt(String key) {
+        return encrypt((int) (key.charAt(0) - 64 - 1));
+    }
+
+    /**
+     * Precondition: 0 <= key <= 26
+     * 
+     * @apiNote Equals this.inputText when key is 0 or 26
+     * @param key The shift
+     * @return The encrypted ciphertext
+     */
+    public String encrypt(int key) {
         String ciphertext = "";
 
-        for (int letter : ciphertextAsNumbers) {
-            int shifted = ((letter + key.charAt(0) - 64)) % 26;
-            ciphertext += (char) (shifted + (int) 'A');
+        for (char letter : inputText.toCharArray()) {
+            /*
+             * Subtract 64 - letters have ASCII codes starting at 65
+             * Add shift
+             * Subtract 1 - Otherwise a shift of 26 would become 0 when modulo is performed
+             * Stay within 0-25 range - later letters in the alphabet would otherwise go
+             * above
+             * Add 1 - Make that range 1 - 26
+             */
+            int shifted = (letter - 64 + key - 1) % 26 + 1;
+            ciphertext += (char) (shifted + 'A' - 1);
         }
 
         return ciphertext;

@@ -9,7 +9,7 @@ public class Vigenere implements Cipher {
     public Vigenere(int len, String cipher) {
         keylength = len;
         // Remove spaces and carriage returns
-        inputText = String.join("", cipher.split("[ \r\t\n]")).toUpperCase();
+        inputText = cipher.replaceAll("[\s\n]", "").toUpperCase();
     }
 
     private String[] distributeCiphertextIntoCosets() {

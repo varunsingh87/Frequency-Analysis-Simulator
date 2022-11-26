@@ -26,7 +26,6 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
-import frequencyanalysissimulator.business.Caesar;
 import frequencyanalysissimulator.business.Vigenere;
 
 public class Main {
@@ -114,7 +113,7 @@ public class Main {
 		BoxLayout layout = new BoxLayout(output, BoxLayout.PAGE_AXIS);
 		output.setLayout(layout);
 		output.setBorder(new EtchedBorder(EtchedBorder.RAISED));
-		inputSize = new JLabel("Input Length: " + inputBox.getText().length());
+		inputSize = new JLabel("Input Length: " + inputBox.getText().trim().length());
 		output.add(inputSize);
 
 		outputBox.setLineWrap(true);
