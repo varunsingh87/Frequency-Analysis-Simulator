@@ -45,8 +45,6 @@ public class Caesar implements Cipher {
                         / standardFrequency;
             }
             chiSquareValues[shift] = chiSquareValue;
-            System.out.println(
-                    String.format("Chi-Square Value for %s is %f", (char) (shift + (int) 'A'), chiSquareValue));
         }
 
         // O(26) = O(c)

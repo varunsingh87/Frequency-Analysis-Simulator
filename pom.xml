@@ -3,24 +3,21 @@
   <groupId>com.varunsingh</groupId>
   <modelVersion>4.0.0</modelVersion>
   <version>1.00</version>
+  <url>https://varunsingh87.github.io/frequency-analysis-simulator</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>19</maven.compiler.source>
     <maven.compiler.release>19</maven.compiler.release>
   </properties>
 
+  <distributionManagement>
+    <site>
+      <id>website</id>
+      <url>scm:git:git@github.com/varunsingh87/Frequency-Analysis-Simulator.git</url>
+    </site>
+  </distributionManagement>
 
   <dependencies>
-    <dependency>
-      <groupId>net.sf.extjwnl</groupId>
-      <artifactId>extjwnl</artifactId>
-      <version>2.0.2</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.extjwnl</groupId>
-      <artifactId>extjwnl-data-wn31</artifactId>
-      <version>1.2</version>
-    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -57,6 +54,19 @@
         <configuration>
           <source>19</source>
           <target>19</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.7</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-publish-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <scmBranch>gh-pages</scmBranch>
         </configuration>
       </plugin>
     </plugins>
