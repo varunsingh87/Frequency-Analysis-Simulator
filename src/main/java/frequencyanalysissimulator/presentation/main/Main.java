@@ -74,7 +74,7 @@ public class Main {
 		execute.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Vigenere cipherSolver = new Vigenere((int) keyLength.getValue(), inputBox.getText());
+				Vigenere cipherSolver = new Vigenere(inputBox.getText());
 				outputBox.setText(cipherSolver.decrypt());
 				inputSize.setText("Input Length: " + inputBox.getText().length());
 			}
@@ -157,7 +157,7 @@ public class Main {
 
 		JRadioButton caesar = new JRadioButton("Caesar cipher");
 		caesar.setToolTipText(
-				"A substitution cipher in which each letter is shifted to a fixed number of	letters in the alphabet to the right");
+				"A substitution cipher in which each letter is shifted to a fixed number of letters in the alphabet to the right");
 		JRadioButton monosub = new JRadioButton("Monoalphabetic Substitution Cipher");
 		monosub.setToolTipText(
 				"A cipher in which each letter maps to another letter in the alphabet for the entire cipher");

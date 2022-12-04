@@ -5,27 +5,43 @@ import java.util.HashMap;
 import java.util.TreeSet;
 
 public class Vigenere implements Cipher {
-    private String inputText;
-    private char[] inputChars;
+    private String cipherText;
+    private char[] cipherChars;
+
     private int keylength;
 
     public Vigenere(int len, String cipher) {
-        keylength = len;
         // Remove anything that is not a letter
-        inputText = cipher.replaceAll("[^A-Za-z]", "").toUpperCase();
-        inputChars = inputText.toCharArray();
+        cipherText = cipher.replaceAll("[^A-Za-z]", "").toUpperCase();
+        cipherChars = cipherText.toCharArray();
+        keylength = len;
     }
 
-    public Vigenere(String plain) {
-        inputText = plain.replaceAll("[^A-Za-z]", "").toUpperCase();
-        inputChars = inputText.toCharArray();
+    public Vigenere(String cipher) {
+        cipherText = cipher.replaceAll("[^A-Za-z]", "").toUpperCase();
+        cipherChars = cipherText.toCharArray();
+        keylength = this.calculateKeyLengthByFriedmanTest();
+    }
+
+    /**
+     * @return the inputChars
+     */
+    public char[] getInputChars() {
+        return cipherChars;
+    }
+
+    /**
+     * @param inputChars the inputChars to set
+     */
+    public void setInputChars(char[] inputChars) {
+        this.cipherChars = inputChars;
     }
 
     private String[] distributeCiphertextIntoCosets() {
         String[] cosets = new String[keylength];
         Arrays.fill(cosets, "");
-        for (int i = 0; i < inputText.length(); i++) {
-            cosets[i % keylength] += inputText.charAt(i);
+        for (int i = 0; i < cipherText.length(); i++) {
+            cosets[i % keylength] += cipherText.charAt(i);
         }
         return cosets;
     }
@@ -40,8 +56,8 @@ public class Vigenere implements Cipher {
         TreeSet<Integer> possibleKeyLengths = new TreeSet<>();
 
         // O(n - 2) = O(n)
-        for (int i = 0; i < inputText.length() - 2; i++) {
-            String trigram = inputText.substring(i, i + 2);
+        for (int i = 0; i < cipherText.length() - 2; i++) {
+            String trigram = cipherText.substring(i, i + 2);
 
             if (trigrams.containsKey(trigram)) {
                 int prevBigramDistance = trigrams.get(trigram);
@@ -62,16 +78,32 @@ public class Vigenere implements Cipher {
      * @param length
      * @return
      */
-    private double calculateIndexOfCoincidence(int length) {
-        double sum = 0;
+    float calculateIndexOfCoincidence() {
+        float indexOfCoincidence = 0;
 
-        for (int i = 0; i < 25; i++) {
-            // sum +=
+        int[] ciphertextLetterCounts = FrequencyAnalysis.calculateAbsoluteLetterFrequencies(cipherText);
+
+        for (int i = 0; i < 26; i++) {
+            double countTimesCountMinusOne = ciphertextLetterCounts[i] * (ciphertextLetterCounts[i] - 1);
+            System.out.printf("[Vigenere#calculateIndexOfCoincidence] n[%d](n[%d]-1): %f\n", i, i,
+                    countTimesCountMinusOne);
+            indexOfCoincidence += countTimesCountMinusOne;
         }
 
-        sum /= inputText.length() * (inputText.length() - 1);
+        indexOfCoincidence /= cipherText.length() * (cipherText.length() - 1);
 
-        return sum;
+        return indexOfCoincidence;
+    }
+
+    int calculateKeyLengthByFriedmanTest() {
+        float ioc = this.calculateIndexOfCoincidence();
+
+        return Math.round((0.067f - 0.0385f) / (ioc - 0.0385f));
+    }
+
+    boolean isPolyalphabetic() {
+        double ioc = this.calculateIndexOfCoincidence();
+        return ioc >= 0.0661 && ioc <= 0.065;
     }
 
     public String getKey() {
@@ -96,24 +128,27 @@ public class Vigenere implements Cipher {
             cosets[i] = coset.decrypt();
         }
 
-        for (int i = 0; i < inputText.length(); i++) {
+        for (int i = 0; i < cipherText.length(); i++) {
             plaintext += cosets[i % keylength].charAt((int) Math.ceil(i / keylength));
         }
 
         return plaintext;
     }
 
-    @Override
-    public String encrypt(String key) {
+    public static String encrypt(String plaintext, String key) {
         String ciphertext = "";
+        plaintext = plaintext.replaceAll("[^A-Za-z]", "").toUpperCase();
 
-        for (int i = 0; i < inputText.length(); i++) {
+        for (int i = 0; i < plaintext.length(); i++) {
+            char letter = Character.toUpperCase(plaintext.charAt(i));
+
             // Subtract 65 from each character to get the nth letter of the alphabet
             // Confine to 0-25 with % 26
-            int shifted = (inputText.charAt(i) - 65 + key.charAt(i % key.length()) - 65) % 26;
+            int shifted = (letter - 65 + key.charAt(i % key.length()) - 65) % 26;
             // Add back 65 when turning to a character (does not need -1 because we did not
             // add 1 above)
             ciphertext += (char) (shifted + 'A');
+
         }
 
         return ciphertext;

@@ -1,10 +1,49 @@
 package frequencyanalysissimulator.business;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class VigenereTest {
+    @ParameterizedTest
+    @MethodSource
+    public void testPerformFriedmanTest(String text, int keylength) {
+        Vigenere cipher = new Vigenere(text);
+
+        int keyLength = cipher.calculateKeyLengthByFriedmanTest();
+
+        assertEquals(5, keyLength);
+    }
+
+    private static Stream<Arguments> testPerformFriedmanTest() {
+        return Stream.of(
+                Arguments.of(
+                        "QPWK ALVRXC QZIKGRB PFAEOMFL JMSD ZVDHXC XJ YEBIMTRQW NMEAI ZRVKC VKVLXN EIC FZPZCZZH KM LVZV ZIZR RQWDKECH OS NYZZL SPMYKV QXJT DCIOMEE XDQV SRXLRLKZH OV",
+                        5));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    public void testCalculateIndexOfCoincidence(String text, double expectedIOC) {
+        Vigenere cipher = new Vigenere(text);
+
+        float indexOfCoincidence = cipher.calculateIndexOfCoincidence();
+
+        assertEquals(expectedIOC, indexOfCoincidence, 0.0001);
+    }
+
+    private static Stream<Arguments> testCalculateIndexOfCoincidence() {
+        return Stream.of(
+                Arguments.of(
+                        "QPWK ALVRXC QZIKGRB PFAEOMFL JMSD ZVDHXC XJ YEBIMTRQW NMEAI ZRVKC VKVLXN EIC FZPZCZZH KM LVZV ZIZR RQWDKECH OS NYZZL SPMYKV QXJT DCIOMEE XDQV SRXLRLKZH OV",
+                        0.04389));
+    }
+
     @Test
     public void testGetKeyOfLength12() {
         Vigenere cipher = new Vigenere(12,
@@ -43,7 +82,8 @@ public class VigenereTest {
 
     @Test
     public void testGetKeyIsCaseInsensitive() {
-        Vigenere cipher = new Vigenere(5, "lxfopv fdsrow twyw ef rnhr mbq elufgj qubheie oseid fnth fvr twxoao");
+        Vigenere cipher = new Vigenere(5,
+                "lxfopv fdsrow twyw ef rnhr mbq elufgj qubheie oseid fnth fvr twxoao");
         Vigenere capitalizedCipher = new Vigenere(5,
                 "LXFOPV FDSROW TWYW EF RNHR MBQ ELUFGJ QUBHEIE OSEID FNTH FVR TWXOAO");
 
@@ -59,7 +99,7 @@ public class VigenereTest {
     }
 
     @Test
-    public void testGetKeyFromCipherWithReturns() {
+    public void testGetKeyFromMultilineCipher() {
         Vigenere cipher = new Vigenere(12, """
                 QRBAI UWYOK ILBRZ XTUWL EGXSN VDXWR XMHXY FCGMW WWSME LSXUZ
                 MKMFS BNZIF YEIEG RFZRX WKUFA XQEDX DTTHY NTBRJ LHTAI KOCZX
@@ -115,7 +155,7 @@ public class VigenereTest {
 
     @Test
     public void testEncrypt() {
-        Vigenere plain = new Vigenere("""
+        String actualCiphertext = Vigenere.encrypt("""
                 Friends, Romans, countrymen, lend me your ears;
                 I come to bury Caesar, not to praise him.
                 The evil that men do lives after them;
@@ -127,10 +167,10 @@ public class VigenereTest {
                 Here, under leave of Brutus and the rest--
                 For Brutus is an honourable man;
                 So are they all, all honourable men--
-                Come I to speak in Caesar's funeral""");
-        String actualCiphertext = plain.encrypt("CRYPTII");
+                Come I to speak in Caesar's funeral""", "CRYPTII");
 
-        String expectedCiphertext = "HIGTGLATFKPGAKQLLIKGUGEJTGLUGPMJKMITJGRHUMVFZJKGKCVQPKVWVKMEKIQUVFXFBPGVTXEBPCKKTGLWNZTTLINVVPIAMUVYCVHWLKJMUMQVVVPGXLEKKFIAMQTSMCXAAQCCIBBJGNGIAKIGJYGMPMPFZAXJZWKSHAIBJKMAWGWWTYTLIZYRQPFJQVZMJLQNKKUTKMAQZRLTAIIIGTOWCUWYJEBIPUEGBMDQLQARPIVYAPXAITRLHPMZFZRWXZMWEBTKTMCMCDYJZWKSHTVLVYCGXABHFPQKCBWJGHTVPQEMJKIJNVKPGAWCICIAMGCCJPETPQEMJKIJNVKTGKWOVGIHAXGRIXGKIGJYGLNCPVPPE";
+        String expectedCiphertext = """
+                HIGTGLATFKPGAKQLLIKGUGEJTGLUGPMJKMITJGRHUMVFZJKGKCVQPKVWVKMEKIQUVFXFBPGVTXEBPCKKTGLWNZTTLINVVPIAMUVYCVHWLKJMUMQVVVPGXLEKKFIAMQTSMCXAAQCCIBBJGNGIAKIGJYGMPMPFZAXJZWKSHAIBJKMAWGWWTYTLIZYRQPFJQVZMJLQNKKUTKMAQZRLTAIIIGTOWCUWYJEBIPUEGBMDQLQARPIVYAPXAITRLHPMZFZRWXZMWEBTKTMCMCDYJZWKSHTVLVYCGXABHFPQKCBWJGHTVPQEMJKIJNVKPGAWCICIAMGCCJPETPQEMJKIJNVKTGKWOVGIHAXGRIXGKIGJYGLNCPVPPE""";
 
         assertEquals(expectedCiphertext, actualCiphertext);
     }

@@ -1,19 +1,17 @@
 package frequencyanalysissimulator.business;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class CaesarTest {
     @Test
     public void testEncryptWithNumber() {
-        Caesar plainToCipher = new Caesar("ATTACKATDAWN");
-        assertEquals("GZZGIQGZJGCT", plainToCipher.encrypt(6));
+        assertEquals("GZZGIQGZJGCT", Caesar.encrypt("ATTACKATDAWN", 6));
     }
 
     @Test
     public void testEncryptWithLetter() {
-        Caesar plainToCipher = new Caesar("ATTACKATDAWN");
-        assertEquals("FYYFHPFYIFBS", plainToCipher.encrypt("F"));
+        assertEquals("FYYFHPFYIFBS", Caesar.encrypt("ATTACKATDAWN", "F"));
     }
 }

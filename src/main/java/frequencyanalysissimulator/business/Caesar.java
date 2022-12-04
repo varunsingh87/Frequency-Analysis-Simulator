@@ -1,11 +1,11 @@
 package frequencyanalysissimulator.business;
 
 public class Caesar implements Cipher {
-    private String inputText;
+    private String ciphertext;
     private int[] ciphertextAsNumbers;
 
     public Caesar(String t) {
-        inputText = String.join("", t.split("[ \r\t\n]")).toUpperCase();
+        ciphertext = String.join("", t.split("[ \r\t\n]")).toUpperCase();
         ciphertextAsNumbers = new int[t.length()];
     }
 
@@ -16,7 +16,7 @@ public class Caesar implements Cipher {
      * 
      * @time O(n) - Increases linearly with the length of the ciphertext
      * 
-     * @param inputText The Caesar cipher text to get the letter rotation of
+     * @param ciphertext The Caesar cipher text to get the letter rotation of
      * @return The letter that represents the number of rotations for the Caesar
      *         cipher and part of the key for the Vigenere cipher
      */
@@ -24,13 +24,13 @@ public class Caesar implements Cipher {
         double[] ciphertextLetterFrequencies = new double[26];
         // Populate ciphertext letter frequencies by adding one for every occurrence of
         // letter O(n)
-        for (int i = 0; i < inputText.length(); i++) {
-            char letter = inputText.charAt(i);
+        for (int i = 0; i < ciphertext.length(); i++) {
+            char letter = ciphertext.charAt(i);
             int asNum = letter - 65;
             ciphertextAsNumbers[i] = asNum;
             // Ignore anything other than letters (such as spaces)
-            if (asNum > 0 && asNum <= 25) {
-                ciphertextLetterFrequencies[asNum] += 1.0 / inputText.length();
+            if (Character.isAlphabetic((int) letter)) {
+                ciphertextLetterFrequencies[asNum] += 1.0 / ciphertext.length();
             }
         }
 
@@ -64,7 +64,7 @@ public class Caesar implements Cipher {
     public String decrypt() {
         char keyLet = getKeyByChiSquare();
         int keyLetAsNum = 27 - (keyLet - 64);
-        return this.encrypt(keyLetAsNum);
+        return Caesar.encrypt(ciphertext, keyLetAsNum);
     }
 
     /**
@@ -76,9 +76,8 @@ public class Caesar implements Cipher {
      *            Postcondition: Encrypted Caesar ciphertext
      * @see frequencyanalysissimulator.business.Cipher#encrypt(java.lang.String)
      */
-    @Override
-    public String encrypt(String key) {
-        return encrypt((int) (key.charAt(0) - 64 - 1));
+    public static String encrypt(String plaintext, String key) {
+        return encrypt(plaintext, (int) (key.charAt(0) - 64 - 1));
     }
 
     /**
@@ -88,10 +87,10 @@ public class Caesar implements Cipher {
      * @param key The shift
      * @return The encrypted ciphertext
      */
-    public String encrypt(int key) {
+    public static String encrypt(String plaintext, int key) {
         String ciphertext = "";
 
-        for (char letter : inputText.toCharArray()) {
+        for (char letter : plaintext.toCharArray()) {
             /*
              * Subtract 64 - letters have ASCII codes starting at 65
              * Add shift
