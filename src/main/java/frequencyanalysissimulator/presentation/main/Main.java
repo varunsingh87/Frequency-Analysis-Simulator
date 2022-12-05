@@ -37,7 +37,6 @@ public class Main {
 
 	private JTextArea outputBox;
 	private JTextArea inputBox;
-	private JSpinner keyLength;
 	private JLabel inputSize;
 
 	/**
@@ -133,11 +132,6 @@ public class Main {
 		inputContainer.setLayout(layout);
 		inputContainer.setBorder(new EmptyBorder(10, 10, 10, 10));
 		inputContainer.add(new JLabel("Action", JLabel.CENTER));
-
-		keyLength = new JSpinner(new SpinnerNumberModel(3, 2, Short.MAX_VALUE, 1));
-		keyLength.setMaximumSize(new Dimension(45, 20));
-		keyLength.setAlignmentX(JSpinner.CENTER_ALIGNMENT);
-		inputContainer.add(keyLength);
 
 		ButtonGroup actionsGroup = new ButtonGroup();
 

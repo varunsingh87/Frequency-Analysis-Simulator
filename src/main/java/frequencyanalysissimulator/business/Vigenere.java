@@ -1,7 +1,10 @@
 package frequencyanalysissimulator.business;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class Vigenere implements Cipher {
@@ -52,24 +55,47 @@ public class Vigenere implements Cipher {
      * @return
      */
     public int calculateKeyLength() {
-        HashMap<String, Integer> trigrams = new HashMap<String, Integer>();
-        TreeSet<Integer> possibleKeyLengths = new TreeSet<>();
+        HashMap<String, Integer> trigrams = new HashMap<>();
+        HashMap<String, Integer> repeatedTrigrams = new HashMap<>();
+        Map<Integer, Integer> possibleKeyLengths = new TreeMap<>();
 
         // O(n - 2) = O(n)
         for (int i = 0; i < cipherText.length() - 2; i++) {
-            String trigram = cipherText.substring(i, i + 2);
+            String trigram = cipherText.substring(i, i + 3);
 
             if (trigrams.containsKey(trigram)) {
-                int prevBigramDistance = trigrams.get(trigram);
-                int distance = i - prevBigramDistance;
+                int prevTrigramDistance = trigrams.get(trigram);
+                int distance = i - prevTrigramDistance;
 
-                trigrams.replace(trigram, distance);
+                trigrams.replace(trigram, i);
+                repeatedTrigrams.put(trigram, distance);
             } else {
                 trigrams.put(trigram, i);
             }
         }
+        repeatedTrigrams.forEach((trigram, distance) -> {
+            System.out.printf("%-15s %-15d\n", trigram, distance);
+            for (int i = 2; i < Math.sqrt(distance); i++) {
+                if (distance % i == 0 && possibleKeyLengths.containsKey(i))
+                    possibleKeyLengths.put(i, possibleKeyLengths.get(i) + 1);
+                else
+                    possibleKeyLengths.put(i, 1);
+            }
+        });
 
-        return 3;
+        int maxRepeats = 0;
+        int mostProbableKeyLength = 1;
+        for (Map.Entry<Integer, Integer> factor : possibleKeyLengths.entrySet()) {
+            if (factor.getValue() > maxRepeats) {
+                mostProbableKeyLength = factor.getKey();
+                maxRepeats = factor.getValue();
+            }
+        }
+
+        System.out.println(maxRepeats);
+
+        return mostProbableKeyLength;
+
     }
 
     /**
