@@ -6,7 +6,15 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Test",
+            "request": "launch",
+            "mainClass": "frequencyanalysissimulator.presentation.main.Test",
+            "projectName": "com.varunsingh.frequencyanalysissimulator"
+        },
+        {
+            "type": "java",
             "name": "Launch Main",
+            "console": "internalConsole",
             "request": "launch",
             "mainClass": "frequencyanalysissimulator.presentation.main.Main",
             "projectName": "com.varunsingh.frequencyanalysissimulator"
@@ -16,6 +24,6 @@
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
-        },
+        }
     ]
 }

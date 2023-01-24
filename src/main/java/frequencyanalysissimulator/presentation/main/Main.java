@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,13 +20,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTextArea;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
+import frequencyanalysissimulator.business.KeyLengthMethod;
 import frequencyanalysissimulator.business.Vigenere;
 
 public class Main {
@@ -38,6 +38,8 @@ public class Main {
 	private JTextArea outputBox;
 	private JTextArea inputBox;
 	private JLabel inputSize;
+
+	private KeyLengthMethod preferredMethod;
 
 	/**
 	 * Launch the application.
@@ -94,10 +96,11 @@ public class Main {
 
 		outputBox = new JTextArea("Awaiting output...");
 		outputBox.setEditable(false);
+		outputBox.setMargin(new Insets(30, 30, 30, 30));
 
 		frame = new JFrame();
 		pHeight = 500;
-		pWidth = 600;
+		pWidth = 1000;
 		frame.setBounds(100, 100, pWidth, pHeight);
 		frame.setMinimumSize(new Dimension(pWidth, pHeight));
 		frame.setIconImage(new ImageIcon("assets/icon.png").getImage());
@@ -116,10 +119,12 @@ public class Main {
 		output.add(inputSize);
 
 		outputBox.setLineWrap(true);
+		outputBox.setOpaque(false);
 
 		JScrollPane scrollOutputText = new JScrollPane(outputBox, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
+		scrollOutputText.getViewport().setOpaque(false);
+		scrollOutputText.getViewport().setBackground(new Color(0, 0, 0, 0));
 		output.add(scrollOutputText);
 
 		return output;
@@ -142,6 +147,9 @@ public class Main {
 		decrypt.setToolTipText("Convert ciphertext to a plaintext (Key optional)");
 		actionsGroup.add(encrypt);
 		actionsGroup.add(decrypt);
+
+		JPanel keylengthMethod = makeRadioButtonGroup();
+		inputContainer.add(keylengthMethod);
 
 		JPanel actionsFormElement = new JPanel(new FlowLayout());
 		actionsFormElement.add(encrypt);
@@ -170,6 +178,7 @@ public class Main {
 		cipherTypesFormElement.add(vigenere);
 
 		inputBox = new JTextArea(10, 10);
+		inputBox.setOpaque(false);
 		JScrollPane scrollInput = new JScrollPane(inputBox, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		inputBox.setLineWrap(true);
@@ -178,10 +187,34 @@ public class Main {
 		inputBox.setForeground(Color.BLUE);
 		inputBox.setToolTipText("Ciphertext or plaintext");
 		inputContainer.add(scrollInput);
+		scrollInput.setOpaque(false);
 
 		inputContainer.add(new JLabel("Cipher"));
 		inputContainer.add(cipherTypesFormElement);
 
 		return inputContainer;
+	}
+
+	private JPanel makeRadioButtonGroup() {
+		ButtonGroup keyLengthMethod = new ButtonGroup();
+		JPanel keyLengthLine = new JPanel();
+		BoxLayout horizontal = new BoxLayout(keyLengthLine, BoxLayout.X_AXIS);
+		keyLengthLine.setLayout(horizontal);
+		JRadioButton kasiski = new JRadioButton("Kasiski");
+		kasiski.setToolTipText("Uses the Kasiski Examination");
+		keyLengthMethod.add(kasiski);
+		keyLengthLine.add(kasiski);
+		JRadioButton kerckhoff = new JRadioButton("Kerckhoff");
+		kerckhoff.setToolTipText(
+				"Use the Kerckhoff method - a modern variation of an improvement of the Kasiski Examination - to infer the key length");
+		keyLengthMethod.add(kerckhoff);
+		keyLengthLine.add(kerckhoff);
+		JRadioButton friedman = new JRadioButton("Friedman");
+		friedman.setToolTipText(
+				"Use the Friedman Test - a mathematical formula using statistics to infer the length of the key");
+		keyLengthMethod.add(friedman);
+		keyLengthLine.add(friedman);
+
+		return keyLengthLine;
 	}
 }

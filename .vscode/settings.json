@@ -1,4 +1,5 @@
 {
     "xml.downloadExternalResources.enabled": true,
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.format.settings.url": "eclipse-formatter.xml"
 }

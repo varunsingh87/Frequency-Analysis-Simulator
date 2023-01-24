@@ -1,92 +1,140 @@
 package frequencyanalysissimulator.business;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class Vigenere implements Cipher {
     private String cipherText;
-    private char[] cipherChars;
-
+    private String letterOnlyCipherText;
     private int keylength;
 
-    public Vigenere(int len, String cipher) {
-        // Remove anything that is not a letter
-        cipherText = cipher.replaceAll("[^A-Za-z]", "").toUpperCase();
-        cipherChars = cipherText.toCharArray();
-        keylength = len;
+    public Vigenere(int keylen, String cipher) {
+        cipherText = cipher.replaceAll("\\s+", " ");
+        letterOnlyCipherText = removeNonLetters();
+        keylength = keylen;
     }
 
     public Vigenere(String cipher) {
-        cipherText = cipher.replaceAll("[^A-Za-z]", "").toUpperCase();
-        cipherChars = cipherText.toCharArray();
-        keylength = this.calculateKeyLengthByFriedmanTest();
+        cipherText = cipher.replaceAll("\\s+", " ");
+        letterOnlyCipherText = removeNonLetters();
+        keylength = this.calculateKeyLengthByKasiskiExamination();
     }
 
-    /**
-     * @return the inputChars
-     */
-    public char[] getInputChars() {
-        return cipherChars;
+    public String getCipherText() {
+        return cipherText;
     }
 
-    /**
-     * @param inputChars the inputChars to set
-     */
-    public void setInputChars(char[] inputChars) {
-        this.cipherChars = inputChars;
+    public void setCipherText(String newCipher) {
+        cipherText = newCipher;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ciphertext: %s\nkeylength method: %s", cipherText, "kasiski");
+    }
+
+    public String removeNonLetters() {
+        return cipherText.replaceAll("[^A-Za-z]", "").toUpperCase();
+    }
+
+    private List<Integer> markNonLetters() {
+        ArrayList<Integer> nonLetters = new ArrayList<>();
+        for (int i = 0; i < cipherText.length(); i++) {
+            // Add nonletters, but only the first space in a string of spaces
+            if (!Character.isLetter(cipherText.charAt(i))) {
+                nonLetters.add(i);
+            }
+        }
+        return nonLetters;
     }
 
     private String[] distributeCiphertextIntoCosets() {
         String[] cosets = new String[keylength];
         Arrays.fill(cosets, "");
-        for (int i = 0; i < cipherText.length(); i++) {
-            cosets[i % keylength] += cipherText.charAt(i);
+
+        for (int i = 0; i < letterOnlyCipherText.length(); i++) {
+            cosets[i % keylength] += letterOnlyCipherText.charAt(i);
         }
+
         return cosets;
     }
 
     /**
-     * Use coincidence counting to deduce the key length
+     * Use coincidence counting (Kasiski Examination) to deduce the key length
      * 
-     * @return
+     * @return The most probable key length using this particular algorithm
      */
-    public int calculateKeyLength() {
-        HashMap<String, Integer> trigrams = new HashMap<>();
-        HashMap<String, Integer> repeatedTrigrams = new HashMap<>();
-        Map<Integer, Integer> possibleKeyLengths = new TreeMap<>();
-
-        // O(n - 2) = O(n)
-        for (int i = 0; i < cipherText.length() - 2; i++) {
-            String trigram = cipherText.substring(i, i + 3);
-
-            if (trigrams.containsKey(trigram)) {
-                int prevTrigramDistance = trigrams.get(trigram);
-                int distance = i - prevTrigramDistance;
-
-                trigrams.replace(trigram, i);
-                repeatedTrigrams.put(trigram, distance);
-            } else {
-                trigrams.put(trigram, i);
+    public int calculateKeyLengthByKasiskiExamination() {
+        float maxAvg = 0;
+        int mostProbableKeyLength = 3;
+        for (int i = 2; i <= 20; i++) {
+            float currentAvg = calculuateAvgIndexOfCoincidence(i);
+            if (currentAvg > maxAvg) {
+                maxAvg = currentAvg;
+                mostProbableKeyLength = i;
             }
         }
-        repeatedTrigrams.forEach((trigram, distance) -> {
+
+        System.out.printf("The key length is most probably %d with an IOC of %f", mostProbableKeyLength, maxAvg);
+
+        return mostProbableKeyLength;
+
+    }
+
+    public int complicatedKasiski() {
+        Map<String, Integer> ngrams = new HashMap<>();
+        Map<String, Integer> repeatedNGrams = new HashMap<>();
+        Map<Integer, Integer> possibleKeyLengths = new TreeMap<>();
+
+        // Removes the ngrams used in the ciphertext as loop proceeds
+        StringBuilder adjustedCipherText = new StringBuilder(letterOnlyCipherText);
+
+        // O(n)
+        for (int n = 4; n >= 3; n--) {
+            for (int i = 0; i < adjustedCipherText.length() - (n - 1); i++) {
+                String ngram = adjustedCipherText.substring(i, i + n);
+
+                if (ngrams.containsKey(ngram)) {
+                    int prevNGramDistance = ngrams.get(ngram);
+                    int distance = i - prevNGramDistance;
+
+                    ngrams.replace(ngram, i);
+                    repeatedNGrams.put(ngram, distance);
+                } else {
+                    ngrams.put(ngram, i);
+                }
+            }
+        }
+
+        // TODO: Loop through and remove the ngrams that are SOLELY inside other ngrams
+        // - indexOf? using distance?
+
+        /*
+         * Add and count up the factors of each trigram's distance and store in a map
+         * Efficiency: O(n^0.5)
+         */
+        repeatedNGrams.forEach((trigram, distance) -> {
             System.out.printf("%-15s %-15d\n", trigram, distance);
             for (int i = 2; i < Math.sqrt(distance); i++) {
-                if (distance % i == 0 && possibleKeyLengths.containsKey(i))
-                    possibleKeyLengths.put(i, possibleKeyLengths.get(i) + 1);
-                else
-                    possibleKeyLengths.put(i, 1);
+                if (distance % i == 0) {
+                    if (possibleKeyLengths.containsKey(i))
+                        possibleKeyLengths.put(i, possibleKeyLengths.get(i) + 1);
+                    else
+                        possibleKeyLengths.put(i, 1);
+                }
             }
         });
+
+        System.out.println(possibleKeyLengths);
 
         int maxRepeats = 0;
         int mostProbableKeyLength = 1;
         for (Map.Entry<Integer, Integer> factor : possibleKeyLengths.entrySet()) {
-            if (factor.getValue() > maxRepeats) {
+            if (factor.getValue() >= maxRepeats) {
                 mostProbableKeyLength = factor.getKey();
                 maxRepeats = factor.getValue();
             }
@@ -95,11 +143,12 @@ public class Vigenere implements Cipher {
         System.out.println(maxRepeats);
 
         return mostProbableKeyLength;
-
     }
 
     /**
      * Friedman's Test on a possible key length
+     * k=sum(letter frequency * (letter frequency - 1)) / (Length of text * (Length
+     * of text - 1))
      * 
      * @param length
      * @return
@@ -107,18 +156,26 @@ public class Vigenere implements Cipher {
     float calculateIndexOfCoincidence() {
         float indexOfCoincidence = 0;
 
-        int[] ciphertextLetterCounts = FrequencyAnalysis.calculateAbsoluteLetterFrequencies(cipherText);
+        int[] ciphertextLetterCounts = FrequencyAnalysis.calculateAbsoluteLetterFrequencies(letterOnlyCipherText);
 
         for (int i = 0; i < 26; i++) {
             double countTimesCountMinusOne = ciphertextLetterCounts[i] * (ciphertextLetterCounts[i] - 1);
-            System.out.printf("[Vigenere#calculateIndexOfCoincidence] n[%d](n[%d]-1): %f\n", i, i,
-                    countTimesCountMinusOne);
             indexOfCoincidence += countTimesCountMinusOne;
         }
 
-        indexOfCoincidence /= cipherText.length() * (cipherText.length() - 1);
+        indexOfCoincidence /= letterOnlyCipherText.length() * (letterOnlyCipherText.length() - 1);
 
         return indexOfCoincidence;
+    }
+
+    float calculuateAvgIndexOfCoincidence(int keyLen) {
+        String[] cosets = new Vigenere(keyLen, cipherText).distributeCiphertextIntoCosets();
+        float avg = 0f;
+        for (String coset : cosets) {
+            avg += new Vigenere(1, coset).calculateIndexOfCoincidence();
+        }
+        avg /= keyLen;
+        return avg;
     }
 
     int calculateKeyLengthByFriedmanTest() {
@@ -146,7 +203,7 @@ public class Vigenere implements Cipher {
 
     @Override
     public String decrypt() {
-        String plaintext = "";
+        StringBuilder plaintext = new StringBuilder("");
         String[] cosets = this.distributeCiphertextIntoCosets();
 
         for (int i = 0; i < keylength; i++) {
@@ -154,11 +211,18 @@ public class Vigenere implements Cipher {
             cosets[i] = coset.decrypt();
         }
 
-        for (int i = 0; i < cipherText.length(); i++) {
-            plaintext += cosets[i % keylength].charAt((int) Math.ceil(i / keylength));
+        for (int i = 0; i < letterOnlyCipherText.length(); i++) {
+            plaintext.append(cosets[i % keylength].charAt((int) Math.ceil(i / keylength)));
         }
 
-        return plaintext;
+        List<Integer> nonLetterLocations = markNonLetters();
+        for (int i = 0; i < nonLetterLocations.size(); i++) {
+            int index = nonLetterLocations.get(i);
+            // System.out.print("\r" + plaintext.toString());
+            plaintext.insert(index, cipherText.charAt(index));
+        }
+
+        return plaintext.toString();
     }
 
     public static String encrypt(String plaintext, String key) {
