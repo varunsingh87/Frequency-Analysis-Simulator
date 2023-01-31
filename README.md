@@ -14,9 +14,10 @@ The purpose of this project is to decrypt a monoalphabetic substitution cipher u
 
 ## Concepts Used
 * Advanced Data Structures - Java Collections API, including TreeSet, HashMap, ArrayList
+* Layered Architecture - separated into presentation code (Java Swing framework) and business logic (pure Java)
 
 ## Project Description
-Frequency Analysis Simulator is a Java program that simulates frequency analysis in which the user inputs cipher text into the console and the System outputs as close to the corresponding plain text as possible. If the type of cipher has been identified, the process may be sped up after the user inputs the type of cipher (monoalphabetic or Vigenere) on prompt. Furthermore, Frequency Analysis Simulator can decipher the caesar shift cipher, a cipher that does not involve the use of frequency analysis for decipherment. The application is additionally able to encrypt messages.
+Frequency Analysis Simulator uses frequency analysis to output a plain text from a ciphertext without being given the key. If the type of cipher has been identified, the process may be sped up after the user inputs the type of cipher (monoalphabetic or Vigenere) on prompt. Frequency Analysis Simulator can decipher the Caesar cipher, a cipher that does not involve the use of frequency analysis for deciphering. The application can encrypt messages, too.
 
 ## Getting Started
 
@@ -29,24 +30,34 @@ mvn compile exec:java -Dexec.mainClass="frequencyanalysissimulator.presentation.
 
 or for short, use `mvn`
 
+### Running the data analysis tool
+
+Run the following command:
+
+```
+mvn compile exec:java -Dexec.mainClass="dataanalysis.DataAnalysis"
+```
+
 ## Process
 * [Blog Post for Part 1](https://dev.to/varuns924/how-i-wrote-a-background-noise-remover-from-start-to-finish-3h9m)
-
+* [Data from 2019 Phase]()
+* [Current Data (Vigenere Phase)](https://docs.google.com/spreadsheets/d/1XFQO-QX4YYL0vaCMqR6Jr5qXWtcWEMhbKEUsunjp1KY/edit#gid=0)
 
 ## Built With
 
-* [Eclipse](https://www.eclipse.org/) - The IDE used
-* [Java](https://www.java.com/en/) - The programming language used
-* [WordNet](https://wordnet.princeton.edu/) - API for predefined list of words used
-* [extJWNL](http://extjwnl.sourceforge.net/) - Java library imported; extension of JWNL
+* [Java](https://www.java.com/en/) - The programming language
+* [Maven] - The dependency management system 
+* [JUnit] - The testing framework
+* *No longer used for this project* [WordNet](https://wordnet.princeton.edu/) - API for predefined list of words used
+* *No longer used for this project* [extJWNL](http://extjwnl.sourceforge.net/) - Java library imported; extension of JWNL
 
 ## Authors
 
-* **Varun Singh** - *Owner and Programmer* - [varunsingh87](https://github.com/varunsingh87)
+* **Varun Singh** - *Creator* - [varunsingh87](https://github.com/varunsingh87)
 
 ## License
 
-Copyright &copy; 2022 Varun Singh
+Copyright &copy; 2023 Varun Singh
 
 ## Acknowledgments
 
@@ -54,5 +65,5 @@ Copyright &copy; 2022 Varun Singh
 * _The Cryptanalyst_ by Helen Fouche Gaines
 * [Kelalaka](https://crypto.stackexchange.com/users/18298/kelalaka) for help on real-world application of the project
 * Princeton University "About WordNet." WordNet. Princeton University. 2010.
-* Stack Overflow, Inc.
-* Gale
+* Michigan Technological University for explaining the Kasiski Examination and index of coincidence with working examples
+* Pixel from IDTech for helping me through my first Java project

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch DataAnalysis",
+            "request": "launch",
+            "mainClass": "dataanalysis.DataAnalysis",
+            "projectName": "com.varunsingh.frequencyanalysissimulator"
+        },
+        {
+            "type": "java",
             "name": "Launch Test",
             "request": "launch",
             "mainClass": "frequencyanalysissimulator.presentation.main.Test",
