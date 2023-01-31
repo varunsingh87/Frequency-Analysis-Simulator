@@ -110,9 +110,6 @@ public class Vigenere implements Cipher {
             }
         }
 
-        // TODO: Loop through and remove the ngrams that are SOLELY inside other ngrams
-        // - indexOf? using distance?
-
         /*
          * Add and count up the factors of each trigram's distance and store in a map
          * Efficiency: O(n^0.5)
@@ -182,6 +179,10 @@ public class Vigenere implements Cipher {
         float ioc = this.calculateIndexOfCoincidence();
 
         return Math.round((0.067f - 0.0385f) / (ioc - 0.0385f));
+    }
+
+    public float getCipherKeyLenRatio() {
+        return cipherText.length() / keylength;
     }
 
     boolean isPolyalphabetic() {
