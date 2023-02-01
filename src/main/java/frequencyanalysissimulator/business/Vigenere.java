@@ -46,6 +46,7 @@ public class Vigenere implements Cipher {
         for (int i = 0; i < cipherText.length(); i++) {
             // Add nonletters, but only the first space in a string of spaces
             if (!Character.isLetter(cipherText.charAt(i))) {
+                // System.out.println("Storing " + cipherText.charAt(i) + " with index " + i + " for later");
                 nonLetters.add(i);
             }
         }
@@ -79,7 +80,8 @@ public class Vigenere implements Cipher {
             }
         }
 
-        System.out.printf("The key length is most probably %d with an IOC of %f", mostProbableKeyLength, maxAvg);
+        // System.out.printf("The key length is most probably %d with an IOC of %f", mostProbableKeyLength,
+        // maxAvg);
 
         return mostProbableKeyLength;
 
@@ -217,9 +219,12 @@ public class Vigenere implements Cipher {
         }
 
         List<Integer> nonLetterLocations = markNonLetters();
+
         for (int i = 0; i < nonLetterLocations.size(); i++) {
             int index = nonLetterLocations.get(i);
             // System.out.print("\r" + plaintext.toString());
+            // System.out.println("Inserting " + cipherText.charAt(index) + " at index " + index);
+            // System.out.println("New length of plaintext: " + plaintext.length());
             plaintext.insert(index, cipherText.charAt(index));
         }
 
@@ -227,21 +232,37 @@ public class Vigenere implements Cipher {
     }
 
     public static String encrypt(String plaintext, String key) {
-        String ciphertext = "";
-        plaintext = plaintext.replaceAll("[^A-Za-z]", "").toUpperCase();
-
+        StringBuilder ciphertext = new StringBuilder("");
+        ArrayList<Integer> nonLetters = new ArrayList<>();
         for (int i = 0; i < plaintext.length(); i++) {
-            char letter = Character.toUpperCase(plaintext.charAt(i));
+            // Add nonletters, but only the first space in a string of spaces
+            if (!Character.isLetter(plaintext.charAt(i))) {
+                // System.out.println("Storing " + cipherText.charAt(i) + " with index " + i + " for later");
+                nonLetters.add(i);
+            }
+        }
+
+        String replacedPlaintext = plaintext.replaceAll("[^A-Za-z]", "").toUpperCase();
+
+        for (int i = 0; i < replacedPlaintext.length(); i++) {
+            char letter = Character.toUpperCase(replacedPlaintext.charAt(i));
 
             // Subtract 65 from each character to get the nth letter of the alphabet
             // Confine to 0-25 with % 26
             int shifted = (letter - 65 + key.charAt(i % key.length()) - 65) % 26;
             // Add back 65 when turning to a character (does not need -1 because we did not
             // add 1 above)
-            ciphertext += (char) (shifted + 'A');
-
+            ciphertext.append((char) (shifted + 'A'));
         }
 
-        return ciphertext;
+        for (int i = 0; i < nonLetters.size(); i++) {
+            int index = nonLetters.get(i);
+            // System.out.print("\r" + plaintext.toString());
+            // System.out.println("Inserting " + cipherText.charAt(index) + " at index " + index);
+            // System.out.println("New length of plaintext: " + plaintext.length());
+            ciphertext.insert(index, plaintext.charAt(index));
+        }
+
+        return ciphertext.toString();
     }
 }

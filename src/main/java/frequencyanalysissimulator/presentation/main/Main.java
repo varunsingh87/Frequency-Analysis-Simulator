@@ -78,6 +78,7 @@ public class Main {
 			public void actionPerformed(ActionEvent e) {
 				Vigenere cipherSolver = new Vigenere(inputBox.getText());
 				outputBox.setText(cipherSolver.decrypt());
+				System.out.println(cipherSolver.decrypt());
 				inputSize.setText("Input Length: " + cipherSolver.getCipherText().length());
 				key.setText("Computed Key: " + cipherSolver.getKey());
 				ratio.setText("Cipher Length to Key Length Ratio: " + cipherSolver.getCipherKeyLenRatio());
