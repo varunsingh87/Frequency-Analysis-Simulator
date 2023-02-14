@@ -10,6 +10,8 @@ dist
 jre
 lombok
 bin/
+generated*
+snippets
 .settings
 .classpath
 .project
