@@ -4,15 +4,15 @@ node_modules
 *.vsix
 .DS_Store
 .vscode-test
-undefined
 target
 dist
 jre
 lombok
 bin/
-generated*
+data/outputs
 snippets
 .settings
+.idea
 .classpath
 .project
 test/resources/projects/**/.vscode

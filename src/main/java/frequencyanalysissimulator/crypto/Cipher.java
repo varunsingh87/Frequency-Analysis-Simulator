@@ -1,4 +1,4 @@
-package frequencyanalysissimulator.business;
+package frequencyanalysissimulator.crypto;
 
 public interface Cipher {
     String decrypt();

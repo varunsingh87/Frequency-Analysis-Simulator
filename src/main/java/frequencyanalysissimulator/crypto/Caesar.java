@@ -1,4 +1,4 @@
-package frequencyanalysissimulator.business;
+package frequencyanalysissimulator.crypto;
 
 public class Caesar implements Cipher {
     private String ciphertext;
@@ -16,7 +16,8 @@ public class Caesar implements Cipher {
      * 
      * @time O(n) - Increases linearly with the length of the ciphertext
      * 
-     * @param ciphertext The Caesar cipher text to get the letter rotation of
+     * @param ciphertext
+     *            The Caesar cipher text to get the letter rotation of
      * @return The letter that represents the number of rotations for the Caesar
      *         cipher and part of the key for the Vigenere cipher
      */
@@ -72,9 +73,10 @@ public class Caesar implements Cipher {
      * 
      * @apiNote A = 0, so encrypt('A') = encrypt(1 - 1) = encrypt(0)
      * 
-     * @param key Precondition: A-Z, one letter long
+     * @param key
+     *            Precondition: A-Z, one letter long
      *            Postcondition: Encrypted Caesar ciphertext
-     * @see frequencyanalysissimulator.business.Cipher#encrypt(java.lang.String)
+     * @see frequencyanalysissimulator.crypto.Cipher#encrypt(java.lang.String)
      */
     public static String encrypt(String plaintext, String key) {
         return encrypt(plaintext, (int) (key.charAt(0) - 64 - 1));
@@ -84,7 +86,8 @@ public class Caesar implements Cipher {
      * Precondition: 0 <= key <= 26
      * 
      * @apiNote Equals this.inputText when key is 0 or 26
-     * @param key The shift
+     * @param key
+     *            The shift
      * @return The encrypted ciphertext
      */
     public static String encrypt(String plaintext, int key) {
@@ -104,5 +107,20 @@ public class Caesar implements Cipher {
         }
 
         return ciphertext;
+    }
+
+    public float calculateIndexOfCoincidence() {
+        float indexOfCoincidence = 0;
+
+        int[] ciphertextLetterCounts = FrequencyAnalysis.calculateAbsoluteLetterFrequencies(ciphertext);
+
+        for (int i = 0; i < 26; i++) {
+            double countTimesCountMinusOne = ciphertextLetterCounts[i] * (ciphertextLetterCounts[i] - 1);
+            indexOfCoincidence += countTimesCountMinusOne;
+        }
+
+        indexOfCoincidence /= ciphertext.length() * (ciphertext.length() - 1);
+
+        return indexOfCoincidence;
     }
 }

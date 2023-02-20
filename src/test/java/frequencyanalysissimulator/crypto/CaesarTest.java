@@ -1,4 +1,4 @@
-package frequencyanalysissimulator.business;
+package frequencyanalysissimulator.crypto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

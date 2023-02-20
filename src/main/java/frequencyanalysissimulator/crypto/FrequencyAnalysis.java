@@ -1,4 +1,4 @@
-package frequencyanalysissimulator.business;
+package frequencyanalysissimulator.crypto;
 
 public final class FrequencyAnalysis {
 	static double[] standardEnglishFrequencies = new double[] {

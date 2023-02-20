@@ -1,7 +1,7 @@
 # Frequency Analysis Simulator
-**Start Date for Part 1: Monoalphabetic Ciphers**: July 22, 2019
+**Start Date for Phase I: Monoalphabetic Ciphers**: July 22, 2019
 
-**Start Date for Part 2: Vigenere Ciphers**: September 26, 2022
+**Start Date for Phase II: Vigenere Ciphers**: September 26, 2022
 
 ## Objective
 The purpose of this project is to decrypt a monoalphabetic substitution cipher using frequency analysis and find the most optimal algorithm of decrypting a Vigenere cipher. 
@@ -17,7 +17,7 @@ The purpose of this project is to decrypt a monoalphabetic substitution cipher u
 * Layered Architecture - separated into presentation code (Java Swing framework) and business logic (pure Java)
 
 ## Project Description
-Frequency Analysis Simulator uses frequency analysis to output a plain text from a ciphertext without being given the key. If the type of cipher has been identified, the process may be sped up after the user inputs the type of cipher (monoalphabetic or Vigenere) on prompt. Frequency Analysis Simulator can decipher the Caesar cipher, a cipher that does not involve the use of frequency analysis for deciphering. The application can encrypt messages, too.
+Frequency Analysis Simulator uses frequency analysis to output a plain text from a ciphertext without receiving the key. 
 
 ## Getting Started
 
@@ -32,16 +32,24 @@ or for short, use `mvn`
 
 ### Running the data analysis tool
 
-Run the following command:
+Run the following command for data collection of a single input (~480 runs/data points):
 
 ```
 mvn compile exec:java -Dexec.mainClass="dataanalysis.DataAnalysis"
 ```
 
 ## Process
-* [Blog Post for Part 1](https://dev.to/varuns924/how-i-wrote-a-background-noise-remover-from-start-to-finish-3h9m)
-* [Data from 2019 Phase]()
-* [Current Data (Vigenere Phase)](https://docs.google.com/spreadsheets/d/1XFQO-QX4YYL0vaCMqR6Jr5qXWtcWEMhbKEUsunjp1KY/edit#gid=0)
+
+### Current (Phase II)
+
+* [Current Data (Phase II)](https://docs.google.com/spreadsheets/d/e/2PACX-1vQIqW8qXtnbI1yTCQR_LcYpy6F7p6eZg5EP07no3c-lBoEkMUbpTPyxo_oa5mCCj7Gfk8LOTonOY-4a/pubhtml)
+* [Presentation](https://docs.google.com/presentation/d/e/2PACX-1vR5Vu_MXCbKyHm0vHaMW5Tn4qaJWVDV34Z_WX1WpHbejcwIzODNiuNKExOOTFTRUUDs7CPsYwz8PA1T/pub?start=false&loop=false&delayms=3000)
+
+
+### Phase I
+
+* [Data from Phase I](https://docs.google.com/spreadsheets/d/130cqH1bGJPZ7mq2LrrTY6sMdm6E7qZP2Jea3s8cg3tA/edit#gid=0)
+* [Presentation](https://docs.google.com/presentation/d/e/2PACX-1vT29PD0nv69KI9cNDpZdsEA1p4eDg4P8V_XLVCWtpIFXDGnp_WmLrg-xiH120KWJkqppP9DZ-DlREr_/pub?start=false&loop=false&delayms=3000)
 
 ## Built With
 

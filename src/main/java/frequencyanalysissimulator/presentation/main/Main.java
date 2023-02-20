@@ -27,8 +27,8 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
-import frequencyanalysissimulator.business.KeyLengthMethod;
-import frequencyanalysissimulator.business.Vigenere;
+import frequencyanalysissimulator.crypto.KeyLengthMethod;
+import frequencyanalysissimulator.crypto.Vigenere;
 
 public class Main {
 
@@ -40,7 +40,7 @@ public class Main {
 	private JLabel key;
 	private JLabel ratio;
 
-	private KeyLengthMethod preferredMethod;
+	private KeyLengthMethod method;
 
 	/**
 	 * Launch the application.

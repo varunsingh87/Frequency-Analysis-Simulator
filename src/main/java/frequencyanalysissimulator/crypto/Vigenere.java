@@ -1,4 +1,4 @@
-package frequencyanalysissimulator.business;
+package frequencyanalysissimulator.crypto;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,9 +80,6 @@ public class Vigenere implements Cipher {
             }
         }
 
-        // System.out.printf("The key length is most probably %d with an IOC of %f", mostProbableKeyLength,
-        // maxAvg);
-
         return mostProbableKeyLength;
 
     }
@@ -146,11 +143,11 @@ public class Vigenere implements Cipher {
 
     /**
      * Friedman's Test on a possible key length
-     * k=sum(letter frequency * (letter frequency - 1)) / (Length of text * (Length
+     * I=sum(letter frequency * (letter frequency - 1)) / (Length of text * (Length
      * of text - 1))
-     * 
-     * @param length
-     * @return
+     * Calculates the probability of two randomly picked symbols in a text to be equal
+     *
+     * @return I, the coincidence index
      */
     float calculateIndexOfCoincidence() {
         float indexOfCoincidence = 0;
@@ -171,16 +168,18 @@ public class Vigenere implements Cipher {
         String[] cosets = new Vigenere(keyLen, cipherText).distributeCiphertextIntoCosets();
         float avg = 0f;
         for (String coset : cosets) {
-            avg += new Vigenere(1, coset).calculateIndexOfCoincidence();
+            avg += new Caesar(coset).calculateIndexOfCoincidence();
         }
         avg /= keyLen;
         return avg;
     }
 
     int calculateKeyLengthByFriedmanTest() {
+        final float KAPPA_R = 0.0385f; // Arabic alphabet
+        final float KAPPA_P = 0.067f; // case-insensitive English
         float ioc = this.calculateIndexOfCoincidence();
 
-        return Math.round((0.067f - 0.0385f) / (ioc - 0.0385f));
+        return Math.round((KAPPA_P - KAPPA_R) / (ioc - KAPPA_R));
     }
 
     public float getCipherKeyLenRatio() {
@@ -193,15 +192,15 @@ public class Vigenere implements Cipher {
     }
 
     public String getKey() {
-        String key = "";
+        StringBuilder key = new StringBuilder(); // A String
         String[] cosets = this.distributeCiphertextIntoCosets();
 
         for (int i = 0; i < keylength; i++) {
             Caesar coset = new Caesar(cosets[i]);
-            key += coset.getKeyByChiSquare();
+            key.append(coset.getKeyByChiSquare());
         }
 
-        return key;
+        return key.toString();
     }
 
     @Override

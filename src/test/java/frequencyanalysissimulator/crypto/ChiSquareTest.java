@@ -1,8 +1,10 @@
-package frequencyanalysissimulator.business;
+package frequencyanalysissimulator.crypto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+
+import frequencyanalysissimulator.crypto.Caesar;
 
 public class ChiSquareTest {
 	@Test

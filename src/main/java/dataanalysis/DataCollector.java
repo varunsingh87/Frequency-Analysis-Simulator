@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import frequencyanalysissimulator.business.Vigenere;
+import frequencyanalysissimulator.crypto.Vigenere;
 
-public class DataAnalysis {
+public class DataCollector {
 
     /**
      * 
