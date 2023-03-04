@@ -24,7 +24,7 @@ public class VigenereTest {
                         AWMOS DELHM UZGPG YEKZU KWTAM ZJMLS EVJQT GLAWV OVVXH KWQIL
                         IEUYS ZWXAH HUSZO GMUZQ CIMVZ UVWIF JJHPW VXFSE TZEDF""");
 
-        int keyLength = cipher.calculateKeyLengthByKasiskiExamination();
+        int keyLength = cipher.calculateKeyLengthByIndexOfCoincidence();
 
         System.out.println(keyLength);
     }

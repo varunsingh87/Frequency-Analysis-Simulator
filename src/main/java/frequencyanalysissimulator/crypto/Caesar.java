@@ -10,9 +10,29 @@ public class Caesar implements Cipher {
     }
 
     /**
+     * Use most common occurence, assume it's e, and shift the rest using this (Kasiski's original
+     * method of finding the key)
+     * 
+     * @return
+     */
+    public String decryptByKasiski() {
+        int[] frequencies = FrequencyAnalysis.calculateAbsoluteLetterFrequencies(ciphertext);
+        int maxFreq = 0;
+        char mostCommonLetter = 'A';
+        for (int i = 0; i < frequencies.length; i++) {
+            if (frequencies[i] > maxFreq)
+                maxFreq = frequencies[i];
+            mostCommonLetter = (char) (i + 'A');
+        }
+
+        return Caesar.encrypt(ciphertext, 27 - (mostCommonLetter - 64));
+    }
+
+    /**
      * Decrypts an individual Caesar cipher using Chi Square analysis
      * to find which number of shifts matches the standard English frequency
      * distribution the most
+     * AKA Kerckhoff's Method
      * 
      * @time O(n) - Increases linearly with the length of the ciphertext
      * 

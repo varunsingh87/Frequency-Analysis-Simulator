@@ -11,6 +11,18 @@ public class Vigenere implements Cipher {
     private String cipherText;
     private String letterOnlyCipherText;
     private int keylength;
+    private KeyLengthMethod method;
+
+    public Vigenere(String cipher, KeyLengthMethod m) {
+        cipherText = cipher.replaceAll("\\s+", " ");
+        letterOnlyCipherText = removeNonLetters();
+        method = m;
+        if (m.equals(KeyLengthMethod.INDEX_OF_COINCIDENCE)) {
+            keylength = this.calculateKeyLengthByIndexOfCoincidence();
+        } else if (m.equals(KeyLengthMethod.FRIEDMAN)) {
+            keylength = this.calculateKeyLengthByFriedmanTest();
+        }
+    }
 
     public Vigenere(int keylen, String cipher) {
         cipherText = cipher.replaceAll("\\s+", " ");
@@ -21,7 +33,7 @@ public class Vigenere implements Cipher {
     public Vigenere(String cipher) {
         cipherText = cipher.replaceAll("\\s+", " ");
         letterOnlyCipherText = removeNonLetters();
-        keylength = this.calculateKeyLengthByKasiskiExamination();
+        keylength = this.calculateKeyLengthByIndexOfCoincidence();
     }
 
     public String getCipherText() {
@@ -30,11 +42,12 @@ public class Vigenere implements Cipher {
 
     public void setCipherText(String newCipher) {
         cipherText = newCipher;
+        letterOnlyCipherText = removeNonLetters();
     }
 
     @Override
     public String toString() {
-        return String.format("ciphertext: %s\nkeylength method: %s", cipherText, "kasiski");
+        return String.format("ciphertext: %s\nkeylength method: %s", cipherText, method.name());
     }
 
     public String removeNonLetters() {
@@ -54,14 +67,20 @@ public class Vigenere implements Cipher {
     }
 
     private String[] distributeCiphertextIntoCosets() {
-        String[] cosets = new String[keylength];
-        Arrays.fill(cosets, "");
+        try {
+            String[] cosets = new String[keylength];
+            Arrays.fill(cosets, "");
 
-        for (int i = 0; i < letterOnlyCipherText.length(); i++) {
-            cosets[i % keylength] += letterOnlyCipherText.charAt(i);
+            for (int i = 0; i < letterOnlyCipherText.length(); i++) {
+                cosets[i % keylength] += letterOnlyCipherText.charAt(i);
+            }
+
+            return cosets;
+        } catch (NegativeArraySizeException e) {
+            System.out.println("Invalid key length. Algorithm failed.");
+            System.exit(0);
+            return null;
         }
-
-        return cosets;
     }
 
     /**
@@ -69,7 +88,7 @@ public class Vigenere implements Cipher {
      * 
      * @return The most probable key length using this particular algorithm
      */
-    public int calculateKeyLengthByKasiskiExamination() {
+    int calculateKeyLengthByIndexOfCoincidence() {
         float maxAvg = 0;
         int mostProbableKeyLength = 3;
         for (int i = 2; i <= 20; i++) {
@@ -84,7 +103,7 @@ public class Vigenere implements Cipher {
 
     }
 
-    public int complicatedKasiski() {
+    int calculateKeylengthByKasiskiExamination() {
         Map<String, Integer> ngrams = new HashMap<>();
         Map<String, Integer> repeatedNGrams = new HashMap<>();
         Map<Integer, Integer> possibleKeyLengths = new TreeMap<>();
@@ -175,11 +194,11 @@ public class Vigenere implements Cipher {
     }
 
     int calculateKeyLengthByFriedmanTest() {
-        final float KAPPA_R = 0.0385f; // Arabic alphabet
-        final float KAPPA_P = 0.067f; // case-insensitive English
-        float ioc = this.calculateIndexOfCoincidence();
+        final double KAPPA_R = 0.0385; // Arabic alphabet
+        final double KAPPA_P = 0.067; // case-insensitive English
+        double ioc = this.calculateIndexOfCoincidence();
 
-        return Math.round((KAPPA_P - KAPPA_R) / (ioc - KAPPA_R));
+        return Math.max(1, (int) Math.round((KAPPA_P - KAPPA_R) / (ioc - KAPPA_R)));
     }
 
     public float getCipherKeyLenRatio() {

@@ -15,7 +15,7 @@ public class DataFileReader {
         try {
             String expectedText = Files.readString(Path.of(String.format("data/inputs/%s.txt", args[0])));
             expectedText = expectedText.replace(System.getProperty("line.separator"), " ");
-            DataCollector.main(new String[] { expectedText, args[0] });
+            DataCollector.main(new String[] { expectedText, args[0], args[1] });
         } catch (IOException e) {
             e.printStackTrace();
         }

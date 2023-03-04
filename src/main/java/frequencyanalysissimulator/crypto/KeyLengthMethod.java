@@ -1,5 +1,6 @@
 package frequencyanalysissimulator.crypto;
 
 public enum KeyLengthMethod {
-    KASISKI, KERCKHOFF, FRIEDMAN
+    // KASISKI,
+    INDEX_OF_COINCIDENCE, FRIEDMAN
 }

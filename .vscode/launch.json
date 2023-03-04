@@ -6,10 +6,25 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DataVisualizer",
+            "request": "launch",
+            "mainClass": "dataanalysis.DataVisualizer",
+            "projectName": "com.varunsingh.frequencyanalysissimulator"
+        },
+        {
+            "type": "java",
+            "name": "DataCollector",
+            "request": "launch",
+            "mainClass": "dataanalysis.DataCollector",
+            "projectName": "com.varunsingh.frequencyanalysissimulator"
+        },
+        {
+            "type": "java",
             "name": "Launch DataPopulater",
             "request": "launch",
             "mainClass": "dataanalysis.DataPopulater",
-            "projectName": "com.varunsingh.frequencyanalysissimulator"
+            "projectName": "com.varunsingh.frequencyanalysissimulator",
+            "args": "${input:method}"
         },
         {
             "type": "java",
@@ -53,6 +68,17 @@
             "id": "text",
             "description": "Choose the input for the program",
             "type": "promptString"
+        },
+        {
+            "id": "method",
+            "description": "Choose the key length calculation algorithm",
+            "options": [
+                "kasiski",
+                "friedman",
+                "index_of_coincidence",
+                "all"
+            ],
+            "type": "pickString"
         }
     ]
 }

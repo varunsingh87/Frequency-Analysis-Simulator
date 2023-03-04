@@ -35,7 +35,7 @@ or for short, use `mvn`
 Run the following command for data collection of a single input (~480 runs/data points):
 
 ```
-mvn compile exec:java -Dexec.mainClass="dataanalysis.DataAnalysis"
+mvn compile exec:java -Dexec.mainClass="dataanalysis.DataCollector"
 ```
 
 ## Process
@@ -67,7 +67,7 @@ mvn compile exec:java -Dexec.mainClass="dataanalysis.DataAnalysis"
 
 Copyright &copy; 2023 Varun Singh
 
-## Acknowledgments
+## Acknowledgments and Sources of Research
 
 * Inspiration from _The Code Book_ by Simon Singh
 * _The Cryptanalyst_ by Helen Fouche Gaines
