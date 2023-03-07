@@ -1,12 +1,31 @@
 package frequencyanalysissimulator.crypto;
 
-public class Caesar implements Cipher {
+public class Caesar {
     private String ciphertext;
     private int[] ciphertextAsNumbers;
 
     public Caesar(String t) {
         ciphertext = String.join("", t.split("[ \r\t\n]")).toUpperCase();
         ciphertextAsNumbers = new int[t.length()];
+    }
+
+    /**
+     * Decrypts a Caesar cipher using the passed method of frequency analysis
+     * 
+     * @param m
+     *            The CaesarDecryptionMethod (enum)
+     * @return The decrypted text
+     */
+    public String decrypt(CaesarDecryptionMethod m) {
+        switch (m) {
+            case KASISKI:
+                return decryptByKasiski();
+            case KERCKHOFF:
+            default:
+                char keyLet = getKeyByChiSquare();
+                int keyLetAsNum = 27 - (keyLet - 64);
+                return Caesar.encrypt(ciphertext, keyLetAsNum);
+        }
     }
 
     /**
@@ -79,13 +98,6 @@ public class Caesar implements Cipher {
         }
 
         return letter;
-    }
-
-    @Override
-    public String decrypt() {
-        char keyLet = getKeyByChiSquare();
-        int keyLetAsNum = 27 - (keyLet - 64);
-        return Caesar.encrypt(ciphertext, keyLetAsNum);
     }
 
     /**

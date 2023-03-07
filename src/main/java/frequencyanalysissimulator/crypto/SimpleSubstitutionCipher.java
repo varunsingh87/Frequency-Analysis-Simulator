@@ -5,11 +5,10 @@ package frequencyanalysissimulator.crypto;
  * 
  * @author Varun Singh on 2/20/2023
  */
-public class SimpleSubstitutionCipher implements Cipher {
+public class SimpleSubstitutionCipher {
     private String ciphertext;
     private double[] frequencies;
 
-    @Override
     public String decrypt() {
         return null;
     }

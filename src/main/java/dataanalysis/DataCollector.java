@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import frequencyanalysissimulator.crypto.CaesarDecryptionMethod;
 import frequencyanalysissimulator.crypto.KeyLengthMethod;
 import frequencyanalysissimulator.crypto.Vigenere;
 
@@ -15,10 +16,11 @@ public class DataCollector {
      *            arg[0]: Input must be one line
      *            arg[1]: Trial Id for output file
      *            arg[2]: (Optional) key length calculation algorithm
-     *            arg[3]: (Optional): key
+     *            arg[3]: (Optional) Caesar decryption algorithm
+     *            arg[4]: (Optional): key
      */
     public static void main(String[] args) {
-        final String key = args.length > 3 ? args[3] : "DONQUIXOTECOYOTEWILL";
+        final String key = args.length > 4 ? args[4] : "DONQUIXOTECOYOTEWILL";
         String expectedText = args[0].toUpperCase();
         String output = String.format("Len,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,Avg(%s)\n", args[1]);
 
@@ -31,7 +33,7 @@ public class DataCollector {
                 String ciphertext = Vigenere.encrypt(input, subKey);
                 Vigenere v = args[2] != null ? new Vigenere(ciphertext, KeyLengthMethod.valueOf(args[2].toUpperCase()))
                         : new Vigenere(ciphertext);
-                String decryptedText = v.decrypt();
+                String decryptedText = v.decrypt(CaesarDecryptionMethod.valueOf(args[3]));
                 double accuracy = percentageSimilarity(decryptedText, input);
 
                 output += Math.round(accuracy) + ",";
@@ -42,7 +44,8 @@ public class DataCollector {
         }
 
         try (FileWriter writer = new FileWriter(
-                new File(String.format("data/outputs/%s/Trial %s.csv", args[2], args[1])))) {
+                new File(String.format("data/outputs/%s_%s/Trial %s.csv", args[2].toLowerCase(), args[3].toLowerCase(),
+                        args[1])))) {
             writer.append(output);
         } catch (IOException e) {
             e.printStackTrace();

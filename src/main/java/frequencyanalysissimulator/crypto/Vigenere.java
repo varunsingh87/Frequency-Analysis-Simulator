@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Vigenere implements Cipher {
+public class Vigenere {
     private String cipherText;
     private String letterOnlyCipherText;
     private int keylength;
@@ -17,7 +17,7 @@ public class Vigenere implements Cipher {
         cipherText = cipher.replaceAll("\\s+", " ");
         letterOnlyCipherText = removeNonLetters();
         method = m;
-        if (m.equals(KeyLengthMethod.INDEX_OF_COINCIDENCE)) {
+        if (m.equals(KeyLengthMethod.IOC)) {
             keylength = this.calculateKeyLengthByIndexOfCoincidence();
         } else if (m.equals(KeyLengthMethod.FRIEDMAN)) {
             keylength = this.calculateKeyLengthByFriedmanTest();
@@ -25,14 +25,12 @@ public class Vigenere implements Cipher {
     }
 
     public Vigenere(int keylen, String cipher) {
-        cipherText = cipher.replaceAll("\\s+", " ");
-        letterOnlyCipherText = removeNonLetters();
+        setCipherText(cipher);
         keylength = keylen;
     }
 
     public Vigenere(String cipher) {
-        cipherText = cipher.replaceAll("\\s+", " ");
-        letterOnlyCipherText = removeNonLetters();
+        setCipherText(cipher);
         keylength = this.calculateKeyLengthByIndexOfCoincidence();
     }
 
@@ -41,7 +39,7 @@ public class Vigenere implements Cipher {
     }
 
     public void setCipherText(String newCipher) {
-        cipherText = newCipher;
+        cipherText = newCipher.replaceAll("\\s+", " ");
         letterOnlyCipherText = removeNonLetters();
     }
 
@@ -103,7 +101,7 @@ public class Vigenere implements Cipher {
 
     }
 
-    int calculateKeylengthByKasiskiExamination() {
+    int calculateKeyLengthByKasiskiExamination() {
         Map<String, Integer> ngrams = new HashMap<>();
         Map<String, Integer> repeatedNGrams = new HashMap<>();
         Map<Integer, Integer> possibleKeyLengths = new TreeMap<>();
@@ -222,14 +220,13 @@ public class Vigenere implements Cipher {
         return key.toString();
     }
 
-    @Override
-    public String decrypt() {
+    public String decrypt(CaesarDecryptionMethod keyAlg) {
         StringBuilder plaintext = new StringBuilder("");
         String[] cosets = this.distributeCiphertextIntoCosets();
 
         for (int i = 0; i < keylength; i++) {
             Caesar coset = new Caesar(cosets[i]);
-            cosets[i] = coset.decrypt();
+            cosets[i] = coset.decrypt(keyAlg);
         }
 
         for (int i = 0; i < letterOnlyCipherText.length(); i++) {
@@ -240,13 +237,14 @@ public class Vigenere implements Cipher {
 
         for (int i = 0; i < nonLetterLocations.size(); i++) {
             int index = nonLetterLocations.get(i);
-            // System.out.print("\r" + plaintext.toString());
-            // System.out.println("Inserting " + cipherText.charAt(index) + " at index " + index);
-            // System.out.println("New length of plaintext: " + plaintext.length());
             plaintext.insert(index, cipherText.charAt(index));
         }
 
         return plaintext.toString();
+    }
+
+    public String decrypt() {
+        return decrypt(null);
     }
 
     public static String encrypt(String plaintext, String key) {
