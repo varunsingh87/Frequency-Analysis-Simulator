@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Close Issues
-        if: startsWith(github.event.head_commit.message, 'Complete #')
+        if: startsWith(github.event.head_commit.message, 'Complete \#')
         run: |
           ISSUE_NUMBERS=$(echo "${{ github.event.head_commit.message }}" | grep -oE '#[0-9]+' | tr -d '#')
           for ISSUE_NUMBER in $(echo "${ISSUE_NUMBERS}" | tr ',' '\n')
