@@ -1,0 +1,30 @@
+name: Close Issues on Commit
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  close-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Close Issues
+        if: startsWith(github.event.head_commit.message, 'Complete #')
+        run: |
+          # Extract issue numbers from commit message
+          ISSUE_NUMBERS=$(echo "${{ github.event.head_commit.message }}" | grep -oE '#[0-9]+' | cut -c2- | paste -sd ",")
+
+          # Close each issue
+          for ISSUE_NUMBER in $(echo "${ISSUE_NUMBERS}" | tr ',' '\n')
+          do
+            echo "Closing issue #${ISSUE_NUMBER}"
+            curl \
+              --request POST \
+              --url "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}" \
+              --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              --header "Content-Type: application/json" \
+              --data "{\"state\": \"closed\"}"
+          done
