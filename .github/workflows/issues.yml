@@ -14,10 +14,7 @@ jobs:
       - name: Close Issues
         if: startsWith(github.event.head_commit.message, 'Complete #')
         run: |
-          # Extract issue numbers from commit message
-          ISSUE_NUMBERS=$(echo "${{ github.event.head_commit.message }}" | grep -oE '#[0-9]+' | cut -c2- | paste -sd ",")
-
-          # Close each issue
+          ISSUE_NUMBERS=$(echo "${{ github.event.head_commit.message }}" | grep -oE '#[0-9]+' | tr -d '#')
           for ISSUE_NUMBER in $(echo "${ISSUE_NUMBERS}" | tr ',' '\n')
           do
             echo "Closing issue #${ISSUE_NUMBER}"
