@@ -34,8 +34,8 @@ public class Vigenere {
         keylength = this.calculateKeyLengthByIndexOfCoincidence();
     }
 
-    public String getCipherText() {
-        return cipherText;
+    public String getCipherText(boolean withLetters) {
+        return withLetters ? cipherText : letterOnlyCipherText;
     }
 
     public void setCipherText(String newCipher) {
@@ -82,7 +82,7 @@ public class Vigenere {
     }
 
     /**
-     * Use coincidence counting (Kasiski Examination) to deduce the key length
+     * Use coincidence counting to deduce the key length
      * 
      * @return The most probable key length using this particular algorithm
      */
@@ -158,45 +158,25 @@ public class Vigenere {
         return mostProbableKeyLength;
     }
 
-    /**
-     * Friedman's Test on a possible key length
-     * I=sum(letter frequency * (letter frequency - 1)) / (Length of text * (Length
-     * of text - 1))
-     * Calculates the probability of two randomly picked symbols in a text to be equal
-     *
-     * @return I, the coincidence index
-     */
-    float calculateIndexOfCoincidence() {
-        float indexOfCoincidence = 0;
-
-        int[] ciphertextLetterCounts = FrequencyAnalysis.calculateAbsoluteLetterFrequencies(letterOnlyCipherText);
-
-        for (int i = 0; i < 26; i++) {
-            double countTimesCountMinusOne = ciphertextLetterCounts[i] * (ciphertextLetterCounts[i] - 1);
-            indexOfCoincidence += countTimesCountMinusOne;
-        }
-
-        indexOfCoincidence /= letterOnlyCipherText.length() * (letterOnlyCipherText.length() - 1);
-
-        return indexOfCoincidence;
-    }
-
     float calculuateAvgIndexOfCoincidence(int keyLen) {
-        String[] cosets = new Vigenere(keyLen, cipherText).distributeCiphertextIntoCosets();
+        String[] cosets = new Vigenere(keyLen, letterOnlyCipherText).distributeCiphertextIntoCosets();
         float avg = 0f;
         for (String coset : cosets) {
-            avg += new Caesar(coset).calculateIndexOfCoincidence();
+            avg += FrequencyAnalysis.calculateIndexOfCoincidence(coset);
         }
         avg /= keyLen;
         return avg;
     }
 
     int calculateKeyLengthByFriedmanTest() {
-        final double KAPPA_R = 0.0385; // Arabic alphabet
-        final double KAPPA_P = 0.067; // case-insensitive English
-        double ioc = this.calculateIndexOfCoincidence();
+        final double KAPPA_R = 0.0385; // UNIFORM random selection from a case-insensitive Arabic (English) alphabet
+        final double KAPPA_P = 0.067; // Selection of two random letters from English alphabet using frequency
+                                      // distribution
+        double ioc = FrequencyAnalysis.calculateIndexOfCoincidence(letterOnlyCipherText);
 
-        return Math.max(1, (int) Math.round((KAPPA_P - KAPPA_R) / (ioc - KAPPA_R)));
+        double coincidenceRate = Math.round((KAPPA_P - KAPPA_R) / (ioc - KAPPA_R));
+
+        return (int) Math.max(1, Math.round(coincidenceRate));
     }
 
     public float getCipherKeyLenRatio() {
@@ -204,8 +184,12 @@ public class Vigenere {
     }
 
     boolean isPolyalphabetic() {
-        double ioc = this.calculateIndexOfCoincidence();
-        return ioc >= 0.0661 && ioc <= 0.065;
+        double ioc = FrequencyAnalysis.calculateIndexOfCoincidence(letterOnlyCipherText);
+        return ioc < 0.0660;
+    }
+
+    boolean isMonoalphabetic() {
+        return FrequencyAnalysis.calculateIndexOfCoincidence(letterOnlyCipherText) >= 0.0660;
     }
 
     public String getKey() {

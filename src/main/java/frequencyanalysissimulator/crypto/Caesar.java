@@ -37,14 +37,15 @@ public class Caesar {
     public String decryptByKasiski() {
         int[] frequencies = FrequencyAnalysis.calculateAbsoluteLetterFrequencies(ciphertext);
         int maxFreq = 0;
-        char mostCommonLetter = 'A';
+        int mostCommonLetterAsNumber = 0;
         for (int i = 0; i < frequencies.length; i++) {
             if (frequencies[i] > maxFreq)
                 maxFreq = frequencies[i];
-            mostCommonLetter = (char) (i + 'A');
+            mostCommonLetterAsNumber = i;
         }
 
-        return Caesar.encrypt(ciphertext, 27 - (mostCommonLetter - 64));
+        int key = mostCommonLetterAsNumber - 4;
+        return decrypt(key);
     }
 
     /**
@@ -101,6 +102,17 @@ public class Caesar {
     }
 
     /**
+     * Decrypts with key by encrypting the complementary number within 26
+     * 
+     * @param key
+     *            The key that was used to get to the current ciphertext
+     * @return The plaintext
+     */
+    String decrypt(int key) {
+        return encrypt(ciphertext, (26 - key) % 26);
+    }
+
+    /**
      * Encrypts a text with the key where A = key with Casar Shift
      * 
      * @apiNote A = 0, so encrypt('A') = encrypt(1 - 1) = encrypt(0)
@@ -111,7 +123,7 @@ public class Caesar {
      * @see frequencyanalysissimulator.crypto.Cipher#encrypt(java.lang.String)
      */
     public static String encrypt(String plaintext, String key) {
-        return encrypt(plaintext, (int) (key.charAt(0) - 64 - 1));
+        return encrypt(plaintext, (int) (key.charAt(0) - 65));
     }
 
     /**
@@ -139,20 +151,5 @@ public class Caesar {
         }
 
         return ciphertext;
-    }
-
-    public float calculateIndexOfCoincidence() {
-        float indexOfCoincidence = 0;
-
-        int[] ciphertextLetterCounts = FrequencyAnalysis.calculateAbsoluteLetterFrequencies(ciphertext);
-
-        for (int i = 0; i < 26; i++) {
-            double countTimesCountMinusOne = ciphertextLetterCounts[i] * (ciphertextLetterCounts[i] - 1);
-            indexOfCoincidence += countTimesCountMinusOne;
-        }
-
-        indexOfCoincidence /= ciphertext.length() * (ciphertext.length() - 1);
-
-        return indexOfCoincidence;
     }
 }

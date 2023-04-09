@@ -27,6 +27,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
+import frequencyanalysissimulator.crypto.CaesarDecryptionMethod;
 import frequencyanalysissimulator.crypto.KeyLengthMethod;
 import frequencyanalysissimulator.crypto.Vigenere;
 
@@ -77,9 +78,9 @@ public class Main {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Vigenere cipherSolver = new Vigenere(inputBox.getText());
-				outputBox.setText(cipherSolver.decrypt());
-				System.out.println(cipherSolver.decrypt());
-				inputSize.setText("Input Length: " + cipherSolver.getCipherText().length());
+				outputBox.setText(cipherSolver.decrypt(CaesarDecryptionMethod.KASISKI));
+				System.out.println(cipherSolver.decrypt(CaesarDecryptionMethod.KASISKI));
+				inputSize.setText("Input Length: " + cipherSolver.getCipherText(true).length());
 				key.setText("Computed Key: " + cipherSolver.getKey());
 				ratio.setText("Cipher Length to Key Length Ratio: " + cipherSolver.getCipherKeyLenRatio());
 			}

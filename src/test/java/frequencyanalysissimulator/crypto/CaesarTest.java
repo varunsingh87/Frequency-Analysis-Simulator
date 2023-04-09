@@ -14,4 +14,18 @@ public class CaesarTest {
     public void testEncryptWithLetter() {
         assertEquals("FYYFHPFYIFBS", Caesar.encrypt("ATTACKATDAWN", "F"));
     }
+
+    @Test
+    public void testDecryptWithNumber() {
+        int key = 7;
+        Caesar c = new Caesar(Caesar.encrypt("ATTACKATDAWN", key));
+        assertEquals("ATTACKATDAWN", c.decrypt(key));
+    }
+
+    @Test
+    public void testKasiski() {
+        int key = 7;
+        Caesar c = new Caesar(Caesar.encrypt("ETTECKETDEWN", key));
+        assertEquals("ETTECKETDEWN", c.decrypt(key));
+    }
 }

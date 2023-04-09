@@ -2,6 +2,10 @@ package dataanalysis;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import frequencyanalysissimulator.crypto.CaesarDecryptionMethod;
 import frequencyanalysissimulator.crypto.KeyLengthMethod;
@@ -43,6 +47,7 @@ public class DataPopulater {
         if (args[0] == null || args[0].equals("all")) {
             for (KeyLengthMethod keyLenAlg : KeyLengthMethod.values()) {
                 for (CaesarDecryptionMethod keyAlg : CaesarDecryptionMethod.values()) {
+                    System.out.printf("\n**********%s-%s******\n\n", keyLenAlg.name(), keyAlg.name());
                     new DataPopulater(keyLenAlg.name(), keyAlg.name());
                 }
             }

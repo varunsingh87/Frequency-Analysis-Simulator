@@ -21,10 +21,11 @@ public class DataCollector {
      */
     public static void main(String[] args) {
         final String key = args.length > 4 ? args[4] : "DONQUIXOTECOYOTEWILL";
-        String expectedText = args[0].toUpperCase();
+        // Remove all non-letters
+        String expectedText = args[0].replaceAll("[^A-Za-z]", "").toUpperCase();
         String output = String.format("Len,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,Avg(%s)\n", args[1]);
 
-        for (int cipherlen = 90; cipherlen <= 1400; cipherlen += 50) { // O(15) = O(C)
+        for (int cipherlen = 90; cipherlen <= 1000; cipherlen += 50) { // O(15) = O(C)
             output += cipherlen + ",";
             double avg = 0;
             for (int i = 3; i <= 20; i++) { // O(17) = O(C)
