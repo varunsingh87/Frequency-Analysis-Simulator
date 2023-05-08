@@ -2,11 +2,6 @@ package dataanalysis;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import frequencyanalysissimulator.crypto.CaesarDecryptionMethod;
 import frequencyanalysissimulator.crypto.KeyLengthMethod;
 
@@ -41,6 +36,7 @@ public class DataPopulater {
      * @param args
      *            args[0]: key length calculation algorithm
      *            args[1]: Caesar decryption algorithm
+     *            args[2]: key (optional)
      * @throws InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {

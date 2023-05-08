@@ -20,7 +20,7 @@ public class DataCollector {
      *            arg[4]: (Optional): key
      */
     public static void main(String[] args) {
-        final String key = args.length > 4 ? args[4] : "DONQUIXOTECOYOTEWILL";
+        final String key = args.length > 4 ? args[4].toUpperCase() : "HARSHTRAITSHINEIMPORT";
         // Remove all non-letters
         String expectedText = args[0].replaceAll("[^A-Za-z]", "").toUpperCase();
         String output = String.format("Len,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,Avg(%s)\n", args[1]);
@@ -45,7 +45,8 @@ public class DataCollector {
         }
 
         try (FileWriter writer = new FileWriter(
-                new File(String.format("data/outputs/%s_%s/Trial %s.csv", args[2].toLowerCase(), args[3].toLowerCase(),
+                new File(String.format("data/outputs/%s/%s_%s/Trial %s.csv", key,
+                        args[2].toLowerCase(), args[3].toLowerCase(),
                         args[1])))) {
             writer.append(output);
         } catch (IOException e) {

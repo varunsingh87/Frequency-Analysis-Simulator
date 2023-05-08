@@ -30,12 +30,19 @@ mvn compile exec:java -Dexec.mainClass="frequencyanalysissimulator.presentation.
 
 or for short, use `mvn`
 
-### Running the data analysis tool
+### Collecting Data
 
 Run the following command for data collection of a single input (~480 runs/data points):
 
 ```
 mvn compile exec:java -Dexec.mainClass="dataanalysis.DataCollector"
+```
+
+Run the following command for data population of experiment data. To use a different key you will need to edit the default in DataCollector.java and make a new folder and subfolders of all the combinations of key length and caesar decryption algorithms in the following format:
+```
+outputs/
+    [ioc, friedman]_[kasiski, kerckhoff]/
+        
 ```
 
 ## Process
@@ -56,8 +63,6 @@ mvn compile exec:java -Dexec.mainClass="dataanalysis.DataCollector"
 * [Java](https://www.java.com/en/) - The programming language
 * [Maven] - The dependency management system 
 * [JUnit] - The testing framework
-* *No longer used for this project* [WordNet](https://wordnet.princeton.edu/) - API for predefined list of words used
-* *No longer used for this project* [extJWNL](http://extjwnl.sourceforge.net/) - Java library imported; extension of JWNL
 
 ## Authors
 
@@ -67,11 +72,8 @@ mvn compile exec:java -Dexec.mainClass="dataanalysis.DataCollector"
 
 Copyright &copy; 2023 Varun Singh
 
-## Acknowledgments and Sources of Research
+## Sources of Research
 
 * Inspiration from _The Code Book_ by Simon Singh
 * _The Cryptanalyst_ by Helen Fouche Gaines
-* [Kelalaka](https://crypto.stackexchange.com/users/18298/kelalaka) for help on real-world application of the project
-* Princeton University "About WordNet." WordNet. Princeton University. 2010.
-* Michigan Technological University for explaining the Kasiski Examination and index of coincidence with working examples
-* Pixel from IDTech for helping me through my first Java project
+* Michigan Technological University - explanations of the Kasiski Examination and index of coincidence with working examples
