@@ -1,10 +1,6 @@
 # Frequency Analysis Simulator
-**Start Date for Phase I: Monoalphabetic Ciphers**: July 22, 2019
 
-**Start Date for Phase II: Vigenere Ciphers**: September 26, 2022
-
-## Objective
-The purpose of this project is to decrypt a monoalphabetic substitution cipher using frequency analysis and find the most optimal algorithm of decrypting a Vigenere cipher. 
+The purpose of this project is to decrypt a monoalphabetic substitution cipher using frequency analysis and find the optimal algorithm and conditions of decrypting a Vigenere cipher. 
 
 ## Methods Used
 * Frequency Analysis
@@ -14,12 +10,9 @@ The purpose of this project is to decrypt a monoalphabetic substitution cipher u
 
 ## Concepts Used
 * Advanced Data Structures - Java Collections API, including TreeSet, HashMap, ArrayList
-* Layered Architecture - separated into presentation code (Java Swing framework) and business logic (pure Java)
+* Layered Architecture - separated into presentation code (Java Swing framework), business logic (pure Java), and data analysis module (pure Java I/O)
 
-## Project Description
-Frequency Analysis Simulator uses frequency analysis to output a plain text from a ciphertext without receiving the key. 
-
-## Getting Started
+## Usage
 
 1. Clone this repo (for help see the [GitHub documentation](https://help.github.com/articles/cloning-a-repository/)).
 2. Run Main.java in the main package of the presentation folder with the following command:
@@ -47,9 +40,21 @@ outputs/
 
 ## Process
 
-### Current (Phase II)
 
-* [Current Data (Phase II)](https://docs.google.com/spreadsheets/d/e/2PACX-1vQIqW8qXtnbI1yTCQR_LcYpy6F7p6eZg5EP07no3c-lBoEkMUbpTPyxo_oa5mCCj7Gfk8LOTonOY-4a/pubhtml)
+**Phase I: Monoalphabetic Ciphers**: July 22, 2019 - February 16, 2020
+
+**Phase II: Vigenere Ciphers**: September 26, 2022 - May 8, 2023
+
+### Upcoming - Phase III
+
+- Rewrite of simple substitution cipher (efficient and accurate, no dictionary)
+- Visualization of data
+- Data collection GUI
+- Variants of Vigenere cipher
+
+### Phase II
+
+* [Data from Phase II](https://docs.google.com/spreadsheets/d/e/2PACX-1vQIqW8qXtnbI1yTCQR_LcYpy6F7p6eZg5EP07no3c-lBoEkMUbpTPyxo_oa5mCCj7Gfk8LOTonOY-4a/pubhtml)
 * [Presentation](https://docs.google.com/presentation/d/e/2PACX-1vR5Vu_MXCbKyHm0vHaMW5Tn4qaJWVDV34Z_WX1WpHbejcwIzODNiuNKExOOTFTRUUDs7CPsYwz8PA1T/pub?start=false&loop=false&delayms=3000)
 
 
@@ -63,14 +68,6 @@ outputs/
 * [Java](https://www.java.com/en/) - The programming language
 * [Maven] - The dependency management system 
 * [JUnit] - The testing framework
-
-## Authors
-
-* **Varun Singh** - *Creator* - [varunsingh87](https://github.com/varunsingh87)
-
-## License
-
-Copyright &copy; 2023 Varun Singh
 
 ## Sources of Research
 
