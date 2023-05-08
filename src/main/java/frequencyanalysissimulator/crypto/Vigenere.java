@@ -17,7 +17,10 @@ public class Vigenere {
         cipherText = cipher.replaceAll("\\s+", " ");
         letterOnlyCipherText = removeNonLetters();
         method = m;
-        if (m.equals(KeyLengthMethod.IOC)) {
+
+        if (!iocIsValid()) {
+            keylength = 1;
+        } else if (m.equals(KeyLengthMethod.IOC)) {
             keylength = this.calculateKeyLengthByIndexOfCoincidence();
         } else if (m.equals(KeyLengthMethod.FRIEDMAN)) {
             keylength = this.calculateKeyLengthByFriedmanTest();
@@ -172,6 +175,7 @@ public class Vigenere {
         final double KAPPA_R = 0.0385; // UNIFORM random selection from a case-insensitive Arabic (English) alphabet
         final double KAPPA_P = 0.067; // Selection of two random letters from English alphabet using frequency
                                       // distribution
+
         double ioc = FrequencyAnalysis.calculateIndexOfCoincidence(letterOnlyCipherText);
 
         double coincidenceRate = Math.round((KAPPA_P - KAPPA_R) / (ioc - KAPPA_R));
@@ -181,6 +185,11 @@ public class Vigenere {
 
     public float getCipherKeyLenRatio() {
         return cipherText.length() / keylength;
+    }
+
+    boolean iocIsValid() {
+        return FrequencyAnalysis.calculateIndexOfCoincidence(letterOnlyCipherText) > 0
+                && FrequencyAnalysis.calculateIndexOfCoincidence(letterOnlyCipherText) < 1;
     }
 
     boolean isPolyalphabetic() {

@@ -7,7 +7,11 @@ package frequencyanalysissimulator.crypto;
  */
 public class SimpleSubstitutionCipher {
     private String ciphertext;
-    private double[] frequencies;
+    private int[] counts;
+
+    public SimpleSubstitutionCipher() {
+        counts = FrequencyAnalysis.calculateAbsoluteLetterFrequencies(ciphertext);
+    }
 
     public String decrypt() {
         return null;
@@ -25,26 +29,15 @@ public class SimpleSubstitutionCipher {
      * @return The letter that represents the number of rotations for the Caesar
      *         cipher and part of the key for the Vigenere cipher
      */
-    private double calculateChiSquare() {
-        // Populate ciphertext letter frequencies by adding one for every occurrence of
-        // letter O(n)
-        for (int i = 0; i < ciphertext.length(); i++) {
-            char letter = ciphertext.charAt(i);
-            int asNum = letter - 65;
-            // Ignore anything other than letters (such as spaces)
-            if (Character.isAlphabetic((int) letter)) {
-                frequencies[asNum] += 1.0 / ciphertext.length();
-            }
+    private double calculateChiSquare(String keyword) {
+        char[] key = new char[26];
+        if (keyword.length() >= 26) {
+            key = keyword.substring(0, 26).toCharArray();
+        } else {
+
         }
 
-        double chiSquareValue = 0;
-        for (int i = 0; i < 26; i++) {
-            double standardFrequency = FrequencyAnalysis.standardEnglishFrequencies[i];
-            double shiftedCiphertextFrequency = frequencies[i % 26];
-            chiSquareValue += Math.pow(shiftedCiphertextFrequency - standardFrequency, 2) / standardFrequency;
-        }
-
-        return chiSquareValue;
+        return 0.0;
     }
 
 }

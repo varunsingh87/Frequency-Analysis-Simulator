@@ -6,6 +6,14 @@ public final class FrequencyAnalysis {
 			0.020, 0.001, 0.068, 0.061, 0.105, 0.025, 0.009, 0.015, 0.002, 0.020, 0.001
 	};
 
+	private int[] counts;
+	private String text;
+
+	FrequencyAnalysis(String t) {
+		text = t;
+		counts = new int[t.length()];
+	}
+
 	static int[] calculateAbsoluteLetterFrequencies(String text) {
 		int[] ciphertextletterCounts = new int[26];
 
@@ -21,5 +29,29 @@ public final class FrequencyAnalysis {
 		}
 
 		return ciphertextletterCounts;
+	}
+
+	/**
+	 * Friedman's Test on a possible key length
+	 * I=sum(letter frequency * (letter frequency - 1)) / (Length of text * (Length
+	 * of text - 1))
+	 * Calculates the probability of two randomly picked symbols in a text to be equal
+	 *
+	 * @return I, the coincidence index
+	 */
+	static float calculateIndexOfCoincidence(String text) {
+		float indexOfCoincidence = 0;
+
+		int[] ciphertextLetterCounts = FrequencyAnalysis.calculateAbsoluteLetterFrequencies(text);
+
+		for (int i = 0; i < 26; i++) {
+			double countTimesCountMinusOne = ciphertextLetterCounts[i] * (ciphertextLetterCounts[i] - 1);
+			indexOfCoincidence += countTimesCountMinusOne;
+		}
+
+		double bigN = text.replaceAll("\s", "").length();
+		indexOfCoincidence /= bigN * Math.max(1, bigN - 1);
+
+		return indexOfCoincidence;
 	}
 }
