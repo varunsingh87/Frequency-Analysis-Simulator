@@ -66,8 +66,8 @@ outputs/
 ## Built With
 
 * [Java](https://www.java.com/en/) - The programming language
-* [Maven] - The dependency management system 
-* [JUnit] - The testing framework
+* [Maven](https://maven.apache.org/) - The dependency management system 
+* [JUnit](https://junit.org/junit5/) - The testing framework
 
 ## Sources of Research
 
