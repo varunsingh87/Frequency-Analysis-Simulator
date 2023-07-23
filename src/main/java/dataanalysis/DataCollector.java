@@ -3,6 +3,8 @@ package dataanalysis;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import frequencyanalysissimulator.crypto.CaesarDecryptionMethod;
 import frequencyanalysissimulator.crypto.KeyLengthMethod;
@@ -23,10 +25,10 @@ public class DataCollector {
         final String key = args.length > 4 ? args[4].toUpperCase() : "HARSHTRAITSHINEIMPORT";
         // Remove all non-letters
         String expectedText = args[0].replaceAll("[^A-Za-z]", "").toUpperCase();
-        String output = String.format("Len,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,Avg(%s)\n", args[1]);
-
+        StringBuilder output = new StringBuilder("Len,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,Avg(" + args[1] + ")\n");
+        
         for (int cipherlen = 90; cipherlen <= 1000; cipherlen += 50) { // O(15) = O(C)
-            output += cipherlen + ",";
+            output.append(cipherlen).append(",");
             double avg = 0;
             for (int i = 3; i <= 20; i++) { // O(17) = O(C)
                 String input = expectedText.substring(0, cipherlen);
@@ -37,18 +39,21 @@ public class DataCollector {
                 String decryptedText = v.decrypt(CaesarDecryptionMethod.valueOf(args[3]));
                 double accuracy = percentageSimilarity(decryptedText, input);
 
-                output += Math.round(accuracy) + ",";
+                output.append(Math.round(accuracy)).append(",");
                 avg += accuracy;
             }
 
-            output += Math.round(avg / 18.0) + "\n";
+            output.append(Math.round(avg / 18.0)).append("\n");
         }
 
-        try (FileWriter writer = new FileWriter(
-                new File(String.format("data/outputs/%s/%s_%s/Trial %s.csv", key,
-                        args[2].toLowerCase(), args[3].toLowerCase(),
-                        args[1])))) {
+        try {
+            String dataOutputFileName = String.format(
+                    "data/outputs/%s/%s_%s/Trial %s.csv", key, args[2].toLowerCase(), args[3].toLowerCase(), args[1]
+            );
+            Files.createDirectories(Paths.get(dataOutputFileName));
+            FileWriter writer = new FileWriter(dataOutputFileName);
             writer.append(output);
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

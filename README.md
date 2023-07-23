@@ -45,6 +45,8 @@ outputs/
 
 **Phase II: Vigenere Ciphers**: September 26, 2022 - May 8, 2023
 
+**Phase III: Finishing Touches, Rewrites, Expansions**: July 22, 2023 - Present
+
 ### Upcoming - Phase III
 
 - Rewrite of simple substitution cipher (efficient and accurate, no dictionary)

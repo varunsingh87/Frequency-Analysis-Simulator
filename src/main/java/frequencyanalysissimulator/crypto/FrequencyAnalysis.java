@@ -23,7 +23,7 @@ public final class FrequencyAnalysis {
 			char letter = text.charAt(i);
 			int asNum = letter - 65;
 			// Ignore anything other than letters (such as spaces)
-			if (Character.isAlphabetic((int) letter)) {
+			if (Character.isAlphabetic(letter)) {
 				ciphertextletterCounts[asNum]++;
 			}
 		}
@@ -49,7 +49,7 @@ public final class FrequencyAnalysis {
 			indexOfCoincidence += countTimesCountMinusOne;
 		}
 
-		double bigN = text.replaceAll("\s", "").length();
+		double bigN = text.replaceAll(" ", "").length();
 		indexOfCoincidence /= bigN * Math.max(1, bigN - 1);
 
 		return indexOfCoincidence;

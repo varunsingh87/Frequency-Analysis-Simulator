@@ -32,7 +32,7 @@ public class Caesar {
      * Use most common occurence, assume it's e, and shift the rest using this (Kasiski's original
      * method of finding the key)
      * 
-     * @return
+     * @return Kasiski-decrypted plaintext
      */
     public String decryptByKasiski() {
         int[] frequencies = FrequencyAnalysis.calculateAbsoluteLetterFrequencies(ciphertext);
@@ -55,9 +55,6 @@ public class Caesar {
      * AKA Kerckhoff's Method
      * 
      * @time O(n) - Increases linearly with the length of the ciphertext
-     * 
-     * @param ciphertext
-     *            The Caesar cipher text to get the letter rotation of
      * @return The letter that represents the number of rotations for the Caesar
      *         cipher and part of the key for the Vigenere cipher
      */
@@ -70,7 +67,7 @@ public class Caesar {
             int asNum = letter - 65;
             ciphertextAsNumbers[i] = asNum;
             // Ignore anything other than letters (such as spaces)
-            if (Character.isAlphabetic((int) letter)) {
+            if (Character.isAlphabetic(letter)) {
                 ciphertextLetterFrequencies[asNum] += 1.0 / ciphertext.length();
             }
         }
@@ -135,7 +132,7 @@ public class Caesar {
      * @return The encrypted ciphertext
      */
     public static String encrypt(String plaintext, int key) {
-        String ciphertext = "";
+        StringBuilder ciphertext = new StringBuilder();
 
         for (char letter : plaintext.toCharArray()) {
             /*
@@ -147,9 +144,9 @@ public class Caesar {
              * Add 1 - Make that range 1 - 26
              */
             int shifted = (letter - 64 + key - 1) % 26 + 1;
-            ciphertext += (char) (shifted + 'A' - 1);
+            ciphertext.append((char) (shifted + 'A' - 1));
         }
 
-        return ciphertext;
+        return ciphertext.toString();
     }
 }

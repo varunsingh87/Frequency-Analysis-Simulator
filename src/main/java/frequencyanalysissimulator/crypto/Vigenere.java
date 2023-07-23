@@ -69,11 +69,16 @@ public class Vigenere {
 
     private String[] distributeCiphertextIntoCosets() {
         try {
-            String[] cosets = new String[keylength];
-            Arrays.fill(cosets, "");
+            StringBuilder[] cosetBuilders = new StringBuilder[keylength];
+            Arrays.fill(cosetBuilders, new StringBuilder());
 
             for (int i = 0; i < letterOnlyCipherText.length(); i++) {
-                cosets[i % keylength] += letterOnlyCipherText.charAt(i);
+                cosetBuilders[i % keylength].append(letterOnlyCipherText.charAt(i));
+            }
+
+            String[] cosets = new String[keylength];
+            for (int i = 0; i < keylength; i++) {
+                cosets[i] = cosetBuilders[i].toString();
             }
 
             return cosets;
@@ -184,7 +189,7 @@ public class Vigenere {
     }
 
     public float getCipherKeyLenRatio() {
-        return cipherText.length() / keylength;
+        return (float) cipherText.length() / keylength;
     }
 
     boolean iocIsValid() {
@@ -214,7 +219,7 @@ public class Vigenere {
     }
 
     public String decrypt(CaesarDecryptionMethod keyAlg) {
-        StringBuilder plaintext = new StringBuilder("");
+        StringBuilder plaintext = new StringBuilder();
         String[] cosets = this.distributeCiphertextIntoCosets();
 
         for (int i = 0; i < keylength; i++) {
@@ -222,14 +227,13 @@ public class Vigenere {
             cosets[i] = coset.decrypt(keyAlg);
         }
 
-        for (int i = 0; i < letterOnlyCipherText.length(); i++) {
-            plaintext.append(cosets[i % keylength].charAt((int) Math.ceil(i / keylength)));
+        for (double i = 0.0; i < letterOnlyCipherText.length(); i++) {
+            plaintext.append(cosets[(int) (i % keylength)].charAt((int) i / keylength));
         }
 
         List<Integer> nonLetterLocations = markNonLetters();
 
-        for (int i = 0; i < nonLetterLocations.size(); i++) {
-            int index = nonLetterLocations.get(i);
+        for (int index : nonLetterLocations) {
             plaintext.insert(index, cipherText.charAt(index));
         }
 
@@ -241,7 +245,7 @@ public class Vigenere {
     }
 
     public static String encrypt(String plaintext, String key) {
-        StringBuilder ciphertext = new StringBuilder("");
+        StringBuilder ciphertext = new StringBuilder();
         ArrayList<Integer> nonLetters = new ArrayList<>();
         for (int i = 0; i < plaintext.length(); i++) {
             // Add nonletters, but only the first space in a string of spaces
@@ -264,8 +268,7 @@ public class Vigenere {
             ciphertext.append((char) (shifted + 'A'));
         }
 
-        for (int i = 0; i < nonLetters.size(); i++) {
-            int index = nonLetters.get(i);
+        for (int index : nonLetters) {
             // System.out.print("\r" + plaintext.toString());
             // System.out.println("Inserting " + cipherText.charAt(index) + " at index " + index);
             // System.out.println("New length of plaintext: " + plaintext.length());
