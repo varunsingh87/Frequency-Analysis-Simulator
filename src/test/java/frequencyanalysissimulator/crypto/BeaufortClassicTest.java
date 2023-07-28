@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class BeaufortClassicTest {
     @Test
     void testMulticaseEncryption() {
-        String actualCiphertext = Beaufort.encryptClassic("KEY", "dCode Beaufort");
+        String actualCiphertext = Vigenere.encryptClassic("KEY", "dCode Beaufort");
         String expected = "hCkha Xgeefqhr";
         
         assertEquals(expected, actualCiphertext);
@@ -15,7 +15,7 @@ public class BeaufortClassicTest {
     
     @Test
     void testMulticaseDecryption() {
-        String actualPlaintext = Beaufort.decryptClassic("KEY", "hCkha Xgeefqhr");
+        String actualPlaintext = Vigenere.decryptClassic("KEY", "hCkha Xgeefqhr");
         String expected = "dCode Beaufort";
         
         assertEquals(expected, actualPlaintext);
@@ -25,11 +25,11 @@ public class BeaufortClassicTest {
     void testPunctuatedEncryptionAndDecryption() {
         String originalMessage = "The five boxing wizards jump quickly.";
         
-        String actualCiphertext = Beaufort.encryptClassic("KEY", originalMessage);
+        String actualCiphertext = Vigenere.encryptClassic("KEY", originalMessage);
         String expectedCiphertext = "Rxu fwdg dknwle iqlehhm pqsj ukqiunm.";
         assertEquals(expectedCiphertext, actualCiphertext);
         
-        String decryptedText = Beaufort.decryptClassic("KEY", actualCiphertext);
+        String decryptedText = Vigenere.decryptClassic("KEY", actualCiphertext);
         assertEquals(originalMessage, decryptedText);
     }
 }

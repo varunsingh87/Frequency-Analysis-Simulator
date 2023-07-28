@@ -13,7 +13,7 @@ public class VigenereTest {
 
     @Test
     public void testKasiskiExamination() {
-        Vigenere cipher = new Vigenere(
+        VigenereDecryption cipher = new VigenereDecryption(
                 """
                         DAZFI SFSPA VQLSN PXYSZ WXALC DAFGQ UISMT PHZGA MKTTF TCCFX
                         KFCRG GLPFE TZMMM ZOZDE ADWVZ WMWKV GQSOH QSVHP WFKLS LEASE
@@ -32,7 +32,7 @@ public class VigenereTest {
     @ParameterizedTest
     @MethodSource
     public void testPerformFriedmanTest(String text, int keylength) {
-        Vigenere cipher = new Vigenere(text);
+        VigenereDecryption cipher = new VigenereDecryption(text);
 
         int keyLength = cipher.calculateKeyLengthByFriedmanTest();
 
@@ -49,7 +49,7 @@ public class VigenereTest {
     @ParameterizedTest
     @MethodSource
     public void testCalculateIndexOfCoincidence(String text, double expectedIOC) {
-        Vigenere cipher = new Vigenere(text);
+        VigenereDecryption cipher = new VigenereDecryption(text);
 
         float indexOfCoincidence = FrequencyAnalysis.calculateIndexOfCoincidence(cipher.getCipherText(false));
 
@@ -65,7 +65,7 @@ public class VigenereTest {
 
     @Test
     public void testGetKeyOfLength12() {
-        Vigenere cipher = new Vigenere(12,
+        VigenereDecryption cipher = new VigenereDecryption(12,
                 "QRBAI UWYOK ILBRZ XTUWL EGXSN VDXWR XMHXY FCGMW WWSME LSXUZ MKMFS BNZIF YEIEG RFZRX WKUFA XQEDX DTTHY NTBRJ LHTAI KOCZX QHBND ZIGZG PXARJ EDYSJ NUMKI FLBTN HWISW NVLFM EGXAI AAWSL FMHXR SGRIG HEQTU MLGLV BRSIL AEZSG XCMHT OWHFM LWMRK HPRFB ELWGF RUGPB HNBEM KBNVW HHUEA KILBN BMLHK XUGML YQKHP RFBEL EJYNV WSIJB GAXGO TPMXR TXFKI WUALB RGWIE GHWHG AMEWW LTAEL NUMRE UWTBL SDPRL YVRET LEEDF ROBEQ UXTHX ZYOZB XLKAC KSOHN VWXKS MAEPH IYQMM FSECH RFYPB BSQTX TPIWH GPXQD FWTAI KNNBX SIYKE TXTLV BTMQA LAGHG OTPMX RTXTH XSFYG WMVKH LOIVU ALMLD LTSYV WYNVW MQVXP XRVYA BLXDL XSMLW SUIOI IMELI SOYEB HPHNR WTVUI AKEYG WIETG WWBVM VDUMA EPAUA KXWHK MAUPA MUKHQ PWKCX EFXGW WSDDE OMLWL NKMWD FWTAM FAFEA MFZBN WIHYA LXRWK MAMIK GNGHJ UAZHM HGUAL YSULA ELYHJ BZMSI LAILH WWYIK EWAHN PMLBN NBVPJ XLBEF WRWGX KWIRH XWWGQ HRRXW IOMFY CZHZL VXNVI OYZCM YDDEY IPWXT MMSHS VHHXZ YEWNV OAOEL SMLSW KXXFX STRVI HZLEF JXDAS FIE");
         CharSequence key = cipher.getKey();
 
@@ -74,7 +74,7 @@ public class VigenereTest {
 
     @Test
     public void testGetKeyOfLength8() {
-        Vigenere cipher = new Vigenere(8,
+        VigenereDecryption cipher = new VigenereDecryption(8,
                 "VVQGY TVVVK ALURW FHQAC MMVLE HUCAT WFHHI PLXHV UWSCI GINCM UHNHQ RMSUI MHWZO DXTNA EKVVQ GYTVV QPHXI NWCAB ASYYM TKSZR CXWRP RFWYH XYGFI PSBWK QAMZY BXJQQ ABJEM TCHQS NAEKV VQGYT VVPCA QPBSL URQUC VMVPQ UTMML VHWDH NFIKJ CPXMY EIOCD TXBJW KQGAN");
         CharSequence key = cipher.getKey();
 
@@ -83,7 +83,7 @@ public class VigenereTest {
 
     @Test
     public void testGetKeyOfLength7() {
-        Vigenere cipher = new Vigenere(7,
+        VigenereDecryption cipher = new VigenereDecryption(7,
                 "WQXYM REOBP VWHTH QYEQV EDEXR BGSIZ SILGR TAJFZ OAMAV VXGRF QGKCP IOZIJ BCBLU WYRWS TUGVQ PSUDI UWOES FMTBT ANCYZ TKTYB VFDKD ERSIB JECAQ DWPDE RIEKG PRAQF BGTHQ KVVGR AXAVT HARQE ELUEC GVVBJ EBXIJ AKNGE SWTKB EDXPB QOUDW VTXES MRUWW RPAWK MTITK HFWTD AURRV FESFE STKSH FLZAE ONEXZ BWTIA RWWTT HQYEQ VEDEX RBGSO REDMT ICM");
         CharSequence key = cipher.getKey();
 
@@ -92,7 +92,7 @@ public class VigenereTest {
 
     @Test
     public void testGetKeyOfLength6() {
-        Vigenere cipher = new Vigenere(6,
+        VigenereDecryption cipher = new VigenereDecryption(6,
                 "TYWUR USHPO SLJNQ AYJLI FTMJY YZFPV EUZTS GAHTU WNSFW EEEVA MYFFD CZTMJ WSQEJ VWXTU QNANT MTIAW AOOJS HPPIN TYDDM VKQUF LGMLB XIXJU BQWXJ YQZJZ YMMZH DMFNQ VIAYE FLVZI ZQCSS AEEXV SFRDS DLBQT YDTFQ NIVKU ZPJFJ HUSLK LUBQV JULAB XYWCD IEOWH FTMXZ MMZHC AATFX YWGMF XYWZU QVPYF AIAFJ GEQCV KNATE MWGKX SMWNA NIUSH PFSRJ CEQEE VJXGG BLBQI MEYMR DSDHU UZXVV VGFXV JZXUI JLIRM RKZYY ASETY MYWWJ IYTMJ KFQQT ZFAQK IJFIP FSYAG QXZVK UZPHF ZCYOS LJNQE MVK");
         CharSequence key = cipher.getKey();
 
@@ -101,9 +101,9 @@ public class VigenereTest {
 
     @Test
     public void testGetKeyIsCaseInsensitive() {
-        Vigenere cipher = new Vigenere(5,
+        VigenereDecryption cipher = new VigenereDecryption(5,
                 "lxfopv fdsrow twyw ef rnhr mbq elufgj qubheie oseid fnth fvr twxoao");
-        Vigenere capitalizedCipher = new Vigenere(5,
+        VigenereDecryption capitalizedCipher = new VigenereDecryption(5,
                 "LXFOPV FDSROW TWYW EF RNHR MBQ ELUFGJ QUBHEIE OSEID FNTH FVR TWXOAO");
 
         assertEquals(capitalizedCipher.getKey(), cipher.getKey());
@@ -111,7 +111,7 @@ public class VigenereTest {
 
     @Test
     public void testGetIncorrectKey() {
-        Vigenere cipher = new Vigenere(4, "YITZU GRFFE TZZOC GSITS XUEAH EIKUT P");
+        VigenereDecryption cipher = new VigenereDecryption(4, "YITZU GRFFE TZZOC GSITS XUEAH EIKUT P");
         CharSequence key = cipher.getKey();
 
         assertEquals("UAPS", key);
@@ -119,7 +119,7 @@ public class VigenereTest {
 
     @Test
     public void testGetKeyFromMultilineCipher() {
-        Vigenere cipher = new Vigenere(12, """
+        VigenereDecryption cipher = new VigenereDecryption(12, """
                 QRBAI UWYOK ILBRZ XTUWL EGXSN VDXWR XMHXY FCGMW WWSME LSXUZ
                 MKMFS BNZIF YEIEG RFZRX WKUFA XQEDX DTTHY NTBRJ LHTAI KOCZX
                 QHBND ZIGZG PXARJ EDYSJ NUMKI FLBTN HWISW NVLFM EGXAI AAWSL
@@ -142,7 +142,7 @@ public class VigenereTest {
 
     @Test
     public void testGetKeyOfLength3() {
-        Vigenere cipher = new Vigenere(3, "NWAIWEBB RFQFOCJPUGDOJ VBGWSPTWRZ");
+        VigenereDecryption cipher = new VigenereDecryption(3, "NWAIWEBB RFQFOCJPUGDOJ VBGWSPTWRZ");
         CharSequence key = cipher.getKey();
 
         assertEquals("BOY", key);
@@ -150,7 +150,7 @@ public class VigenereTest {
 
     @Test
     public void testDecrypt() {
-        Vigenere cipher = new Vigenere(12, """
+        VigenereDecryption cipher = new VigenereDecryption(12, """
                 QRBAI UWYOK ILBRZ XTUWL EGXSN VDXWR XMHXY FCGMW WWSME LSXUZ
                     MKMFS BNZIF YEIEG RFZRX WKUFA XQEDX DTTHY NTBRJ LHTAI KOCZX
                     QHBND ZIGZG PXARJ EDYSJ NUMKI FLBTN HWISW NVLFM EGXAI AAWSL
@@ -174,7 +174,7 @@ public class VigenereTest {
 
     @Test
     public void testEncrypt() {
-        String actualCiphertext = Vigenere.encrypt("""
+        String actualCiphertext = VigenereDecryption.encrypt("""
                 Friends, Romans, countrymen, lend me your ears;
                 I come to bury Caesar, not to praise him.
                 The evil that men do lives after them;
@@ -189,8 +189,19 @@ public class VigenereTest {
                 Come I to speak in Caesar's funeral""", "CRYPTII");
 
         String expectedCiphertext = """
-                HIGTGLATFKPGAKQLLIKGUGEJTGLUGPMJKMITJGRHUMVFZJKGKCVQPKVWVKMEKIQUVFXFBPGVTXEBPCKKTGLWNZTTLINVVPIAMUVYCVHWLKJMUMQVVVPGXLEKKFIAMQTSMCXAAQCCIBBJGNGIAKIGJYGMPMPFZAXJZWKSHAIBJKMAWGWWTYTLIZYRQPFJQVZMJLQNKKUTKMAQZRLTAIIIGTOWCUWYJEBIPUEGBMDQLQARPIVYAPXAITRLHPMZFZRWXZMWEBTKTMCMCDYJZWKSHTVLVYCGXABHFPQKCBWJGHTVPQEMJKIJNVKPGAWCICIAMGCCJPETPQEMJKIJNVKTGKWOVGIHAXGRIXGKIGJYGLNCPVPPE""";
+                Higtgla, Tfkpga, kqllikguge, jtgl ug pmjk mitj;
+                G rhum vf zjkg Kcvqpk, vwv km ekiquv fxf.
+                Bpg vtxe bpck ktg lw nzttl invvp iamu;
+                Vyc vhwl kj mum qvvvpgxl ekkf iamqt smcxa;
+                Aq cci bb jg ngia Kigjyg. Mpm pfzax Jzwksh
+                Aibj kmaw gww Tytliz yrq pfjqvzmjl:
+                Qn kk utkm aq, zr lta i iigtowcu wyjeb,
+                Ipu egbmdqlqar pivy Apxait rlhpmz'f zr.
+                Wxzm, webtk tmcmc dy Jzwksh tvl vyc gxab--
+                Hfp Qkcbwj gh tv pqemjkijnv kpg;
+                Aw cic iamg ccj, pet pqemjkijnv ktg--
+                Kwov G ih axgri xg Kigjyg'l ncpvppe""";
 
-        assertEquals(expectedCiphertext, actualCiphertext);
+        assertEquals(expectedCiphertext.toUpperCase(), actualCiphertext);
     }
 }
