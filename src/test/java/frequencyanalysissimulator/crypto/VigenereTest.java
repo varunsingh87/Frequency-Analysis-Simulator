@@ -2,6 +2,7 @@ package frequencyanalysissimulator.crypto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Locale;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -174,7 +175,7 @@ public class VigenereTest {
 
     @Test
     public void testEncrypt() {
-        String actualCiphertext = VigenereDecryption.encrypt("""
+            String originalMessage = """
                 Friends, Romans, countrymen, lend me your ears;
                 I come to bury Caesar, not to praise him.
                 The evil that men do lives after them;
@@ -186,7 +187,7 @@ public class VigenereTest {
                 Here, under leave of Brutus and the rest--
                 For Brutus is an honourable man;
                 So are they all, all honourable men--
-                Come I to speak in Caesar's funeral""", "CRYPTII");
+                Come I to speak in Caesar's funeral""";
 
         String expectedCiphertext = """
                 Higtgla, Tfkpga, kqllikguge, jtgl ug pmjk mitj;
@@ -202,6 +203,19 @@ public class VigenereTest {
                 Aw cic iamg ccj, pet pqemjkijnv ktg--
                 Kwov G ih axgri xg Kigjyg'l ncpvppe""";
 
-        assertEquals(expectedCiphertext.toUpperCase(), actualCiphertext);
+        assertEquals(expectedCiphertext, Vigenere.encrypt("CRYPTII", originalMessage));
+    }
+
+    @Test
+    public void testEncryptAndDecryptAreInverses() {
+        final String originalMessage = "The quick brown fox jumps over the lazy dog";
+
+        assertEquals(originalMessage, Vigenere.encrypt("KEY", Vigenere.decrypt("KEY", originalMessage)));
+        assertEquals(originalMessage, Vigenere.decrypt("KEY", Vigenere.encrypt("KEY", originalMessage)));
+    }
+
+    @Test
+    public void testEncryptWithKey() {
+        assertEquals("Vyc fnweb zghkp wmm ciogq dost kft eobp bdz.", Vigenere.encrypt("crypto", "The quick brown fox jumps over the lazy dog."));    
     }
 }

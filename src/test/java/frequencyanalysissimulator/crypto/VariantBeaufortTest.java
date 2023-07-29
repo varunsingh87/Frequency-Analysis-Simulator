@@ -1,5 +1,6 @@
 package frequencyanalysissimulator.crypto;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
@@ -51,6 +52,7 @@ public class VariantBeaufortTest {
      * Tests that the casing of the key does not affect the encryption
      */
     @Test
+    @DisplayName("Key's casing independent of encryption")
     void testKeyEncryption_AnyCase() {
         String message = "A simple variant is to encrypt by using the Vigenère decryption method and to decrypt by using Vigenère encryption.";
         final String ALL_CAPS_KEY = "CRYPTO";
@@ -62,6 +64,7 @@ public class VariantBeaufortTest {
     }
 
     @Test
+    @DisplayName("Key's casing independent of decryption")
     void testKeyDecryption_AnyCase() {
         String message = "A simple variant is to encrypt by using the Vigenère decryption method and to decrypt by using Vigenère encryption.";
         final String ALL_CAPS_KEY = "CRYPTO";

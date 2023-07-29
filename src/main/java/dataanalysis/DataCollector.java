@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 
 import frequencyanalysissimulator.crypto.CaesarDecryptionMethod;
 import frequencyanalysissimulator.crypto.KeyLengthMethod;
+import frequencyanalysissimulator.crypto.Vigenere;
 import frequencyanalysissimulator.crypto.VigenereDecryption;
 
 public class DataCollector {
@@ -32,7 +33,7 @@ public class DataCollector {
             for (int i = 3; i <= 20; i++) { // O(17) = O(C)
                 String input = expectedText.substring(0, cipherlen);
                 String subKey = key.substring(0, i);
-                String ciphertext = VigenereDecryption.encrypt(input, subKey);
+                String ciphertext = Vigenere.encrypt(subKey, input);
                 VigenereDecryption v = args[2] != null ? new VigenereDecryption(ciphertext, KeyLengthMethod.valueOf(args[2].toUpperCase()))
                         : new VigenereDecryption(ciphertext);
                 String decryptedText = v.decrypt(CaesarDecryptionMethod.valueOf(args[3]));
