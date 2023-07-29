@@ -23,7 +23,7 @@ public final class FrequencyAnalysis {
 			char letter = text.charAt(i);
 			int asNum = letter - 65;
 			// Ignore anything other than letters (such as spaces)
-			if (Character.isAlphabetic(letter)) {
+			if (Character.isLetter(letter)) {
 				ciphertextletterCounts[asNum]++;
 			}
 		}

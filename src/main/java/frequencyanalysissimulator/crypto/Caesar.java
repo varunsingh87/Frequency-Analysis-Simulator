@@ -11,9 +11,8 @@ public class Caesar {
 
     /**
      * Decrypts a Caesar cipher using the passed method of frequency analysis
-     * 
-     * @param m
-     *            The CaesarDecryptionMethod (enum)
+     *
+     * @param m The CaesarDecryptionMethod (enum)
      * @return The decrypted text
      */
     public String decrypt(CaesarDecryptionMethod m) {
@@ -31,7 +30,7 @@ public class Caesar {
     /**
      * Use most common occurence, assume it's e, and shift the rest using this (Kasiski's original
      * method of finding the key)
-     * 
+     *
      * @return Kasiski-decrypted plaintext
      */
     public String decryptByKasiski() {
@@ -53,10 +52,10 @@ public class Caesar {
      * to find which number of shifts matches the standard English frequency
      * distribution the most
      * AKA Kerckhoff's Method
-     * 
-     * @time O(n) - Increases linearly with the length of the ciphertext
+     *
      * @return The letter that represents the number of rotations for the Caesar
-     *         cipher and part of the key for the Vigenere cipher
+     * cipher and part of the key for the Vigenere cipher
+     * @time O(n) - Increases linearly with the length of the ciphertext
      */
     public char getKeyByChiSquare() {
         double[] ciphertextLetterFrequencies = new double[26];
@@ -100,9 +99,8 @@ public class Caesar {
 
     /**
      * Decrypts with key by encrypting the complementary number within 26
-     * 
-     * @param key
-     *            The key that was used to get to the current ciphertext
+     *
+     * @param key The key that was used to get to the current ciphertext
      * @return The plaintext
      */
     String decrypt(int key) {
@@ -111,12 +109,10 @@ public class Caesar {
 
     /**
      * Encrypts a text with the key where A = key with Casar Shift
-     * 
-     * @apiNote A = 0, so encrypt('A') = encrypt(1 - 1) = encrypt(0)
-     * 
-     * @param key
-     *            Precondition: A-Z, one letter long
+     *
+     * @param key Precondition: A-Z, one letter long
      *            Postcondition: Encrypted Caesar ciphertext
+     * @apiNote A = 0, so encrypt('A') = encrypt(1 - 1) = encrypt(0)
      * @see frequencyanalysissimulator.crypto.Cipher#encrypt(java.lang.String)
      */
     public static String encrypt(String plaintext, String key) {
@@ -125,11 +121,10 @@ public class Caesar {
 
     /**
      * Precondition: 0 <= key <= 26
-     * 
-     * @apiNote Equals this.inputText when key is 0 or 26
-     * @param key
-     *            The shift
+     *
+     * @param key The shift
      * @return The encrypted ciphertext
+     * @apiNote Equals this.inputText when key is 0 or 26
      */
     public static String encrypt(String plaintext, int key) {
         StringBuilder ciphertext = new StringBuilder();

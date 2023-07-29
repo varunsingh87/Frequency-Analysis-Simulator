@@ -6,31 +6,52 @@
             "workingDir": "$PROJECT_DIR$",
             "module": "com.varunsingh.frequencyanalysissimulator",
             "includeTests": false,
-        },  {
-        "name": "Main",
-        "type": "jps-run",
-        "workingDir": "$PROJECT_DIR$",
-        "dependsOn": ["Main Build"],
-        "mainClass": "frequencyanalysissimulator.presentation.main.Main",
-        "module": "com.varunsingh.frequencyanalysissimulator",
-        "options": ["-Dfile.encoding=UTF-8","-Dsun.stdout.encoding=UTF-8","-Dsun.stderr.encoding=UTF-8"],
-    },{
-        "name": "Data Collection Tool Build",
-        "type": "jps-build",
-        "workingDir": "$PROJECT_DIR$",
-        "module": "com.varunsingh.frequencyanalysissimulator",
-        "includeTests": false,
-    },
+        },
+        {
+            "name": "Main",
+            "type": "jps-run",
+            "workingDir": "$PROJECT_DIR$",
+            "dependsOn": [
+                "Main Build"
+            ],
+            "mainClass": "frequencyanalysissimulator.presentation.main.Main",
+            "module": "com.varunsingh.frequencyanalysissimulator",
+            "options": [
+                "-Dfile.encoding=UTF-8",
+                "-Dsun.stdout.encoding=UTF-8",
+                "-Dsun.stderr.encoding=UTF-8"
+            ],
+        },
+        {
+            "name": "Data Collection Tool Build",
+            "type": "jps-build",
+            "workingDir": "$PROJECT_DIR$",
+            "module": "com.varunsingh.frequencyanalysissimulator",
+            "includeTests": false,
+        },
 
         {
-        "name": "Data Collection Tool",
-        "type": "jps-run",
-        "workingDir": "$PROJECT_DIR$",
-        "dependsOn": ["Data Collection Tool Build"],
-        "mainClass": "dataanalysis.DataPopulater",
-        "module": "com.varunsingh.frequencyanalysissimulator",
-        "options": ["-Dfile.encoding=UTF-8","-Dsun.stdout.encoding=UTF-8","-Dsun.stderr.encoding=UTF-8"],
-        "args": ["all"]
-    }
+            "name": "Data Collection Tool",
+            "type": "jps-run",
+            "workingDir": "$PROJECT_DIR$",
+            "dependsOn": [
+                "Data Collection Tool Build"
+            ],
+            "mainClass": "dataanalysis.DataPopulater",
+            "module": "com.varunsingh.frequencyanalysissimulator",
+            "options": [
+                "-Dfile.encoding=UTF-8",
+                "-Dsun.stdout.encoding=UTF-8",
+                "-Dsun.stderr.encoding=UTF-8"
+            ],
+            "args": [
+                "all"
+            ]
+        },
+        {
+            "type": "maven",
+            "name": "Full Test Suite",
+            "tasks": ["test"],
+        }
     ]
 }
