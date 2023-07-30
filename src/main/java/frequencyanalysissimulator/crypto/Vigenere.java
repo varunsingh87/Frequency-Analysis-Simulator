@@ -40,7 +40,7 @@ public class Vigenere {
     }
 
     public static String decryptVariant(String key, String text) {
-        return convert(key, text, (k, l) -> l + k);
+        return convert(key, text, Integer::sum);
     }
 
     // TODO: Vernam cipher
@@ -78,13 +78,23 @@ public class Vigenere {
         return decrypt(mappedKey.toString(), text);
     }
 
+    /**
+     * @param plaintext    Message to encipher
+     * @param ascending    Evolution of shift: true is ascending, false is descending, both starting at initial shift
+     * @param initialShift Initial shift before it evolves
+     * @return Trithemius-enciphered ciphertext
+     * @implNote Negative initial shifts are supported, by becoming positive shifts that many counts from the end of the alphabet
+     */
     public static String encryptTrithemius(String plaintext, boolean ascending, int initialShift) {
+        initialShift = Math.floorMod(initialShift, 26);
         String alphabet = String.valueOf(ALPHABET);
-        String shiftedAlphabet = Caesar.encrypt(alphabet, initialShift);
+        String shiftedAlphabet = alphabet.substring(initialShift) + alphabet.substring(0, initialShift);
         if (ascending) {
+            System.out.printf("Shifted Alphabet: %s", shiftedAlphabet);
             return encrypt(shiftedAlphabet, plaintext);
         } else {
-            return encrypt(new StringBuilder(shiftedAlphabet).reverse().toString(), plaintext);
+            shiftedAlphabet = shiftedAlphabet.charAt(0) + new StringBuilder(shiftedAlphabet.substring(1)).reverse().toString();
+            return encrypt(shiftedAlphabet, plaintext);
         }
     }
 }
