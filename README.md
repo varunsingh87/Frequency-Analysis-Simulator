@@ -38,6 +38,16 @@ outputs/
         
 ```
 
+### Generate executable file
+
+To create an executable file without the user needing the Java Runtime Environment on his or her computer, use the `jpackage` utility from the Java Development Kit:
+
+**Mac**: `jpackage --input target/ --name 'Frequency Analysis Simulation' --main-jar com.varunsingh.frequencyanalysissimulator-1.00.jar --main-class frequencyanalysissimulator.presentation.main.Main --type dmg --icon ./assets/icon.icns`
+
+**Windows**: `jpackage --input target/ --name 'Frequency Analysis Simulation' --main-jar com.varunsingh.frequencyanalysissimulator-1.00.jar --main-class frequencyanalysissimulator.presentation.main.Main --type exe --icon ./assets/icon.ico` *Does not work on Mac*
+
+**Linux**: `jpackage --input target/ --name 'Frequency Analysis Simulation' --main-jar com.varunsingh.frequencyanalysissimulator-1.00.jar --main-class frequencyanalysissimulator.presentation.main.Main --type deb --icon ./assets/icon.ico` *Does not work on Mac*
+
 ## Process
 
 

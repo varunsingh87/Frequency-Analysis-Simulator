@@ -79,6 +79,20 @@
                     <scmBranch>gh-pages</scmBranch>
                 </configuration>
             </plugin>
+            <plugin> <!-- Build an executable JAR by adding a META-INF/MANIFEST.MF file -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>frequencyanalysissimulator.presentation.main.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

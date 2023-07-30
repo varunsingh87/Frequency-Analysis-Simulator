@@ -1,6 +1,7 @@
 package frequencyanalysissimulator.crypto;
 
 import java.util.function.BiFunction;
+import java.util.regex.Pattern;
 
 import static frequencyanalysissimulator.crypto.LetterArithmetic.letterOperator;
 
@@ -37,14 +38,42 @@ public class Vigenere {
     }
 
     public static String decryptVariant(String key, String text) {
-        return convert(key, text, (k, l) -> l - 2 + k);
+        return convert(key, text, (k, l) -> l + k);
     }
 
+    // TODO: Tritemius cipher
+    // TODO: Vernam cipher
+    // TODO: Autokey cipher
+
     public static String encrypt(String key, String text) {
-        return convert(key, text, (k, l) -> l - 2 + k);
+        return convert(key, text, (k, l) -> l + k);
     }
 
     public static String decrypt(String key, String text) {
         return convert(key, text, (k, l) -> l - k);
+    }
+
+    public static String encryptGronsfeld(String key, String text) {
+        if (!Pattern.matches("[0-9]+", key))
+            throw new IllegalArgumentException("Key must be all digits, 0-9");
+
+        StringBuilder mappedKey = new StringBuilder(key.length());
+        for (char number : key.toCharArray()) {
+            mappedKey.append(letterOperator.toLetter(Integer.parseInt(String.valueOf(number))));
+        }
+
+        return encrypt(mappedKey.toString(), text);
+    }
+
+    public static String decryptGronsfeld(String key, String text) {
+        if (!Pattern.matches("[0-9]+", key))
+            throw new IllegalArgumentException("Key must be all digits, 0-9");
+
+        StringBuilder mappedKey = new StringBuilder(key.length());
+        for (char number : key.toCharArray()) {
+            mappedKey.append(letterOperator.toLetter(Integer.parseInt(String.valueOf(number))));
+        }
+
+        return decrypt(mappedKey.toString(), text);
     }
 }
