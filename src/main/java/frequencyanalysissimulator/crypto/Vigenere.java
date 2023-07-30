@@ -1,8 +1,10 @@
 package frequencyanalysissimulator.crypto;
 
+import java.util.Collections;
 import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
+import static frequencyanalysissimulator.crypto.LetterArithmetic.ALPHABET;
 import static frequencyanalysissimulator.crypto.LetterArithmetic.letterOperator;
 
 public class Vigenere {
@@ -41,7 +43,6 @@ public class Vigenere {
         return convert(key, text, (k, l) -> l + k);
     }
 
-    // TODO: Tritemius cipher
     // TODO: Vernam cipher
     // TODO: Autokey cipher
 
@@ -75,5 +76,15 @@ public class Vigenere {
         }
 
         return decrypt(mappedKey.toString(), text);
+    }
+
+    public static String encryptTrithemius(String plaintext, boolean ascending, int initialShift) {
+        String alphabet = String.valueOf(ALPHABET);
+        String shiftedAlphabet = Caesar.encrypt(alphabet, initialShift);
+        if (ascending) {
+            return encrypt(shiftedAlphabet, plaintext);
+        } else {
+            return encrypt(new StringBuilder(shiftedAlphabet).reverse().toString(), plaintext);
+        }
     }
 }
