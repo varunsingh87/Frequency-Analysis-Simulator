@@ -89,12 +89,17 @@ public class Vigenere {
         initialShift = Math.floorMod(initialShift, 26);
         String alphabet = String.valueOf(ALPHABET);
         String shiftedAlphabet = alphabet.substring(initialShift) + alphabet.substring(0, initialShift);
+
         if (ascending) {
-            System.out.printf("Shifted Alphabet: %s", shiftedAlphabet);
             return encrypt(shiftedAlphabet, plaintext);
         } else {
             shiftedAlphabet = shiftedAlphabet.charAt(0) + new StringBuilder(shiftedAlphabet.substring(1)).reverse().toString();
             return encrypt(shiftedAlphabet, plaintext);
         }
+    }
+
+    public static String decryptTrithemius(String ciphertext, boolean ascending, int initialShift) {
+        initialShift = Math.floorMod(initialShift, 26);
+        return encryptTrithemius(ciphertext, !ascending, -initialShift);
     }
 }
