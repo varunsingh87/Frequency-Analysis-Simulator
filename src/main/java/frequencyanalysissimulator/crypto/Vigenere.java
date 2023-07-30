@@ -14,7 +14,7 @@ public class Vigenere {
                 int keyOffset = letterOperator.toNumber(key.charAt((i - nonLetterCount) % keySize));
                 int textMapping = letterOperator.toNumber(text.charAt(i));
                 int shiftOperationResult = shiftOperation.apply(keyOffset, textMapping);
-                s.append(letterOperator.toLetter(shiftOperationResult, Character.isLowerCase(text.charAt(i))));
+                s.append(letterOperator.toLetter(shiftOperationResult));
             } else {
                 s.append(text.charAt(i));
                 nonLetterCount++;

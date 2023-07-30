@@ -10,6 +10,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Toolkit;
+import java.util.Locale;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -178,7 +179,8 @@ public class Main {
 						"A cipher in which each letter maps to another letter in the alphabet for the entire cipher" },
 				{ "Vigenere cipher",
 						"A polyalphabetic substitution cipher that cycles through a number of caesar ciphers equivalent to the length of the key where each letter in the key maps to its number index in the language's alphabet" },
-				{ "Beaufort Cipher", "A variant of the Vigenere cipher where the letters map in the reverse direction"}
+				{ "Beaufort Cipher", "A variant of the Vigenere cipher where the letters map in the reverse direction" },
+				{ "Variant Beaufort", "A variant of the Vigenere cipher where encryption and decryption are reversed" }
 		};
 		inputContainer.add(generateRadioGroup(cipherOptions, "Cipher"));
 
