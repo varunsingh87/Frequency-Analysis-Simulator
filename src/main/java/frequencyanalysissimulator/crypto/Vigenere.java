@@ -1,6 +1,8 @@
 package frequencyanalysissimulator.crypto;
 
+import java.security.SecureRandom;
 import java.util.Collections;
+import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
@@ -43,11 +45,11 @@ public class Vigenere {
         return convert(key, text, Integer::sum);
     }
 
-    // TODO: Vernam cipher
     // TODO: Autokey cipher
+    // TODO: Running key cipher
 
     public static String encrypt(String key, String text) {
-        return convert(key, text, (k, l) -> l + k);
+        return convert(key, text, Integer::sum);
     }
 
     public static String decrypt(String key, String text) {
@@ -101,5 +103,15 @@ public class Vigenere {
     public static String decryptTrithemius(String ciphertext, boolean ascending, int initialShift) {
         initialShift = Math.floorMod(initialShift, 26);
         return encryptTrithemius(ciphertext, !ascending, -initialShift);
+    }
+
+    public static String encryptVernam(String plaintext) {
+        Random sr = new SecureRandom();
+        String key = sr.ints(plaintext.length(), 0, 26) // 9 is the length of the string you want
+            .mapToObj(i -> ALPHABET[i])
+            .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+            .toString();
+
+        return convert(key, plaintext, Integer::sum);
     }
 }
