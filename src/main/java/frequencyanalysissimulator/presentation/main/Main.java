@@ -10,6 +10,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Toolkit;
+import java.util.Locale;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -29,7 +30,7 @@ import javax.swing.border.EtchedBorder;
 
 import frequencyanalysissimulator.crypto.CaesarDecryptionMethod;
 import frequencyanalysissimulator.crypto.KeyLengthMethod;
-import frequencyanalysissimulator.crypto.Vigenere;
+import frequencyanalysissimulator.crypto.VigenereDecryption;
 
 public class Main {
 
@@ -77,7 +78,7 @@ public class Main {
 		execute.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Vigenere cipherSolver = new Vigenere(inputBox.getText());
+				VigenereDecryption cipherSolver = new VigenereDecryption(inputBox.getText());
 				outputBox.setText(cipherSolver.decrypt(CaesarDecryptionMethod.KASISKI));
 				System.out.println(cipherSolver.decrypt(CaesarDecryptionMethod.KASISKI));
 				inputSize.setText("Input Length: " + cipherSolver.getCipherText(true).length());
@@ -177,7 +178,9 @@ public class Main {
 				{ "Monoalphabetic substitution cipher",
 						"A cipher in which each letter maps to another letter in the alphabet for the entire cipher" },
 				{ "Vigenere cipher",
-						"A polyalphabetic substitution cipher that cycles through a number of caesar ciphers equivalent to the length of the key where each letter in the key maps to its number index in the language's alphabet" }
+						"A polyalphabetic substitution cipher that cycles through a number of caesar ciphers equivalent to the length of the key where each letter in the key maps to its number index in the language's alphabet" },
+				{ "Beaufort Cipher", "A variant of the Vigenere cipher where the letters map in the reverse direction" },
+				{ "Variant Beaufort", "A variant of the Vigenere cipher where encryption and decryption are reversed" }
 		};
 		inputContainer.add(generateRadioGroup(cipherOptions, "Cipher"));
 

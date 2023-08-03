@@ -14,14 +14,14 @@ The purpose of this project is to decrypt a monoalphabetic substitution cipher u
 
 ## Usage
 
-1. Clone this repo (for help see the [GitHub documentation](https://help.github.com/articles/cloning-a-repository/)).
-2. Run Main.java in the main package of the presentation folder with the following command:
+1. Clone this repo with `git clone https://github.com/varunsingh87/Frequency-Analysis-Simulator`
+(for help see the [GitHub documentation](https://help.github.com/articles/cloning-a-repository/)).
+2. Run `mvn package`
+2. Run the GUI with the following command:
 
 ```
-mvn compile exec:java -Dexec.mainClass="frequencyanalysissimulator.presentation.main.Main"
+mvn compile exec:java"
 ``` 
-
-or for short, use `mvn`
 
 ### Collecting Data
 
@@ -37,6 +37,16 @@ outputs/
     [ioc, friedman]_[kasiski, kerckhoff]/
         
 ```
+
+### Generate executable file
+
+To create an executable file without the user needing the Java Runtime Environment on his or her computer, use the `jpackage` utility from the Java Development Kit:
+
+**Mac**: `jpackage --input target/ --name 'Frequency Analysis Simulation' --main-jar com.varunsingh.frequencyanalysissimulator-1.00.jar --main-class frequencyanalysissimulator.presentation.main.Main --type dmg --icon ./assets/icon.icns`
+
+**Windows**: `jpackage --input target/ --name 'Frequency Analysis Simulation' --main-jar com.varunsingh.frequencyanalysissimulator-1.00.jar --main-class frequencyanalysissimulator.presentation.main.Main --type exe --icon ./assets/icon.ico` *Does not work on Mac*
+
+**Linux**: `jpackage --input target/ --name 'Frequency Analysis Simulation' --main-jar com.varunsingh.frequencyanalysissimulator-1.00.jar --main-class frequencyanalysissimulator.presentation.main.Main --type deb --icon ./assets/icon.ico` *Does not work on Mac*
 
 ## Process
 

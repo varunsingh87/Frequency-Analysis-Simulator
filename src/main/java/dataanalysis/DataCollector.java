@@ -1,6 +1,5 @@
 package dataanalysis;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,6 +8,7 @@ import java.nio.file.Paths;
 import frequencyanalysissimulator.crypto.CaesarDecryptionMethod;
 import frequencyanalysissimulator.crypto.KeyLengthMethod;
 import frequencyanalysissimulator.crypto.Vigenere;
+import frequencyanalysissimulator.crypto.VigenereDecryption;
 
 public class DataCollector {
 
@@ -33,9 +33,9 @@ public class DataCollector {
             for (int i = 3; i <= 20; i++) { // O(17) = O(C)
                 String input = expectedText.substring(0, cipherlen);
                 String subKey = key.substring(0, i);
-                String ciphertext = Vigenere.encrypt(input, subKey);
-                Vigenere v = args[2] != null ? new Vigenere(ciphertext, KeyLengthMethod.valueOf(args[2].toUpperCase()))
-                        : new Vigenere(ciphertext);
+                String ciphertext = Vigenere.encrypt(subKey, input);
+                VigenereDecryption v = args[2] != null ? new VigenereDecryption(ciphertext, KeyLengthMethod.valueOf(args[2].toUpperCase()))
+                        : new VigenereDecryption(ciphertext);
                 String decryptedText = v.decrypt(CaesarDecryptionMethod.valueOf(args[3]));
                 double accuracy = percentageSimilarity(decryptedText, input);
 
