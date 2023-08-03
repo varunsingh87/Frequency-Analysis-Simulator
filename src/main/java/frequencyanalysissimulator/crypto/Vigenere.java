@@ -45,7 +45,6 @@ public class Vigenere {
         return convert(key, text, Integer::sum);
     }
 
-    // TODO: Autokey cipher
     // TODO: Running key cipher
 
     public static String encrypt(String key, String text) {
@@ -113,5 +112,19 @@ public class Vigenere {
             .toString();
 
         return convert(key, plaintext, Integer::sum);
+    }
+
+    public static String encryptAutokey(String primer, String plaintext) {
+        String key = primer.concat(plaintext.replaceAll(" ", ""));
+        return encrypt(key, plaintext);
+    }
+
+    public static String decryptAutokey(String primer, String ciphertext) {
+        if (ciphertext.isEmpty())
+            return "";
+
+        int min = Math.min(primer.length(), ciphertext.length());
+        String prev = decrypt(primer, ciphertext.substring(0, min));
+        return prev + decryptAutokey(prev, ciphertext.substring(min));
     }
 }
