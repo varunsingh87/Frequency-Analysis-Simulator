@@ -1,4 +1,4 @@
-package frequencyanalysissimulator.crypto;
+package frequencyanalysissimulator.dictionary;
 
 import java.util.HashMap;
 
@@ -8,13 +8,13 @@ import java.util.HashMap;
  * @implNote supported for 26 letters of English/Arabic alphabet
  * @apiNote 1-indexed
  */
-final class LetterArithmetic {
-    static final char[] ALPHABET = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+public final class LetterArithmetic {
+    public static final char[] ALPHABET = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
     private final HashMap<Character, Integer> letters = new HashMap<>(52);
 
     private boolean isLowerCase;
 
-    static final LetterArithmetic letterOperator = new LetterArithmetic();
+    public static final LetterArithmetic letterOperator = new LetterArithmetic();
 
     private LetterArithmetic() {
         for (int i = 0; i < 26; i++) {
@@ -28,7 +28,7 @@ final class LetterArithmetic {
      *
      * @apiNote Side effect-updates isLowerCase flag for conversion in {@link LetterArithmetic#toLetter(int)}
      */
-    int toNumber(char letter) {
+    public int toNumber(char letter) {
         isLowerCase = Character.isLowerCase(letter);
         return letters.containsKey(letter) ? letters.get(letter) : (int) letter;
     }
@@ -38,7 +38,7 @@ final class LetterArithmetic {
         return lowerCase ? Character.toLowerCase(letter) : letter;
     }
 
-    char toLetter(int index) {
+    public char toLetter(int index) {
         char letter = ALPHABET[Math.floorMod(index, 26)];
         return isLowerCase ? Character.toLowerCase(letter) : letter;
     }

@@ -1,13 +1,15 @@
 package frequencyanalysissimulator.crypto;
 
+import frequencyanalysissimulator.dictionary.RandomWord;
+
+import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.Collections;
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
-import static frequencyanalysissimulator.crypto.LetterArithmetic.ALPHABET;
-import static frequencyanalysissimulator.crypto.LetterArithmetic.letterOperator;
+import static frequencyanalysissimulator.dictionary.LetterArithmetic.ALPHABET;
+import static frequencyanalysissimulator.dictionary.LetterArithmetic.letterOperator;
 
 public class Vigenere {
     private static String convert(String key, String text, BiFunction<Integer, Integer, Integer> shiftOperation) {
@@ -44,8 +46,6 @@ public class Vigenere {
     public static String decryptVariant(String key, String text) {
         return convert(key, text, Integer::sum);
     }
-
-    // TODO: Running key cipher
 
     public static String encrypt(String key, String text) {
         return convert(key, text, Integer::sum);
@@ -105,12 +105,7 @@ public class Vigenere {
     }
 
     public static String encryptVernam(String plaintext) {
-        Random sr = new SecureRandom();
-        String key = sr.ints(plaintext.length(), 0, 26) // 9 is the length of the string you want
-            .mapToObj(i -> ALPHABET[i])
-            .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
-            .toString();
-
+        String key = RandomWord.generate(plaintext.length());
         return convert(key, plaintext, Integer::sum);
     }
 
@@ -126,5 +121,23 @@ public class Vigenere {
         int min = Math.min(primer.length(), ciphertext.length());
         String prev = decrypt(primer, ciphertext.substring(0, min));
         return prev + decryptAutokey(prev, ciphertext.substring(min));
+    }
+
+    public static String[] encryptRunningKey(String plaintext) {
+        String ciphertext = "";
+        StringBuilder runningKey = new StringBuilder();
+
+        while (runningKey.length() < plaintext.length()) {
+            try {
+                runningKey.append(RandomWord.generateEnglish());
+            } catch (IOException | InterruptedException e) {
+                System.out.println("Could not generate English word: " + e.getLocalizedMessage());
+                runningKey.append(RandomWord.generate(plaintext.length()));
+            }
+        }
+
+        ciphertext = encrypt(runningKey.toString(), plaintext);
+
+        return new String[]{ ciphertext, runningKey.toString() };
     }
 }
