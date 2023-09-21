@@ -32,6 +32,8 @@ import frequencyanalysissimulator.crypto.CaesarDecryptionMethod;
 import frequencyanalysissimulator.crypto.KeyLengthMethod;
 import frequencyanalysissimulator.crypto.VigenereDecryption;
 
+import coreui.CipherInputBox;
+
 public class Main {
 
 	private JFrame frame;
@@ -78,9 +80,9 @@ public class Main {
 		execute.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VigenereDecryption cipherSolver = new VigenereDecryption(inputBox.getText());
-				outputBox.setText(cipherSolver.decrypt(CaesarDecryptionMethod.KASISKI));
-				System.out.println(cipherSolver.decrypt(CaesarDecryptionMethod.KASISKI));
+				VigenereDecryption cipherSolver = new VigenereDecryption(inputBox.getText(), KeyLengthMethod.IOC);
+				outputBox.setText(cipherSolver.decrypt(CaesarDecryptionMethod.KERCKHOFF));
+				System.out.println(cipherSolver.decrypt(CaesarDecryptionMethod.KERCKHOFF));
 				inputSize.setText("Input Length: " + cipherSolver.getCipherText(true).length());
 				key.setText("Computed Key: " + cipherSolver.getKey());
 				ratio.setText("Cipher Length to Key Length Ratio: " + cipherSolver.getCipherKeyLenRatio());
@@ -157,45 +159,36 @@ public class Main {
 		inputContainer.setLayout(layout);
 		inputContainer.setBorder(new EtchedBorder(EtchedBorder.RAISED));
 
-		String[][] actionOptions = new String[][] {
-				{ "Encryption", "Convert plaintext to a ciphertext (Key required)" },
-				{ "Decryption", "Convert ciphertext to a plaintext (Key optional)" }
+		String[][] actionOptions = new String[][]{
+				{"Encryption", "Convert plaintext to a ciphertext (Key required)"},
+				{"Decryption", "Convert ciphertext to a plaintext (Key optional)"}
 		};
 		inputContainer.add(generateRadioGroup(actionOptions, "Action"));
 
-		String[][] keylengthMethod = new String[][] {
-				{ "Kasiski", "Uses the Kasiski Examination" },
-				{ "Kerckhoff",
-						"Use the Kerckhoff method - a modern variation of an improvement of the Kasiski Examination - to infer the key length" },
-				{ "Friedman",
-						"Use the Friedman Test - a mathematical formula using statistics to infer the length of the key" }
+		String[][] keylengthMethod = new String[][]{
+				{"Kasiski", "Uses the Kasiski Examination"},
+				{"Kerckhoff",
+						"Use the Kerckhoff method - a modern variation of an improvement of the Kasiski Examination - to infer the key length"},
+				{"Friedman",
+						"Use the Friedman Test - a mathematical formula using statistics to infer the length of the key"}
 		};
 		inputContainer.add(generateRadioGroup(keylengthMethod, "Key Length"));
 
 		String[][] cipherOptions = {
-				{ "Caesar cipher",
-						"A substitution cipher in which each letter is shifted to a fixed number of letters in the alphabet to the right" },
-				{ "Monoalphabetic substitution cipher",
-						"A cipher in which each letter maps to another letter in the alphabet for the entire cipher" },
-				{ "Vigenere cipher",
-						"A polyalphabetic substitution cipher that cycles through a number of caesar ciphers equivalent to the length of the key where each letter in the key maps to its number index in the language's alphabet" },
-				{ "Beaufort Cipher", "A variant of the Vigenere cipher where the letters map in the reverse direction" },
-				{ "Variant Beaufort", "A variant of the Vigenere cipher where encryption and decryption are reversed" }
+				{"Caesar cipher",
+						"A substitution cipher in which each letter is shifted to a fixed number of letters in the alphabet to the right"},
+				{"Monoalphabetic substitution cipher",
+						"A cipher in which each letter maps to another letter in the alphabet for the entire cipher"},
+				{"Vigenere cipher",
+						"A polyalphabetic substitution cipher that cycles through a number of caesar ciphers equivalent to the length of the key where each letter in the key maps to its number index in the language's alphabet"},
+				{"Beaufort Cipher", "A variant of the Vigenere cipher where the letters map in the reverse direction"},
+				{"Variant Beaufort", "A variant of the Vigenere cipher where encryption and decryption are reversed"}
 		};
 		inputContainer.add(generateRadioGroup(cipherOptions, "Cipher"));
 
-		inputBox = new JTextArea(10, 10);
-		inputBox.setOpaque(false);
-		JScrollPane scrollInput = new JScrollPane(inputBox,
-				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		inputBox.setLineWrap(true);
-		inputBox.setBorder(new EmptyBorder(10, 10, 10, 10));
-		inputBox.setFont(new Font("Segoe Script", Font.BOLD, 20));
-		inputBox.setForeground(Color.BLUE);
-		inputBox.setToolTipText("Ciphertext or plaintext");
+		CipherInputBox scrollInput = new CipherInputBox();
+		inputBox = scrollInput.getTextArea();
 		inputContainer.add(scrollInput);
-		scrollInput.setOpaque(false);
 
 		return inputContainer;
 	}
