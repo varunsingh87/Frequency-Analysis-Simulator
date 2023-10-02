@@ -1,5 +1,8 @@
 package frequencyanalysissimulator.crypto;
 
+/**
+ * Algorithms for the first step of Vigenere decryption: Calculation of the length of the key
+ */
 public enum KeyLengthMethod {
 	// KASISKI,
 	IOC("Index of Coincidence"), FRIEDMAN("Friedman's Test");

@@ -2,6 +2,11 @@ package frequencyanalysissimulator.crypto;
 
 import java.util.Locale;
 
+
+/**
+ * Possible algorithms for second step of Vigenere decryption - decrypting each coset.
+ * Each coset is a Caesar cipher.
+ */
 public enum CaesarDecryptionMethod {
 	KERCKHOFF, KASISKI;
 

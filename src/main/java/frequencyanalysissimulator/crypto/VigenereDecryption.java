@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Represents a Vigenere cipher whose key is not known
+ */
 public class VigenereDecryption {
 	private String cipherText;
 	private String letterOnlyCipherText;
