@@ -2,15 +2,12 @@
 
 The purpose of this project is to decrypt a monoalphabetic substitution cipher using frequency analysis and find the optimal algorithm and conditions of decrypting a Vigenere cipher. 
 
-## Methods Used
+## Methods of Cryptanalysis
 * Frequency Analysis
 * Kasiski Examination
 * Freidman Test
 * Kerckhoff's Method
-
-## Concepts Used
-* Advanced Data Structures - Java Collections API, including TreeSet, HashMap, ArrayList
-* Layered Architecture - separated into presentation code (Java Swing framework), business logic (pure Java), and data analysis module (pure Java I/O)
+* Dictionary attack using Words and WordNet API
 
 ## Usage
 
@@ -57,12 +54,12 @@ To create an executable file without the user needing the Java Runtime Environme
 
 **Phase III: Finishing Touches, Rewrites, Expansions**: July 22, 2023 - Present
 
-### Upcoming - Phase III
+### Phase III
 
-- Rewrite of simple substitution cipher (efficient and accurate, no dictionary)
-- Visualization of data
-- Data collection GUI
-- Variants of Vigenere cipher
+- [] Rewrite of simple substitution cipher (efficient and accurate, no dictionary)
+- [] Visualization of data
+- [] Data collection GUI
+- [x] Variants of Vigenere cipher
 
 ### Phase II
 
@@ -74,6 +71,11 @@ To create an executable file without the user needing the Java Runtime Environme
 
 * [Data from Phase I](https://docs.google.com/spreadsheets/d/130cqH1bGJPZ7mq2LrrTY6sMdm6E7qZP2Jea3s8cg3tA/edit#gid=0)
 * [Presentation](https://docs.google.com/presentation/d/e/2PACX-1vT29PD0nv69KI9cNDpZdsEA1p4eDg4P8V_XLVCWtpIFXDGnp_WmLrg-xiH120KWJkqppP9DZ-DlREr_/pub?start=false&loop=false&delayms=3000)
+
+## Concepts Used
+* Advanced Data Structures - Java Collections API, including TreeSet, HashMap, ArrayList
+* Layered Architecture - separated into presentation code (Java Swing framework), business logic (pure Java), and data analysis module (pure Java I/O)
+* Recursion
 
 ## Built With
 
