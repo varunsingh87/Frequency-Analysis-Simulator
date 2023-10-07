@@ -6,6 +6,7 @@ import java.util.Locale;
 /**
  * Possible algorithms for second step of Vigenere decryption - decrypting each coset.
  * Each coset is a Caesar cipher.
+ * The enumerated values are listed in descending order of accuracy and reliability.
  */
 public enum CaesarDecryptionMethod {
 	KERCKHOFF, KASISKI;

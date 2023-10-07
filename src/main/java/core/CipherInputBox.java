@@ -1,4 +1,4 @@
-package coreui;
+package core;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -9,7 +9,8 @@ public class CipherInputBox extends JScrollPane {
 
 	public CipherInputBox() {
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		textArea = new JTextArea(10, 10);
+		textArea = new JTextArea();
+		textArea.setMinimumSize(new Dimension(10, 10));
 		textArea.setOpaque(false);
 		textArea.setLineWrap(true);
 		textArea.setBorder(new EmptyBorder(10, 10, 10, 10));

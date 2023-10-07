@@ -1,7 +1,8 @@
 package frequencyanalysissimulator.crypto;
 
 /**
- * Algorithms for the first step of Vigenere decryption: Calculation of the length of the key
+ * Algorithms for the first step of Vigenere decryption: Calculation of the length of the key.
+ * The enumerated values are listed in descending order of accuracy and reliability.
  */
 public enum KeyLengthMethod {
 	// KASISKI,

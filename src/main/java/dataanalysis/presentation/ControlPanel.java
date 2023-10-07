@@ -1,15 +1,17 @@
 package dataanalysis.presentation;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class ControlPanel extends JFrame {
 
 	ControlPanel() {
 		super();
-		this.setSize(800, 600);
-		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		this.add(layoutCipherTabs());
-		this.setVisible(true);
+		setMinimumSize(new Dimension(750, 600));
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setContentPane(layoutCipherTabs());
+		pack();
+		setVisible(true);
 	}
 
 	private static JTabbedPane layoutCipherTabs() {

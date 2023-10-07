@@ -1,38 +1,16 @@
 package frequencyanalysissimulator.presentation.main;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.Toolkit;
-import java.util.Locale;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-
+import core.CipherInputBox;
 import frequencyanalysissimulator.crypto.CaesarDecryptionMethod;
 import frequencyanalysissimulator.crypto.KeyLengthMethod;
 import frequencyanalysissimulator.crypto.VigenereDecryption;
 
-import coreui.CipherInputBox;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Main {
 
@@ -69,25 +47,28 @@ public class Main {
 		initialize();
 
 		frame.add(new JLabel("Varun Singh's Frequency Analysis Simulator", JLabel.CENTER), BorderLayout.NORTH);
-		frame.add(generateInputContainer(), BorderLayout.WEST);
+
+		CipherInputBox scrollInput = new CipherInputBox();
+		inputBox = scrollInput.getTextArea();
+		frame.add(scrollInput, BorderLayout.CENTER);
 
 		JPanel executeContainer = new JPanel(new FlowLayout());
 		JButton execute = new JButton("Begin operation");
 		executeContainer.add(execute);
 		frame.add(executeContainer, BorderLayout.SOUTH);
-		frame.add(output(), BorderLayout.CENTER);
+		frame.add(output(), BorderLayout.EAST);
+		frame.add(generateInputContainer(), BorderLayout.WEST);
 
-		execute.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				VigenereDecryption cipherSolver = new VigenereDecryption(inputBox.getText(), KeyLengthMethod.IOC);
-				outputBox.setText(cipherSolver.decrypt(CaesarDecryptionMethod.KERCKHOFF));
-				System.out.println(cipherSolver.decrypt(CaesarDecryptionMethod.KERCKHOFF));
-				inputSize.setText("Input Length: " + cipherSolver.getCipherText(true).length());
-				key.setText("Computed Key: " + cipherSolver.getKey());
-				ratio.setText("Cipher Length to Key Length Ratio: " + cipherSolver.getCipherKeyLenRatio());
-			}
+		execute.addActionListener(e -> {
+			VigenereDecryption cipherSolver = new VigenereDecryption(inputBox.getText(), KeyLengthMethod.IOC);
+			outputBox.setText(cipherSolver.decrypt(CaesarDecryptionMethod.KERCKHOFF));
+			System.out.println(cipherSolver.decrypt(CaesarDecryptionMethod.KERCKHOFF));
+			inputSize.setText("Input Length: " + cipherSolver.getCipherText(true).length());
+			key.setText("Computed Key: " + cipherSolver.getKey());
+			ratio.setText("Cipher Length to Key Length Ratio: " + cipherSolver.getCipherKeyLenRatio());
 		});
+
+
 	}
 
 	/**
@@ -113,6 +94,7 @@ public class Main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout(10, 10));
 		frame.getRootPane().setBorder(new EmptyBorder(10, 10, 10, 10));
+		frame.pack();
 	}
 
 	private JComponent output() {
@@ -123,7 +105,7 @@ public class Main {
 
 		outputBox.setLineWrap(true);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		outputBox.setSize((int) (d.getWidth() / 2.0), 500);
+		outputBox.setSize((int) (d.getWidth() / 4.0), 500);
 		outputBox.setOpaque(false);
 
 		Color statsColor = new Color(0, 153, 0);
@@ -149,11 +131,7 @@ public class Main {
 
 	private JPanel generateInputContainer() {
 		JPanel inputContainer = new JPanel();
-		Dimension fullContainer = Toolkit.getDefaultToolkit().getScreenSize();
-		inputContainer
-				.setPreferredSize(
-						new Dimension((int) (fullContainer.getWidth() / 2.0),
-								(int) fullContainer.getHeight()));
+		inputContainer.setPreferredSize(new Dimension(300, 200));
 
 		BoxLayout layout = new BoxLayout(inputContainer, BoxLayout.PAGE_AXIS);
 		inputContainer.setLayout(layout);
@@ -175,20 +153,16 @@ public class Main {
 		inputContainer.add(generateRadioGroup(keylengthMethod, "Key Length"));
 
 		String[][] cipherOptions = {
-				{"Caesar cipher",
+				{"Caesar",
 						"A substitution cipher in which each letter is shifted to a fixed number of letters in the alphabet to the right"},
-				{"Monoalphabetic substitution cipher",
+				{"Simple substitution",
 						"A cipher in which each letter maps to another letter in the alphabet for the entire cipher"},
-				{"Vigenere cipher",
+				{"Vigenere",
 						"A polyalphabetic substitution cipher that cycles through a number of caesar ciphers equivalent to the length of the key where each letter in the key maps to its number index in the language's alphabet"},
-				{"Beaufort Cipher", "A variant of the Vigenere cipher where the letters map in the reverse direction"},
+				{"Beaufort", "A variant of the Vigenere cipher where the letters map in the reverse direction"},
 				{"Variant Beaufort", "A variant of the Vigenere cipher where encryption and decryption are reversed"}
 		};
 		inputContainer.add(generateRadioGroup(cipherOptions, "Cipher"));
-
-		CipherInputBox scrollInput = new CipherInputBox();
-		inputBox = scrollInput.getTextArea();
-		inputContainer.add(scrollInput);
 
 		return inputContainer;
 	}
@@ -203,8 +177,9 @@ public class Main {
 
 		System.out.println(titleContainer.getPreferredSize().getWidth());
 		titleContainer.add(Box.createHorizontalStrut((int) (100 - title.getPreferredSize().getWidth())));
-		container.add(titleContainer, BorderLayout.WEST);
+		container.add(titleContainer, BorderLayout.NORTH);
 		JPanel b1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		b1.setSize(100, container.getHeight());
 
 		container.add(b1, BorderLayout.CENTER);
 		ButtonGroup buttons = new ButtonGroup();
