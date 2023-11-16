@@ -1,5 +1,8 @@
 package dataanalysis.presentation;
 
+import dataanalysis.DataCollector;
+import dataanalysis.DataFileReader;
+import frequencyanalysissimulator.crypto.KeyLengthMethod;
 import frequencyanalysissimulator.crypto.VigenereDecryption;
 
 import javax.swing.*;
@@ -10,7 +13,7 @@ public class VigenereTab extends JPanel {
 	private final InputSelection inputInfoMenu;
 
 	VigenereTab() {
-		super(new BorderLayout());
+		super(createBorderLayout());
 		decryptParamsMenu = new DecryptionParameters();
 		this.add(decryptParamsMenu, BorderLayout.WEST);
 
@@ -18,6 +21,13 @@ public class VigenereTab extends JPanel {
 		this.add(inputInfoMenu, BorderLayout.CENTER);
 
 		this.add(submission(), BorderLayout.SOUTH);
+	}
+
+	private static BorderLayout createBorderLayout() {
+		BorderLayout bl = new BorderLayout();
+		bl.setVgap(30);
+		bl.setHgap(30);
+		return bl;
 	}
 
 	JComponent submission() {
@@ -31,6 +41,7 @@ public class VigenereTab extends JPanel {
 
 		collect.addActionListener(e -> {
 			new VigenereDecryption(inputInfoMenu.getPlaintext());
+			DataCollector.main(new String[]{inputInfoMenu.getPlaintext(), "Custom", decryptParamsMenu.getParameterInfo().getKeyLengthMethod().name(), decryptParamsMenu.getParameterInfo().getCaesarDecryptionMethodChoice().name(), decryptParamsMenu.getKey()});
 		});
 
 		return submission;

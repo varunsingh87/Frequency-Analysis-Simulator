@@ -69,7 +69,7 @@ class DecryptionParameters extends JPanel {
 
 	private JPanel keyContainer() {
 		JPanel container = new JPanel();
-		container.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.GREEN, Color.BLACK));
+		container.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.BLUE, Color.BLACK));
 		container.add(new JLabel("Key"));
 		container.add(key);
 
@@ -78,5 +78,9 @@ class DecryptionParameters extends JPanel {
 
 	DecryptionSettings getParameterInfo() {
 		return argumentValues;
+	}
+
+	String getKey() {
+		return key.getText();
 	}
 }
