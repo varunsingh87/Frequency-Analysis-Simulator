@@ -9,7 +9,7 @@ import java.util.Locale;
  * The enumerated values are listed in descending order of accuracy and reliability.
  */
 public enum CaesarDecryptionMethod {
-	KERCKHOFF, KASISKI;
+	KERCKHOFF, KASISKI, ALL;
 
 	@Override
 	public String toString() {

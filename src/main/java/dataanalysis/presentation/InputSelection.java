@@ -14,25 +14,23 @@ import java.util.Scanner;
 
 class InputSelection extends JPanel {
 	private final CipherInputBox customPlaintext;
+	private String plaintextId;
+
+	private final static int HORIZONTAL_PADDING = 15;
+	private final static int VERTICAL_PADDING = 10;
 
 	InputSelection() {
 		super();
 
-		setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+		setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createBevelBorder(BevelBorder.RAISED),
+				BorderFactory.createEmptyBorder(10, 10, 10, 10)
+		));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-		File inputFolder = new File(System.getProperty("user.dir").concat("/data/inputs"));
-		String[] inputIds = Arrays.stream(Objects.requireNonNull(inputFolder.listFiles())).map(File::getName).toArray(String[]::new);
-
-		JComboBox<String> existingInputs = new JComboBox<>(inputIds);
-		existingInputs.setMaximumSize(new Dimension(200, 10));
-		add(existingInputs);
-		existingInputs.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
 		customPlaintext = new CipherInputBox();
 		add(customPlaintext);
 		add(getImportFileButton(customPlaintext));
-		add(new JButton("Add Input"));
 	}
 
 	private JButton getImportFileButton(CipherInputBox outputBox) {
@@ -43,8 +41,8 @@ class InputSelection extends JPanel {
 			chooser.setFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
 			int returnVal = chooser.showOpenDialog(new JFrame());
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				System.out.println("You chose to open this file: " +
-						chooser.getSelectedFile().getName());
+				plaintextId = chooser.getSelectedFile().getName();
+				System.out.println("You chose to open this file: " + plaintextId);
 				try {
 					Scanner reader = new Scanner(chooser.getSelectedFile());
 					StringBuilder cipherInput = new StringBuilder();
@@ -52,6 +50,8 @@ class InputSelection extends JPanel {
 						cipherInput.append(reader.nextLine()).append("\n");
 					}
 					outputBox.getTextArea().setText(cipherInput.toString());
+					// Remove extension for identifier
+					plaintextId = plaintextId.substring(0, plaintextId.lastIndexOf("."));
 				} catch (FileNotFoundException ex) {
 					System.out.println("File was not found");
 				}
@@ -63,5 +63,9 @@ class InputSelection extends JPanel {
 
 	public String getPlaintext() {
 		return customPlaintext.getTextArea().getText();
+	}
+
+	String getPlaintextId() {
+		return plaintextId;
 	}
 }

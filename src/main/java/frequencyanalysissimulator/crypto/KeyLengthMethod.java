@@ -6,7 +6,7 @@ package frequencyanalysissimulator.crypto;
  */
 public enum KeyLengthMethod {
 	// KASISKI,
-	IOC("Index of Coincidence"), FRIEDMAN("Friedman's Test");
+	IOC("Index of Coincidence"), FRIEDMAN("Friedman's Test"), ALL("All Methods");
 
 	private final String fullName;
 

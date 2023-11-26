@@ -6,7 +6,6 @@ package frequencyanalysissimulator.crypto;
 public class DecryptionSettings {
 	private KeyLengthMethod keyLengthMethodChoice;
 	private CaesarDecryptionMethod caesarDecryptionMethodChoice;
-	private String cipherType;
 
 	public DecryptionSettings(KeyLengthMethod klm, CaesarDecryptionMethod cdm) {
 		keyLengthMethodChoice = klm;

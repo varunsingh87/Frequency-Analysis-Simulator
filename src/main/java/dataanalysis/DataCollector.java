@@ -11,6 +11,11 @@ import frequencyanalysissimulator.crypto.Vigenere;
 import frequencyanalysissimulator.crypto.VigenereDecryption;
 
 public class DataCollector {
+	private final static int PREFERRED_CIPHER_LENGTH = 1000;
+	private final static int PREFERRED_KEY_LENGTH = 20;
+	private final static int MIN_SUBKEY_LENGTH = 3;
+	private final static String DEFAULT_KEY = "DONQUIXOTECOYOTEWILL";
+
 	/**
 	 * @param args arg[0]: Input must be one line
 	 *             arg[1]: Trial Id for output file
@@ -19,17 +24,29 @@ public class DataCollector {
 	 *             arg[4]: (Optional): key
 	 */
 	public static void main(String[] args) {
-		final String key = args.length > 4 ? args[4].toUpperCase() : "DONQUIXOTECOYOTEWILL";
+		final String fullInput = args[0];
+		final String fullKey = args.length > 4 ? args[4].toUpperCase() : DEFAULT_KEY;
 		// Remove all non-letters
 		String expectedText = args[0].replaceAll("[^A-Za-z]", "").toUpperCase();
 		StringBuilder output = new StringBuilder("Len,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,Avg(" + args[1] + ")\n");
 
-		for (int cipherlen = 90; cipherlen <= 1000; cipherlen += 50) { // O(1)
-			output.append(cipherlen).append(",");
+		for (int cipherlen = 90; cipherlen <= PREFERRED_CIPHER_LENGTH; cipherlen += 50) { // O(1)
 			double avg = 0;
-			for (int i = 3; i <= 20; i++) {
+
+			output.append(cipherlen).append(",");
+			if (cipherlen > fullInput.length()) {
+				output.append(fillEmptyRows(cipherlen));
+				break;
+			}
+
+			for (int keylen = 3; keylen <= PREFERRED_KEY_LENGTH; keylen++) {
+				if (keylen > fullKey.length()) {
+					output.append(fillEmptyCells(keylen));
+					break;
+				}
+
 				String input = expectedText.substring(0, cipherlen);
-				String subKey = key.substring(0, i);
+				String subKey = fullKey.substring(0, keylen);
 				String ciphertext = Vigenere.encrypt(subKey, input);
 				VigenereDecryption v = args[2] != null ? new VigenereDecryption(ciphertext, KeyLengthMethod.valueOf(args[2].toUpperCase())) : new VigenereDecryption(ciphertext);
 				String decryptedText = v.decrypt(CaesarDecryptionMethod.valueOf(args[3]));
@@ -44,7 +61,7 @@ public class DataCollector {
 
 		try {
 			String dataOutputFileName = String.format(
-					"data/outputs/%s/%s_%s", key, args[2].toLowerCase(), args[3].toLowerCase()
+					"data/outputs/%s/%s_%s", fullKey, args[2].toLowerCase(), args[3].toLowerCase()
 			);
 			Files.createDirectories(Paths.get(dataOutputFileName));
 			FileWriter writer = new FileWriter(dataOutputFileName + "/" + args[1] + ".csv");
@@ -53,6 +70,21 @@ public class DataCollector {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Fills the rest of the data table with 0 values to represent that the cipher is not that long
+	 */
+	private static String fillEmptyRows(int startingCipherLength) {
+		return fillEmptyCells(MIN_SUBKEY_LENGTH).concat("\n")
+				.repeat(PREFERRED_CIPHER_LENGTH - startingCipherLength);
+	}
+
+	/**
+	 * Fills a row with 0 values to represent that the key is not that long
+	 */
+	private static String fillEmptyCells(int startingKeyLenght) {
+		return "0,".repeat(PREFERRED_KEY_LENGTH - startingKeyLenght);
 	}
 
 	/**

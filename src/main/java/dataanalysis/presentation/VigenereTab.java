@@ -2,6 +2,7 @@ package dataanalysis.presentation;
 
 import dataanalysis.DataCollector;
 import dataanalysis.DataFileReader;
+import frequencyanalysissimulator.crypto.CaesarDecryptionMethod;
 import frequencyanalysissimulator.crypto.KeyLengthMethod;
 import frequencyanalysissimulator.crypto.VigenereDecryption;
 
@@ -40,10 +41,42 @@ public class VigenereTab extends JPanel {
 		submission.add(outputDir);
 
 		collect.addActionListener(e -> {
-			new VigenereDecryption(inputInfoMenu.getPlaintext());
-			DataCollector.main(new String[]{inputInfoMenu.getPlaintext(), "Custom", decryptParamsMenu.getParameterInfo().getKeyLengthMethod().name(), decryptParamsMenu.getParameterInfo().getCaesarDecryptionMethodChoice().name(), decryptParamsMenu.getKey()});
+			KeyLengthMethod chosenStep1Method = decryptParamsMenu.getParameterInfo().getKeyLengthMethod();
+			CaesarDecryptionMethod chosenStep2Method = decryptParamsMenu.getParameterInfo().getCaesarDecryptionMethodChoice();
+			collect(chosenStep1Method, chosenStep2Method);
 		});
 
 		return submission;
+	}
+
+	/**
+	 * Collects data on the current input with the given methods, or recursively on all methods if specified
+	 *
+	 * @param keyLengthMethod        The algorithm that is used to infer the length of the key, or ALL
+	 * @param caesarDecryptionMethod The algorithm that is used to decrypt the Caesar ciphers, or All
+	 */
+	private void collect(KeyLengthMethod keyLengthMethod, CaesarDecryptionMethod caesarDecryptionMethod) {
+		// Specific method for both steps (stopping case)
+		if (caesarDecryptionMethod != CaesarDecryptionMethod.ALL && keyLengthMethod != KeyLengthMethod.ALL) {
+			DataCollector.main(new String[]{
+					inputInfoMenu.getPlaintext(),
+					inputInfoMenu.getPlaintextId(),
+					keyLengthMethod.name(),
+					caesarDecryptionMethod.name(),
+					decryptParamsMenu.getKey()
+			});
+		} else if (keyLengthMethod == KeyLengthMethod.ALL) { // All key length methods
+			for (KeyLengthMethod method : KeyLengthMethod.values()) {
+				if (method != KeyLengthMethod.ALL) {
+					collect(method, caesarDecryptionMethod);
+				}
+			}
+		} else { // All caesar decryption methods
+			for (CaesarDecryptionMethod method : CaesarDecryptionMethod.values()) {
+				if (method != CaesarDecryptionMethod.ALL) {
+					collect(keyLengthMethod, method);
+				}
+			}
+		}
 	}
 }
