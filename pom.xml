@@ -1,87 +1,104 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <artifactId>com.varunsingh.frequencyanalysissimulator</artifactId>
-  <groupId>com.varunsingh</groupId>
-  <modelVersion>4.0.0</modelVersion>
-  <version>1.00</version>
-  <url>https://varunsingh87.github.io/frequency-analysis-simulator</url>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>19</maven.compiler.source>
-    <maven.compiler.release>19</maven.compiler.release>
-  </properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <artifactId>com.varunsingh.frequencyanalysissimulator</artifactId>
+    <groupId>com.varunsingh</groupId>
+    <modelVersion>4.0.0</modelVersion> <!-- Because we are in Maven major version 3 -->
+    <version>1.00</version>
+    <url>https://varunsingh87.github.io/frequency-analysis-simulator</url>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.release>19</maven.compiler.release>
+        <exec.mainClass>frequencyanalysissimulator.presentation.main.Main</exec.mainClass>
+    </properties>
 
-  <distributionManagement>
-    <site>
-      <id>website</id>
-      <url>scm:git:git@github.com/varunsingh87/Frequency-Analysis-Simulator.git</url>
-    </site>
-  </distributionManagement>
+    <distributionManagement>
+        <site>
+            <id>website</id>
+            <url>scm:git:git@github.com/varunsingh87/Frequency-Analysis-Simulator.git</url>
+        </site>
+    </distributionManagement>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.9.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>5.9.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <version>5.9.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <build>
-    <defaultGoal>mvn compile exec:java -Dexec.mainClass="frequencyanalysissimulator.presentation.main.Main"</defaultGoal>
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.0</version>
+            <scope>test</scope> <!-- Not packaged in JAR file because it is used for tests only, used for mvn test -->
+        </dependency>
+    </dependencies>
 
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.2.0</version>
-        <executions>
-          <execution>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>src/main/generated</source>
-              </sources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
-        <configuration>
-          <source>19</source>
-          <target>19</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.7</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-scm-publish-plugin</artifactId>
-        <version>3.0.0</version>
-        <configuration>
-          <scmBranch>gh-pages</scmBranch>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+    <build>
+        <defaultGoal>mvn compile exec:java -Dexec.mainClass="frequencyanalysissimulator.presentation.main.Main"
+        </defaultGoal>
 
+        <plugins> <!-- Automate Maven lifecycle phases -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/generated</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin> <!-- Compiles java files (javac) with mvn compiler:compile (class files go to target folder) -->
+                <!-- mvn compiler:testCompile for compiling test classes-->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <source>20</source> <!-- Configuration for latest version - Java 20 -->
+                    <target>20</target>
+                </configuration>
+            </plugin>
+            <plugin> <!-- Run unit tests and generate reports -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.7</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-publish-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <scmBranch>gh-pages</scmBranch>
+                </configuration>
+            </plugin>
+            <plugin> <!-- Build an executable JAR by adding a META-INF/MANIFEST.MF file -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>frequencyanalysissimulator.presentation.main.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <developers>
+        <developer>
+            <name>Varun Singh</name>
+        </developer>
+    </developers>
 </project>

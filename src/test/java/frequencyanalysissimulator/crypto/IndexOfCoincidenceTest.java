@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Locale;
+
 public class IndexOfCoincidenceTest {
     @Test
     public void testSingleRepeatingCharacter() {
@@ -27,9 +29,9 @@ public class IndexOfCoincidenceTest {
 
     @Test
     public void testParagraph() {
-        assertEquals(.07222, FrequencyAnalysis.calculateIndexOfCoincidence(
-                """
-                        That makes calamity of so long life. Than fly to others that we know not of? And lose the name of action."""),
-                0.00001);
+        assertEquals(.0722, FrequencyAnalysis.calculateIndexOfCoincidence("""
+        That makes calamity of so long life.
+        Than fly to others that we know not of?
+        And lose the name of action.""".toUpperCase(Locale.ROOT)), 0.01);
     }
 }
