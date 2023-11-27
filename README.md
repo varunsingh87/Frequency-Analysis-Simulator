@@ -68,6 +68,12 @@ Do the same for any other Java class with a main method that you would like to t
 
 ### Phase III
 
+The purpose of phase III was to study classical ciphers further and implement GUIs to reduce the project's reliance on
+Google Sheets for data visualization and analysis. The data analysis module
+in [Version 3](https://github.com/varunsingh87/Frequency-Analysis-Simulator/releases/tag/v3.0.0) contains two GUIs that
+allow a user to collect and visualize the accuracy of the Vigenere decryption algorithms with a particular message when
+encrypted with the Vigenere cipher.
+
 * Data GUI
 * Data collection GUI
 * Variants of Vigenere cipher
