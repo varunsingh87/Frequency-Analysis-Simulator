@@ -2,6 +2,7 @@ package dataanalysis.presentation;
 
 import dataanalysis.DataCollector;
 import dataanalysis.DataFileReader;
+import dataanalysis.DataVisualizer;
 import frequencyanalysissimulator.crypto.CaesarDecryptionMethod;
 import frequencyanalysissimulator.crypto.KeyLengthMethod;
 import frequencyanalysissimulator.crypto.VigenereDecryption;
@@ -58,13 +59,15 @@ public class VigenereTab extends JPanel {
 	private void collect(KeyLengthMethod keyLengthMethod, CaesarDecryptionMethod caesarDecryptionMethod) {
 		// Specific method for both steps (stopping case)
 		if (caesarDecryptionMethod != CaesarDecryptionMethod.ALL && keyLengthMethod != KeyLengthMethod.ALL) {
-			DataCollector.main(new String[]{
-					inputInfoMenu.getPlaintext(),
-					inputInfoMenu.getPlaintextId(),
-					keyLengthMethod.name(),
-					caesarDecryptionMethod.name(),
-					decryptParamsMenu.getKey()
-			});
+			new Thread(() -> {
+				DataCollector.main(new String[]{
+						inputInfoMenu.getPlaintext(),
+						inputInfoMenu.getPlaintextId(),
+						keyLengthMethod.name(),
+						caesarDecryptionMethod.name(),
+						decryptParamsMenu.getKey()
+				});
+			}).start();
 		} else if (keyLengthMethod == KeyLengthMethod.ALL) { // All key length methods
 			for (KeyLengthMethod method : KeyLengthMethod.values()) {
 				if (method != KeyLengthMethod.ALL) {

@@ -10,6 +10,11 @@ import frequencyanalysissimulator.crypto.KeyLengthMethod;
 import frequencyanalysissimulator.crypto.Vigenere;
 import frequencyanalysissimulator.crypto.VigenereDecryption;
 
+/**
+ * Outputs data table containing accuracy of the
+ * subsequences of a ciphertext encrypted from subsequences of a key of an input message
+ * to a CSV file in the outputs/ folder
+ */
 public class DataCollector {
 	private final static int PREFERRED_CIPHER_LENGTH = 1000;
 	private final static int PREFERRED_KEY_LENGTH = 20;

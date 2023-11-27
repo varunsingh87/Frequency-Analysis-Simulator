@@ -21,7 +21,17 @@ public class DataVisualizer extends JPanel {
 		DataPopulater.main(new String[]{"all"});
 		setCount = 1;
 		trialCount = 'A';
+
 		File dataFile = new File("data/outputs/HARSHTRAITSHINEIMPORT/ioc_kerckhoff/1A.csv");
+		GraphPanel g = new GraphPanel(findAverages(dataFile));
+		add(g, BorderLayout.CENTER);
+		add(dataGroupControls(), BorderLayout.NORTH);
+		trialIdLabel = new JLabel(setCount + "" + trialCount);
+		trialIdLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		add(trialIdLabel, BorderLayout.SOUTH);
+	}
+
+	public static List<Double> findAverages(File dataFile) {
 		List<Double> averages = new ArrayList<>();
 		try (Scanner dataFileReader = new Scanner(dataFile)) {
 			dataFileReader.nextLine(); // Skip header
@@ -33,12 +43,7 @@ public class DataVisualizer extends JPanel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		g = new GraphPanel(averages);
-		add(g, BorderLayout.CENTER);
-		add(dataGroupControls(), BorderLayout.NORTH);
-		trialIdLabel = new JLabel(setCount + "" + trialCount);
-		trialIdLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		add(trialIdLabel, BorderLayout.SOUTH);
+		return averages;
 	}
 
 	private void updateTrialIdLabel() {
