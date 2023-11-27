@@ -9,11 +9,7 @@ optimal algorithm and conditions of decrypting a Vigenere cipher.
 * Kasiski Examination
 * Freidman Test
 * Kerckhoff's Method
-<<<<<<< HEAD
 * Dictionary attack using WordNet API
-=======
-* Dictionary attack using Words and WordNet API
->>>>>>> 930ef91784de248ecdf0fac7deb03a4ec249b82c
 
 ## Usage
 
@@ -60,11 +56,8 @@ the `jpackage` utility from the Java Development Kit:
 **: `jpackage --input target/ --name 'Frequency Analysis Simulation' --main-jar com.varunsingh.frequencyanalysissimulator-1.00.jar --main-class frequencyanalysissimulator.presentation.main.Main --type deb --icon ./assets/icon.ico`
 *Does not work on Mac*
 
-<<<<<<< HEAD
 Do the same for any other Java class with a main method that you would like to turn into an executable file.
 
-=======
->>>>>>> 930ef91784de248ecdf0fac7deb03a4ec249b82c
 ## Process
 
 **Phase I: Monoalphabetic Ciphers**: July 22, 2019 - February 16, 2020
@@ -75,15 +68,12 @@ Do the same for any other Java class with a main method that you would like to t
 
 ### Phase III
 
-<<<<<<< HEAD
 The purpose of phase III was to study classical ciphers further and implement GUIs to reduce the project's reliance on
 Google Sheets for data visualization and analysis. The data analysis module
 in [Version 3](https://github.com/varunsingh87/Frequency-Analysis-Simulator/releases/tag/v3.0.0) contains two GUIs that
 allow a user to collect and visualize the accuracy of the Vigenere decryption algorithms with a particular message when
 encrypted with the Vigenere cipher.
 
-=======
->>>>>>> 930ef91784de248ecdf0fac7deb03a4ec249b82c
 * Data GUI
 * Data collection GUI
 * Variants of Vigenere cipher
@@ -102,11 +92,7 @@ encrypted with the Vigenere cipher.
 
 * Advanced Data Structures - Java Collections API, including TreeSet, HashMap, ArrayList
 * Layered Architecture - separated into presentation code (Java Swing framework), business logic (pure Java), and data
-<<<<<<< HEAD
   analysis module (I/O Streams)
-=======
-  analysis module (pure Java I/O)
->>>>>>> 930ef91784de248ecdf0fac7deb03a4ec249b82c
 * Recursion
 
 ## Built With
